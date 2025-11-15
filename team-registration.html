@@ -1,715 +1,493 @@
 <!doctype html>
 <html lang="en">
- <head>
-  <meta charset="UTF-8">
+<head>
+  <meta charset="UTF-8" />
   <title>OSF 2026 – Team Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-    
     :root {
-      --primary: #3b82f6;
-      --primary-dark: #2563eb;
-      --accent: #fbbf24;
-      --accent-dark: #f59e0b;
-      --danger: #ff6b6b;
-      --warning: #ffd93d;
-      --surface: #f8fafc;
-      --surface-light: #ffffff;
-      --surface-lighter: #f1f5f9;
-      --text: #ffffff;
-      --text-muted: #e2e8f0;
-      --text-dim: #cbd5e1;
-      --border: rgba(59, 130, 246, 0.2);
-      --glow: rgba(59, 130, 246, 0.4);
+      --primary: #004b8d;   /* AYSO blue */
+      --accent:  #d62828;   /* AYSO red */
+      --bg:      #f3f4f6;
+      --card-bg: #ffffff;
+      --text:    #111827;
+      --muted:   #6b7280;
+      --border:  #e5e7eb;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.18);
     }
 
-    * { 
-      box-sizing: border-box; 
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: 
-        radial-gradient(ellipse at top, rgba(251, 191, 36, 0.15) 0%, transparent 60%),
-        radial-gradient(ellipse at bottom right, rgba(59, 130, 246, 0.2) 0%, transparent 60%),
-        radial-gradient(ellipse at bottom left, rgba(251, 191, 36, 0.1) 0%, transparent 60%),
-        linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #2563eb 100%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe 0, #f9fafb 40%, #e5e7eb 100%);
       color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='10' height='10' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 10 0 L 0 0 0 10' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.03'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23grid)'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: 
-        radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(251, 191, 36, 0.02) 0%, transparent 50%);
-      animation: float 20s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      33% { transform: translate(-20px, -20px) rotate(1deg); }
-      66% { transform: translate(20px, -10px) rotate(-1deg); }
     }
 
     .page {
-      max-width: 1400px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 60px 24px 80px;
-      position: relative;
-      z-index: 1;
+      padding: 24px 16px 40px;
     }
 
     .header {
       display: flex;
       flex-wrap: wrap;
-      gap: 40px;
+      gap: 16px;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 60px;
+      align-items: center;
+      margin-bottom: 22px;
     }
 
-    .title-block { 
-      max-width: 700px; 
-    }
+    .title-block { max-width: 640px; }
 
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 12px 24px;
-      border-radius: 100px;
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-      backdrop-filter: blur(20px);
-      border: 2px solid rgba(16, 185, 129, 0.3);
-      color: #10b981;
-      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.07);
+      color: #1d4ed8;
+      font-size: 12px;
       font-weight: 600;
-      gap: 12px;
-      margin-bottom: 24px;
-      box-shadow: 
-        0 0 40px rgba(16, 185, 129, 0.2),
-        inset 0 1px 0 rgba(16, 185, 129, 0.1);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      gap: 6px;
+      margin-bottom: 8px;
     }
 
     .badge-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 
-        0 0 20px rgba(16, 185, 129, 0.8),
-        0 0 40px rgba(16, 185, 129, 0.4);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { 
-        opacity: 1; 
-        transform: scale(1);
-        box-shadow: 
-          0 0 20px rgba(16, 185, 129, 0.8),
-          0 0 40px rgba(16, 185, 129, 0.4);
-      }
-      50% { 
-        opacity: 0.8; 
-        transform: scale(1.2);
-        box-shadow: 
-          0 0 30px rgba(16, 185, 129, 1),
-          0 0 60px rgba(16, 185, 129, 0.6);
-      }
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.28);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(32px, 6vw, 64px);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
-      text-shadow: 0 0 80px rgba(59, 130, 246, 0.1);
-      position: relative;
-    }
-
-    h1::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: 2px;
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+      font-size: 26px;
+      letter-spacing: 0.03em;
     }
 
     .subtitle {
-      margin-top: 20px;
-      color: var(--text-muted);
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 1.6;
-      max-width: 600px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     .event-pill {
-      padding: 24px 32px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, var(--surface-light), var(--surface-lighter));
-      backdrop-filter: blur(20px);
-      border: 2px solid rgba(59, 130, 246, 0.2);
-      color: #1e293b;
-      font-size: 16px;
+      padding: 10px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: white;
+      font-size: 13px;
       display: inline-flex;
-      align-items: center;
-      gap: 20px;
-      box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(59, 130, 246, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.45);
     }
 
-    .event-pill::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
-      transition: left 0.6s ease;
-    }
-
-    .event-pill:hover::before {
-      left: 100%;
-    }
-
-    .event-pill:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.12),
-        0 0 0 1px rgba(59, 130, 246, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-      border-color: rgba(59, 130, 246, 0.4);
-    }
-
-    .event-pill span { 
-      font-size: 28px;
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-    }
-
-    .event-pill-strong { 
-      font-weight: 700; 
-      display: block; 
-      font-size: 18px;
-      color: #1e293b;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    }
+    .event-pill span { opacity: 0.9; }
+    .event-pill-strong { font-weight: 600; display:block; }
 
     .card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.8));
-      backdrop-filter: blur(40px);
-      border-radius: 32px;
-      box-shadow: 
-        0 32px 64px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(59, 130, 246, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      padding: 48px 40px;
-      border: 2px solid rgba(59, 130, 246, 0.15);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
-      animation: shimmer 3s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
-
-    .card:hover {
-      transform: translateY(-12px) scale(1.01);
-      box-shadow: 
-        0 48px 96px rgba(0, 0, 0, 0.12),
-        0 0 0 1px rgba(59, 130, 246, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9),
-        0 0 80px rgba(59, 130, 246, 0.15);
-      border-color: rgba(59, 130, 246, 0.3);
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 22px 20px 18px;
+      border: 1px solid rgba(148,163,184,0.4);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 20px;
-      margin-bottom: 32px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
 
-    .card-title { 
-      font-size: 24px; 
-      font-weight: 700;
-      margin: 0; 
-      color: #1e293b;
-      letter-spacing: -0.01em;
-    }
-
-    .card-subtitle { 
-      font-size: 16px; 
-      color: #64748b; 
-      margin-top: 6px; 
-      font-weight: 400;
-      line-height: 1.5;
-    }
+    .card-title { font-size: 18px; margin: 0; }
+    .card-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
 
     .chip-row {
       display: flex;
-      gap: 10px;
+      gap: 6px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
 
     .chip {
-      border-radius: 50px;
-      padding: 8px 16px;
-      font-size: 12px;
-      font-weight: 500;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      color: #64748b;
-      background: rgba(59, 130, 246, 0.1);
-      backdrop-filter: blur(10px);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(148,163,184,0.7);
+      color: #4b5563;
+      background: #f9fafb;
       white-space: nowrap;
-      transition: all 0.3s ease;
-    }
-
-    .chip:hover {
-      background: rgba(59, 130, 246, 0.2);
-      color: #1e293b;
-      border-color: rgba(59, 130, 246, 0.4);
-      transform: translateY(-1px);
     }
 
     .info-banner {
       display: flex;
-      gap: 16px;
+      gap: 8px;
       align-items: flex-start;
-      font-size: 14px;
-      color: #64748b;
-      background: rgba(59, 130, 246, 0.08);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+      font-size: 11px;
+      color: var(--muted);
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      border: 1px dashed rgba(148,163,184,0.8);
     }
 
     .info-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      color: white;
-      flex-shrink: 0;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(37,99,235,0.08);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size: 11px;
+      color:#1d4ed8;
+      flex-shrink:0;
+      margin-top:1px;
     }
 
-    .info-text strong { 
-      color: #1e293b; 
-      font-weight: 600;
-    }
+    .info-text strong { color: var(--text); }
 
     form {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 32px 36px;
-      margin-top: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px 18px;
+      margin-top: 6px;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      position: relative;
+      gap: 4px;
+      font-size: 13px;
     }
 
     label {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 6px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      font-size: 12px;
-      opacity: 0.9;
-    }
-
-    input, select, textarea {
-      padding: 20px 24px;
-      border: 2px solid rgba(59, 130, 246, 0.15);
-      border-radius: 20px;
-      font-size: 16px;
-      font-family: inherit;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(248, 250, 252, 0.6));
-      backdrop-filter: blur(20px);
-      color: #1e293b;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       font-weight: 500;
-      box-shadow: 
-        inset 0 1px 0 rgba(255, 255, 255, 0.8),
-        0 4px 20px rgba(0, 0, 0, 0.04);
+      color: #374151;
     }
 
-    input::placeholder, textarea::placeholder {
-      color: #94a3b8;
-      font-weight: 400;
-    }
+    .required { color: #dc2626; margin-left: 2px; }
 
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.8));
-      box-shadow: 
-        0 0 0 4px rgba(59, 130, 246, 0.15),
-        0 12px 40px rgba(59, 130, 246, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-      transform: translateY(-4px) scale(1.02);
-    }
-
-    input:hover, select:hover, textarea:hover {
-      border-color: rgba(59, 130, 246, 0.3);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.7));
-      transform: translateY(-2px);
-    }
-
-    select {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 20px center;
-      background-size: 20px;
-      padding-right: 60px;
-    }
-
-    select option {
-      background: #ffffff;
-      color: #1e293b;
-      padding: 16px;
-      border: none;
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      background: #f9fafb;
     }
 
     textarea {
+      min-height: 70px;
       resize: vertical;
-      min-height: 120px;
     }
 
-    button {
-      background: #3b82f6;
-      color: black;
-      border: none;
-      padding: 28px 56px;
-      border-radius: 20px;
-      font-size: 20px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 
-        0 16px 40px rgba(59, 130, 246, 0.4),
-        0 0 0 1px rgba(59, 130, 246, 0.2),
-        inset 0 2px 0 rgba(255, 255, 255, 0.2);
-      font-family: inherit;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      position: relative;
-      overflow: hidden;
-      text-shadow: none;
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37,99,235,0.25);
+      background: #ffffff;
     }
 
-    button.clicked {
-      background: #93c5fd;
-      color: #1e293b;
-      box-shadow: 
-        0 8px 20px rgba(147, 197, 253, 0.3),
-        0 0 0 1px rgba(147, 197, 253, 0.2),
-        inset 0 2px 0 rgba(255, 255, 255, 0.4);
-    }
+    .full-width { grid-column: 1 / -1; }
 
-    button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.6s ease;
-    }
-
-    button:hover::before {
-      left: 100%;
-    }
-
-    button:hover {
-      transform: translateY(-8px) scale(1.08);
-      box-shadow: 
-        0 24px 60px rgba(59, 130, 246, 0.5),
-        0 0 0 3px rgba(59, 130, 246, 0.4),
-        inset 0 2px 0 rgba(255, 255, 255, 0.3),
-        0 0 80px rgba(59, 130, 246, 0.3);
-      background: linear-gradient(135deg, var(--primary-dark), #1d4ed8);
-      color: white;
-    }
-
-    button:active {
-      transform: translateY(-3px) scale(1.02);
-    }
-
-    .submit-btn {
+    .actions {
       grid-column: 1 / -1;
-      justify-self: center;
-      margin-top: 32px;
-      min-width: 280px;
-      font-size: 16px;
-      padding: 20px 40px;
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
     }
 
-    /* Responsive improvements */
-    @media (max-width: 768px) {
-      .page {
-        padding: 24px 16px 40px;
-      }
-
-      .header {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-      }
-
-      h1 {
-        font-size: clamp(24px, 6vw, 32px);
-      }
-
-      .subtitle {
-        font-size: 16px;
-      }
-
-      .event-pill {
-        padding: 16px 20px;
-        font-size: 14px;
-        align-self: center;
-      }
-
-      form {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      .card {
-        padding: 28px 20px;
-        margin: 0 -4px;
-      }
-
-      .card-header {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-      }
-
-      .chip-row {
-        justify-content: center;
-      }
-
-      input, select, textarea {
-        padding: 14px 16px;
-        font-size: 16px; /* Prevents zoom on iOS */
-      }
-
-      button {
-        padding: 16px 32px;
-        font-size: 15px;
-      }
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 14px 30px rgba(37,99,235,0.4);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+      white-space: nowrap;
     }
 
-    @media (max-width: 480px) {
-      .page {
-        padding: 20px 12px 32px;
-      }
+    .btn-primary span:last-child { font-size: 16px; }
 
-      .card {
-        padding: 24px 16px;
-        border-radius: 20px;
-      }
-
-      .info-banner {
-        padding: 16px 20px;
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
-      }
-
-      .event-pill span {
-        font-size: 20px;
-      }
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 16px 34px rgba(37,99,235,0.5);
+      transform: translateY(-1px);
     }
 
-    /* Loading animation */
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 22px rgba(37,99,235,0.4);
     }
 
-    .loading {
-      position: relative;
-      overflow: hidden;
+    .note {
+      font-size: 11px;
+      color: var(--muted);
+      max-width: 520px;
     }
 
-    .loading::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      animation: shimmer 1.5s infinite;
+    .note strong { color: var(--text); }
+
+    .message {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 12px;
+      display: none;
+    }
+
+    .message.visible { display: block; }
+
+    .message.success {
+      background: #ecfdf3;
+      border: 1px solid #22c55e;
+      color: #166534;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+      color: #991b1b;
+    }
+
+    @media (max-width: 680px) {
+      .card { padding: 16px 13px 14px; }
+      .header { align-items: flex-start; }
+      .event-pill { width: 100%; }
     }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
- </head>
- <body>
-  <div class="page">
-   <header class="header">
+</head>
+<body>
+<div class="page">
+  <header class="header">
     <div class="title-block">
-     <div class="badge">
-      <div class="badge-dot"></div> Registration Open
-     </div>
-     <h1>OSF 2026 – Team Registration</h1>
-     <p class="subtitle">Use this form to pre-register your team for the 2026 Oxnard Sports Festival. Final acceptance is based on the full packet and payment being received by the Tournament Committee.</p>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        AYSO 46th Annual Oxnard Sports Festival
+        <span>• Team Registration</span>
+      </div>
+      <h1>Oxnard Sports Festival – Team Pre-Registration</h1>
+      <p class="subtitle">
+        Use this form to pre-register your team for the 2026 tournament.
+        Final acceptance is based on the full packet received by the Tournament Committee.
+      </p>
     </div>
-   </header>
-   <div class="card">
-    <div class="card-header">
-     <div>
-      <h2 class="card-title">Team Information</h2>
-      <p class="card-subtitle">Provide your team details and contact information</p>
-     </div>
-     <div class="chip-row"><span class="chip">Required</span> <span class="chip">Step 1 of 1</span>
-     </div>
+    <div class="event-pill">
+      <div>
+        <span class="event-pill-strong">April 25–26, 2026</span>
+        <span>Oxnard, California · 10U / 12U / 14U · Boys &amp; Girls</span>
+      </div>
     </div>
-    <div class="info-banner">
-     <div class="info-icon">
-      i
-     </div>
-     <div class="info-text"><strong>Important:</strong> All fields marked with an asterisk (*) are required. Make sure to double-check your contact information as this will be used for all tournament communications.
-     </div>
+  </header>
+
+  <section>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Team Pre-Registration</h2>
+          <p class="card-subtitle">
+            This form mirrors your 2026 Tournament Application and helps the committee track interest by division.
+          </p>
+        </div>
+        <div class="chip-row">
+          <div class="chip">Max 16 teams / division</div>
+          <div class="chip">AYSO teams only</div>
+          <div class="chip">10U · 12U · 14U · B &amp; G</div>
+        </div>
+      </div>
+
+      <div class="info-banner">
+        <div class="info-icon">i</div>
+        <div class="info-text">
+          <strong>Important:</strong> Your team is <em>not</em> officially accepted until the Tournament Committee
+          receives and confirms: (1) the signed 2026 Tournament Application (PDF), (2) the official AYSO team roster,
+          and (3) a Region-issued check for the full fee.
+        </div>
+      </div>
+
+      <form id="registrationForm">
+        <!-- Division & Region -->
+        <div class="form-group">
+          <label for="division">Division<span class="required">*</span></label>
+          <select id="division" required>
+            <option value="">Select division…</option>
+            <option value="10UB">10U Boys</option>
+            <option value="10UG">10U Girls</option>
+            <option value="12UB">12U Boys</option>
+            <option value="12UG">12U Girls</option>
+            <option value="14UB">14U Boys</option>
+            <option value="14UG">14U Girls</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="regionNumber">Region #<span class="required">*</span></label>
+          <input type="text" id="regionNumber" placeholder="e.g., 304" required />
+        </div>
+
+        <!-- Team info -->
+        <div class="form-group">
+          <label for="teamName">Team Name<span class="required">*</span></label>
+          <input type="text" id="teamName" placeholder="Team name from application" required />
+        </div>
+
+        <div class="form-group">
+          <label for="city">City<span class="required">*</span></label>
+          <input type="text" id="city" placeholder="Home city" required />
+        </div>
+
+        <div class="form-group">
+          <label for="state">State<span class="required">*</span></label>
+          <input type="text" id="state" placeholder="CA, AZ, etc." required />
+        </div>
+
+        <!-- Coach info -->
+        <div class="form-group">
+          <label for="coachName">Head Coach Name<span class="required">*</span></label>
+          <input type="text" id="coachName" required />
+        </div>
+
+        <div class="form-group">
+          <label for="coachEmail">Head Coach Email<span class="required">*</span></label>
+          <input type="email" id="coachEmail" required />
+        </div>
+
+        <div class="form-group">
+          <label for="coachPhone">Head Coach Phone<span class="required">*</span></label>
+          <input type="tel" id="coachPhone" placeholder="Mobile preferred" required />
+        </div>
+
+        <div class="form-group">
+          <label for="assistantCoach">Assistant Coach Name</label>
+          <input type="text" id="assistantCoach" placeholder="Optional" />
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group full-width">
+          <label for="notes">Notes / Special Requests</label>
+          <textarea id="notes"
+            placeholder="Scheduling requests, travel notes, or brief comments that align with your 2026 application."></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">
+            <span>Submit Pre-Registration</span>
+            <span>⚽</span>
+          </button>
+
+          <div class="note">
+            After submitting this form, please follow your 2026 Tournament Application packet for where to send your
+            <strong>PDF application</strong>, <strong>official roster</strong>, and
+            <strong>Region check</strong>.
+          </div>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+      </form>
     </div>
-    <form id="registrationForm">
-     <div class="form-group"><label for="teamName">Team Name *</label> <input type="text" id="teamName" name="teamName" required placeholder="Enter your team name">
-     </div>
-     <div class="form-group"><label for="division">Division *</label> <select id="division" name="division" required> <option value="">Select Division</option> <option value="U10">U10 (Under 10)</option> <option value="U12">U12 (Under 12)</option> <option value="U14">U14 (Under 14)</option> <option value="U16">U16 (Under 16)</option> <option value="U19">U19 (Under 19)</option> </select>
-     </div>
-     <div class="form-group"><label for="coachName">Head Coach Name *</label> <input type="text" id="coachName" name="coachName" required placeholder="Full name of head coach">
-     </div>
-     <div class="form-group"><label for="coachEmail">Coach Email *</label> <input type="email" id="coachEmail" name="coachEmail" required placeholder="coach@example.com">
-     </div>
-     <div class="form-group"><label for="coachPhone">Coach Phone *</label> <input type="tel" id="coachPhone" name="coachPhone" required placeholder="(555) 123-4567">
-     </div>
-     <div class="form-group"><label for="clubName">Club/Organization *</label> <input type="text" id="clubName" name="clubName" required placeholder="Your club or organization name">
-     </div>
-     <div class="form-group"><label for="specialRequests">Special Requests</label> <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special accommodations or requests (optional)"></textarea>
-     </div><button type="submit" class="submit-btn">Submit</button>
-    </form>
-   </div>
-  </div>
-  <script>
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Get form data
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData);
-      
-      // Simple validation
-      const requiredFields = ['teamName', 'division', 'coachName', 'coachEmail', 'coachPhone', 'clubName'];
-      const missingFields = requiredFields.filter(field => !data[field]);
-      
-      if (missingFields.length > 0) {
-        alert('Please fill in all required fields: ' + missingFields.join(', '));
+  </section>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
+
+  const registrationForm = document.getElementById('registrationForm');
+  const formMessage = document.getElementById('formMessage');
+
+  registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const division       = document.getElementById('division').value.trim();
+    const regionNumber   = document.getElementById('regionNumber').value.trim();
+    const teamName       = document.getElementById('teamName').value.trim();
+    const city           = document.getElementById('city').value.trim();
+    const state          = document.getElementById('state').value.trim();
+    const coachName      = document.getElementById('coachName').value.trim();
+    const coachEmail     = document.getElementById('coachEmail').value.trim();
+    const coachPhone     = document.getElementById('coachPhone').value.trim();
+    const assistantCoach = document.getElementById('assistantCoach').value.trim();
+    const notes          = document.getElementById('notes').value.trim();
+
+    if (!division || !regionNumber || !teamName || !city || !state || !coachName || !coachEmail || !coachPhone) {
+      showFormMessage('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    const team = {
+      division,
+      regionNumber,
+      teamName,
+      city,
+      state,
+      coachName,
+      coachEmail,
+      coachPhone,
+      assistantCoach,
+      notes,
+      docs_application: false,
+      docs_roster: false,
+      docs_check: false,
+      status: 'pending'
+    };
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'create', team })
+      });
+
+      const data = await res.json();
+      if (!data.ok) {
+        console.error(data);
+        showFormMessage('There was a problem submitting your registration. Please try again.', 'error');
         return;
       }
-      
-      // Email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(data.coachEmail)) {
-        alert('Please enter a valid email address.');
-        return;
-      }
-      
-      // Simulate form submission
-      const submitBtn = this.querySelector('.submit-btn');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Registering...';
-      submitBtn.disabled = true;
-      submitBtn.classList.add('clicked');
-      
-      setTimeout(() => {
-        alert('Registration submitted successfully! You will receive a confirmation email shortly.');
-        this.reset();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('clicked');
-      }, 2000);
-    });
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99f1586e96b34bb4',t:'MTc2MzIzNjkzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+      registrationForm.reset();
+      showFormMessage(
+        'Thank you! Your pre-registration has been received. Your team will remain in "Pending" status until all required documents and fees are confirmed by the Tournament Committee.',
+        'success'
+      );
+    } catch (err) {
+      console.error(err);
+      showFormMessage('Network error. Please check your connection and try again.', 'error');
+    }
+  });
+
+  function showFormMessage(text, type) {
+    formMessage.textContent = text;
+    formMessage.className = 'message visible ' + (type === 'error' ? 'error' : 'success');
+  }
+</script>
+</body>
 </html>
