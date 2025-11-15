@@ -1,100 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Approved Teams</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Your CSS goes here -->
+</head>
+<body>
+
+<h2>Approved Teams</h2>
+
+<div id="filters">
+  <button class="pill-filter" data-div="ALL">All</button>
+  <button class="pill-filter" data-div="10UB">10U Boys</button>
+  <button class="pill-filter" data-div="10UG">10U Girls</button>
+  <button class="pill-filter" data-div="12UB">12U Boys</button>
+  <button class="pill-filter" data-div="12UG">12U Girls</button>
+  <button class="pill-filter" data-div="14UB">14U Boys</button>
+  <button class="pill-filter" data-div="14UG">14U Girls</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Division</th>
+      <th>Region</th>
+      <th>Team</th>
+      <th>Coach</th>
+      <th>City / State</th>
+    </tr>
+  </thead>
+  <tbody id="approvedTeamsBody"></tbody>
+</table>
+
+<div id="approvedEmptyNote">Loading...</div>
+
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
 
   let teams = [];
-
-  function divisionLabel(code) {
-    const map = {
-      '10UB': '10U Boys',
-      '10UG': '10U Girls',
-      '12UB': '12U Boys',
-      '12UG': '12U Girls',
-      '14UB': '14U Boys',
-      '14UG': '14U Girls'
-    };
-    return map[code] || code || '';
-  }
-
-  const approvedBody = document.getElementById('approvedTeamsBody');
-  const approvedEmptyNote = document.getElementById('approvedEmptyNote');
-  const divisionFiltersContainer = document.getElementById('divisionFilters');
   let approvedFilterDivision = 'ALL';
 
-  divisionFiltersContainer.addEventListener('click', (e) => {
-    const btn = e.target.closest('.pill-filter');
+  function divisionLabel(code) {
+    return {
+      '10UB': '10U Boys', '10UG': '10U Girls',
+      '12UB': '12U Boys', '12UG': '12U Girls',
+      '14UB': '14U Boys', '14UG': '14U Girls'
+    }[code] || code;
+  }
+
+  document.getElementById("filters").addEventListener("click", (e) => {
+    const btn = e.target.closest(".pill-filter");
     if (!btn) return;
     approvedFilterDivision = btn.dataset.div;
-    divisionFiltersContainer.querySelectorAll('.pill-filter').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderApprovedTeams();
+    loadApproved();
   });
 
-  function renderApprovedTeams() {
-    approvedBody.innerHTML = '';
+  async function loadApproved() {
+    const res = await fetch(API_URL);
+    teams = await res.json();
 
-    const approvedTeams = teams
-      .filter(t => t.status === 'approved')
-      .filter(t => approvedFilterDivision === 'ALL' || t.division === approvedFilterDivision)
-      .sort((a, b) => {
-        if (a.division === b.division) {
-          return (a.teamName || '').localeCompare(b.teamName || '');
-        }
-        return (a.division || '').localeCompare(b.division || '');
-      });
+    const tbody = document.getElementById('approvedTeamsBody');
+    tbody.innerHTML = '';
 
-    if (approvedTeams.length === 0) {
-      approvedEmptyNote.style.display = 'block';
+    const filtered = teams.filter(t =>
+      t.status === 'approved' &&
+      (approvedFilterDivision === 'ALL' || t.division === approvedFilterDivision)
+    );
+
+    if (filtered.length === 0) {
+      document.getElementById('approvedEmptyNote').style.display = 'block';
       return;
-    } else {
-      approvedEmptyNote.style.display = 'none';
     }
 
-    approvedTeams.forEach(team => {
+    document.getElementById('approvedEmptyNote').style.display = 'none';
+
+    filtered.forEach(team => {
       const tr = document.createElement('tr');
-
-      const tdDiv = document.createElement('td');
-      const divTag = document.createElement('span');
-      divTag.className = 'tag tag-division';
-      divTag.textContent = divisionLabel(team.division);
-      tdDiv.appendChild(divTag);
-
-      const tdRegion = document.createElement('td');
-      tdRegion.textContent = team.regionNumber || '';
-
-      const tdTeam = document.createElement('td');
-      tdTeam.textContent = team.teamName || '';
-
-      const tdCoach = document.createElement('td');
-      tdCoach.textContent = team.coachName || '';
-
-      const tdCity = document.createElement('td');
-      const city = team.city || '';
-      const state = team.state || '';
-      tdCity.textContent = city && state ? `${city}, ${state}` : city || state || '';
-
-      tr.appendChild(tdDiv);
-      tr.appendChild(tdRegion);
-      tr.appendChild(tdTeam);
-      tr.appendChild(tdCoach);
-      tr.appendChild(tdCity);
-
-      approvedBody.appendChild(tr);
+      tr.innerHTML = `
+        <td>${divisionLabel(team.division)}</td>
+        <td>${team.regionNumber}</td>
+        <td>${team.teamName}</td>
+        <td>${team.coachName}</td>
+        <td>${team.city}, ${team.state}</td>
+      `;
+      tbody.appendChild(tr);
     });
   }
 
-  async function loadTeamsFromApi() {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      teams = Array.isArray(data) ? data : [];
-      renderApprovedTeams();
-    } catch (err) {
-      console.error(err);
-      approvedEmptyNote.style.display = 'block';
-      approvedEmptyNote.textContent = 'Unable to load teams. Please try again later.';
-    }
-  }
-
-  loadTeamsFromApi();
+  loadApproved();
 </script>
 
+</body>
+</html>
