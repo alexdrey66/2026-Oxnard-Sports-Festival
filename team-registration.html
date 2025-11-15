@@ -1,165 +1,493 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>OSF 2026 – Team Registration (Test)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>OSF 2026 – Team Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #004b8d;   /* AYSO blue */
+      --accent:  #d62828;   /* AYSO red */
+      --bg:      #f3f4f6;
+      --card-bg: #ffffff;
+      --text:    #111827;
+      --muted:   #6b7280;
+      --border:  #e5e7eb;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe 0, #f9fafb 40%, #e5e7eb 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .title-block { max-width: 640px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.07);
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 600;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.28);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .event-pill {
+      padding: 10px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: white;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.45);
+    }
+
+    .event-pill span { opacity: 0.9; }
+    .event-pill-strong { font-weight: 600; display:block; }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 22px 20px 18px;
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card-title { font-size: 18px; margin: 0; }
+    .card-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    .chip-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(148,163,184,0.7);
+      color: #4b5563;
+      background: #f9fafb;
+      white-space: nowrap;
+    }
+
+    .info-banner {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 11px;
+      color: var(--muted);
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      border: 1px dashed rgba(148,163,184,0.8);
+    }
+
+    .info-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(37,99,235,0.08);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size: 11px;
+      color:#1d4ed8;
+      flex-shrink:0;
+      margin-top:1px;
+    }
+
+    .info-text strong { color: var(--text); }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px 18px;
+      margin-top: 6px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    label {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .required { color: #dc2626; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      background: #f9fafb;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37,99,235,0.25);
+      background: #ffffff;
+    }
+
+    .full-width { grid-column: 1 / -1; }
+
+    .actions {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 14px 30px rgba(37,99,235,0.4);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary span:last-child { font-size: 16px; }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 16px 34px rgba(37,99,235,0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 22px rgba(37,99,235,0.4);
+    }
+
+    .note {
+      font-size: 11px;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    .note strong { color: var(--text); }
+
+    .message {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 12px;
+      display: none;
+    }
+
+    .message.visible { display: block; }
+
+    .message.success {
+      background: #ecfdf3;
+      border: 1px solid #22c55e;
+      color: #166534;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+      color: #991b1b;
+    }
+
+    @media (max-width: 680px) {
+      .card { padding: 16px 13px 14px; }
+      .header { align-items: flex-start; }
+      .event-pill { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-  <h1>OSF 2026 – Team Registration</h1>
-  <p>If you can see this heading, the page is loading correctly from GitHub Pages.</p>
-
-  <form id="registrationForm">
-    <div>
-      <label>
-        Division:
-        <select id="division" required>
-          <option value="">Select…</option>
-          <option value="10UB">10U Boys</option>
-          <option value="10UG">10U Girls</option>
-          <option value="12UB">12U Boys</option>
-          <option value="12UG">12U Girls</option>
-          <option value="14UB">14U Boys</option>
-          <option value="14UG">14U Girls</option>
-        </select>
-      </label>
+<div class="page">
+  <header class="header">
+    <div class="title-block">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        AYSO 46th Annual Oxnard Sports Festival
+        <span>• Team Registration</span>
+      </div>
+      <h1>Oxnard Sports Festival – Team Pre-Registration</h1>
+      <p class="subtitle">
+        Use this form to pre-register your team for the 2026 tournament.
+        Final acceptance is based on the full packet received by the Tournament Committee.
+      </p>
     </div>
-
-    <div>
-      <label>
-        Region #:
-        <input type="text" id="regionNumber" required>
-      </label>
+    <div class="event-pill">
+      <div>
+        <span class="event-pill-strong">April 25–26, 2026</span>
+        <span>Oxnard, California · 10U / 12U / 14U · Boys &amp; Girls</span>
+      </div>
     </div>
+  </header>
 
-    <div>
-      <label>
-        Team Name:
-        <input type="text" id="teamName" required>
-      </label>
+  <section>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Team Pre-Registration</h2>
+          <p class="card-subtitle">
+            This form mirrors your 2026 Tournament Application and helps the committee track interest by division.
+          </p>
+        </div>
+        <div class="chip-row">
+          <div class="chip">Max 16 teams / division</div>
+          <div class="chip">AYSO teams only</div>
+          <div class="chip">10U · 12U · 14U · B &amp; G</div>
+        </div>
+      </div>
+
+      <div class="info-banner">
+        <div class="info-icon">i</div>
+        <div class="info-text">
+          <strong>Important:</strong> Your team is <em>not</em> officially accepted until the Tournament Committee
+          receives and confirms: (1) the signed 2026 Tournament Application (PDF), (2) the official AYSO team roster,
+          and (3) a Region-issued check for the full fee.
+        </div>
+      </div>
+
+      <form id="registrationForm">
+        <!-- Division & Region -->
+        <div class="form-group">
+          <label for="division">Division<span class="required">*</span></label>
+          <select id="division" required>
+            <option value="">Select division…</option>
+            <option value="10UB">10U Boys</option>
+            <option value="10UG">10U Girls</option>
+            <option value="12UB">12U Boys</option>
+            <option value="12UG">12U Girls</option>
+            <option value="14UB">14U Boys</option>
+            <option value="14UG">14U Girls</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="regionNumber">Region #<span class="required">*</span></label>
+          <input type="text" id="regionNumber" placeholder="e.g., 304" required />
+        </div>
+
+        <!-- Team info -->
+        <div class="form-group">
+          <label for="teamName">Team Name<span class="required">*</span></label>
+          <input type="text" id="teamName" placeholder="Team name from application" required />
+        </div>
+
+        <div class="form-group">
+          <label for="city">City<span class="required">*</span></label>
+          <input type="text" id="city" placeholder="Home city" required />
+        </div>
+
+        <div class="form-group">
+          <label for="state">State<span class="required">*</span></label>
+          <input type="text" id="state" placeholder="CA, AZ, etc." required />
+        </div>
+
+        <!-- Coach info -->
+        <div class="form-group">
+          <label for="coachName">Head Coach Name<span class="required">*</span></label>
+          <input type="text" id="coachName" required />
+        </div>
+
+        <div class="form-group">
+          <label for="coachEmail">Head Coach Email<span class="required">*</span></label>
+          <input type="email" id="coachEmail" required />
+        </div>
+
+        <div class="form-group">
+          <label for="coachPhone">Head Coach Phone<span class="required">*</span></label>
+          <input type="tel" id="coachPhone" placeholder="Mobile preferred" required />
+        </div>
+
+        <div class="form-group">
+          <label for="assistantCoach">Assistant Coach Name</label>
+          <input type="text" id="assistantCoach" placeholder="Optional" />
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group full-width">
+          <label for="notes">Notes / Special Requests</label>
+          <textarea id="notes"
+            placeholder="Scheduling requests, travel notes, or brief comments that align with your 2026 application."></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">
+            <span>Submit Pre-Registration</span>
+            <span>⚽</span>
+          </button>
+
+          <div class="note">
+            After submitting this form, please follow your 2026 Tournament Application packet for where to send your
+            <strong>PDF application</strong>, <strong>official roster</strong>, and
+            <strong>Region check</strong>.
+          </div>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+      </form>
     </div>
+  </section>
+</div>
 
-    <div>
-      <label>
-        City:
-        <input type="text" id="city" required>
-      </label>
-    </div>
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
 
-    <div>
-      <label>
-        State:
-        <input type="text" id="state" required>
-      </label>
-    </div>
+  const registrationForm = document.getElementById('registrationForm');
+  const formMessage = document.getElementById('formMessage');
 
-    <div>
-      <label>
-        Coach Name:
-        <input type="text" id="coachName" required>
-      </label>
-    </div>
+  registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    <div>
-      <label>
-        Coach Email:
-        <input type="email" id="coachEmail" required>
-      </label>
-    </div>
+    const division       = document.getElementById('division').value.trim();
+    const regionNumber   = document.getElementById('regionNumber').value.trim();
+    const teamName       = document.getElementById('teamName').value.trim();
+    const city           = document.getElementById('city').value.trim();
+    const state          = document.getElementById('state').value.trim();
+    const coachName      = document.getElementById('coachName').value.trim();
+    const coachEmail     = document.getElementById('coachEmail').value.trim();
+    const coachPhone     = document.getElementById('coachPhone').value.trim();
+    const assistantCoach = document.getElementById('assistantCoach').value.trim();
+    const notes          = document.getElementById('notes').value.trim();
 
-    <div>
-      <label>
-        Coach Phone:
-        <input type="tel" id="coachPhone" required>
-      </label>
-    </div>
+    if (!division || !regionNumber || !teamName || !city || !state || !coachName || !coachEmail || !coachPhone) {
+      showFormMessage('Please fill in all required fields.', 'error');
+      return;
+    }
 
-    <div>
-      <label>
-        Assistant Coach:
-        <input type="text" id="assistantCoach">
-      </label>
-    </div>
+    const team = {
+      division,
+      regionNumber,
+      teamName,
+      city,
+      state,
+      coachName,
+      coachEmail,
+      coachPhone,
+      assistantCoach,
+      notes,
+      docs_application: false,
+      docs_roster: false,
+      docs_check: false,
+      status: 'pending'
+    };
 
-    <div>
-      <label>
-        Notes:
-        <textarea id="notes"></textarea>
-      </label>
-    </div>
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'create', team })
+      });
 
-    <button type="submit">Submit Pre-Registration</button>
-  </form>
-
-  <p id="formMessage" style="font-weight:bold;"></p>
-
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
-
-    const registrationForm = document.getElementById('registrationForm');
-    const formMessage = document.getElementById('formMessage');
-
-    registrationForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const division = document.getElementById('division').value.trim();
-      const regionNumber = document.getElementById('regionNumber').value.trim();
-      const teamName = document.getElementById('teamName').value.trim();
-      const city = document.getElementById('city').value.trim();
-      const state = document.getElementById('state').value.trim();
-      const coachName = document.getElementById('coachName').value.trim();
-      const coachEmail = document.getElementById('coachEmail').value.trim();
-      const coachPhone = document.getElementById('coachPhone').value.trim();
-      const assistantCoach = document.getElementById('assistantCoach').value.trim();
-      const notes = document.getElementById('notes').value.trim();
-
-      if (!division || !regionNumber || !teamName || !city || !state || !coachName || !coachEmail || !coachPhone) {
-        formMessage.textContent = 'Please fill in all required fields.';
-        formMessage.style.color = 'red';
+      const data = await res.json();
+      if (!data.ok) {
+        console.error(data);
+        showFormMessage('There was a problem submitting your registration. Please try again.', 'error');
         return;
       }
 
-      const team = {
-        division,
-        regionNumber,
-        teamName,
-        city,
-        state,
-        coachName,
-        coachEmail,
-        coachPhone,
-        assistantCoach,
-        notes,
-        docs_application: false,
-        docs_roster: false,
-        docs_check: false,
-        status: 'pending'
-      };
+      registrationForm.reset();
+      showFormMessage(
+        'Thank you! Your pre-registration has been received. Your team will remain in "Pending" status until all required documents and fees are confirmed by the Tournament Committee.',
+        'success'
+      );
+    } catch (err) {
+      console.error(err);
+      showFormMessage('Network error. Please check your connection and try again.', 'error');
+    }
+  });
 
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mode: 'create', team })
-        });
-
-        const data = await res.json();
-        if (!data.ok) {
-          console.error(data);
-          formMessage.textContent = 'There was a problem submitting your registration.';
-          formMessage.style.color = 'red';
-          return;
-        }
-
-        registrationForm.reset();
-        formMessage.textContent = 'Pre-registration received! Check Admin to confirm it saved.';
-        formMessage.style.color = 'green';
-      } catch (err) {
-        console.error(err);
-        formMessage.textContent = 'Network error. Please try again.';
-        formMessage.style.color = 'red';
-      }
-    });
-  </script>
+  function showFormMessage(text, type) {
+    formMessage.textContent = text;
+    formMessage.className = 'message visible ' + (type === 'error' ? 'error' : 'success');
+  }
+</script>
 </body>
 </html>
