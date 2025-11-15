@@ -447,35 +447,38 @@
       status: 'pending'
     };
 
-    // disable button while submitting
     const originalButtonText = submitButton.innerHTML;
     submitButton.disabled = true;
     submitButton.innerHTML = '<span>Submitting…</span><span>⏳</span>';
-    showFormMessage('', null); // clear message
+    showFormMessage('', null); // clear any previous message
 
     try {
       const res = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // Use text/plain to avoid CORS preflight issues with Apps Script
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ mode: 'create', team })
       });
 
       const text = await res.text();
       let ok = res.ok;
 
-      // Try to read JSON if available, but don't rely on it
+      // Try to parse JSON if the script returns it, but don't depend on it
       try {
         const data = JSON.parse(text);
         if (typeof data.ok !== 'undefined') {
           ok = ok && !!data.ok;
         }
       } catch (_) {
-        // Not JSON, that's fine if status is OK
+        // Not JSON, that's fine as long as the HTTP status is OK
       }
 
       if (!ok) {
         console.error('Response not OK:', text);
-        showFormMessage('There was a problem submitting your registration. Please try again or contact the tournament.', 'error');
+        showFormMessage(
+          'There was a problem submitting your registration. Please try again or contact the tournament.',
+          'error'
+        );
       } else {
         registrationForm.reset();
         showFormMessage(
