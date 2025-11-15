@@ -576,3 +576,239 @@
           <span class="brand-subtitle">AYSO 46th Annual • April 25–26, 2026</span>
         </div>
       </div>
+      <nav class="nav-links">
+        <button class="nav-link" onclick="scrollToId('about')">About</button>
+        <button class="nav-link" onclick="scrollToId('divisions')">Divisions</button>
+        <button class="nav-link" onclick="scrollToId('refs')">Referees</button>
+        <button class="nav-link nav-link-primary" onclick="scrollToId('register')">Register</button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <main class="hero">
+      <section class="hero-main">
+        <div class="pill">
+          <span class="pill-dot"></span>
+          AYSO Area 10W • Hosted by Region 304
+        </div>
+
+        <h1 class="hero-heading">
+          AYSO 46th Annual<br />
+          <span class="highlight">Oxnard Sports Festival</span>
+        </h1>
+
+        <p class="hero-sub">
+          A competitive, family-friendly soccer festival in Oxnard, CA.
+          Quality fields, full concessions, and a weekend that celebrates the
+          AYSO spirit on and off the pitch.
+        </p>
+
+        <div class="hero-badges">
+          <div class="hero-badge">
+            🔥 New for 2026: live standings & digital check-in
+          </div>
+          <div class="hero-badge">
+            Max <strong>16 teams</strong> per division
+          </div>
+        </div>
+
+        <div id="register" class="hero-actions">
+          <button class="btn btn-primary" onclick="goToTeams()">Team Registration</button>
+          <button class="btn btn-secondary" onclick="goToRefs()">Referee Signup</button>
+        </div>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Tournament Dates</span>
+            <span class="hero-meta-value">April 25–26, 2026 (Sat–Sun)</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Location</span>
+            <span class="hero-meta-value">Oxnard, California</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Divisions</span>
+            <span class="hero-meta-value">10U • 12U • 14U (Boys & Girls)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT CARD -->
+      <aside class="hero-side">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Tournament Snapshot</h2>
+            <div class="card-tag">Quick view</div>
+          </div>
+
+          <div class="schedule-grid">
+            <div class="schedule-item">
+              <div class="schedule-label">Check-In</div>
+              <div class="schedule-value">Sat • 7:00–8:00 AM</div>
+              <div class="schedule-note">Coach or team manager required.</div>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-label">First Kickoff</div>
+              <div class="schedule-value">Sat • 8:30 AM</div>
+              <div class="schedule-note">All divisions begin pool play.</div>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-label">Finals</div>
+              <div class="schedule-value">Sun Afternoon</div>
+              <div class="schedule-note">Awards ceremony on site.</div>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-label">Ref HQ</div>
+              <div class="schedule-value">Central Referee Tent</div>
+              <div class="schedule-note">Assignments & check-in per match.</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="quick-links">
+            <button class="quick-link" onclick="scrollToId('divisions')">
+              <div class="quick-link-main">
+                <span class="quick-link-label">Teams</span>
+                <span>View eligible divisions & team requirements.</span>
+              </div>
+              <span class="quick-link-pill">Max 16 teams/division</span>
+            </button>
+
+            <button class="quick-link" onclick="scrollToId('refs')">
+              <div class="quick-link-main">
+                <span class="quick-link-label">Referees</span>
+                <span>Signup details & expectations for refs.</span>
+              </div>
+              <span class="quick-link-pill">Ref signup</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- LOWER SECTIONS -->
+    <section id="about" class="sections">
+      <article class="section-card">
+        <h2 class="section-title">About the Festival</h2>
+        <p class="section-subtitle">
+          The Oxnard Sports Festival is one of AYSO’s signature events in Area 10W,
+          bringing together competitive teams, dedicated referees, and families for
+          a weekend of quality soccer and community.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-label">Format</div>
+            <div class="feature-main">Pool Play & Finals</div>
+            <p class="feature-note">
+              Saturday pool play with advancement to Sunday semifinals and finals,
+              depending on division size.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-label">Philosophy</div>
+            <div class="feature-main">AYSO Principles</div>
+            <p class="feature-note">
+              Everyone Plays, Balanced Teams, Positive Coaching, Good Sportsmanship,
+              Player Development, and Open Registration.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-label">Facilities</div>
+            <div class="feature-main">Fields & Support</div>
+            <p class="feature-note">
+              Well-maintained fields, concessions, restrooms, and medical support
+              help create a safe and enjoyable experience.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-label">Experience</div>
+            <div class="feature-main">Festival Atmosphere</div>
+            <p class="feature-note">
+              Food, vendors, and team spaces make the weekend feel like a true festival,
+              not just a tournament.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article id="divisions" class="section-card">
+        <h2 class="section-title">Divisions & Team Slots</h2>
+        <p class="section-subtitle">
+          Each division is capped at <strong>16 teams</strong>. Spots are confirmed
+          when all required documents and fees are received.
+        </p>
+
+        <div class="feature-item" style="margin-bottom:10px;">
+          <div class="feature-label">Eligible Divisions</div>
+          <div class="feature-main">10U • 12U • 14U — Boys & Girls</div>
+          <p class="feature-note">
+            Final bracketing and schedule will be confirmed once registrations are complete
+            and AYSO age guidelines for MY2025/2026 are applied.
+          </p>
+          <div class="pill-row">
+            <span class="mini-pill">Max 16 teams/division</span>
+            <span class="mini-pill">Roster & ID checks</span>
+            <span class="mini-pill">Area/Section approvals as needed</span>
+          </div>
+        </div>
+
+        <div id="refs" class="feature-item">
+          <div class="feature-label">Referee Participation</div>
+          <div class="feature-main">Ref Support & Points</div>
+          <p class="feature-note">
+            Referees are essential to the success of the festival. Regions may be asked
+            to provide a minimum number of referees or game slots. Coverage and performance
+            may factor into advancement or awards per tournament rules.
+          </p>
+          <div class="pill-row">
+            <span class="mini-pill">Certified AYSO referees</span>
+            <span class="mini-pill">Assignments via Ref HQ</span>
+            <span class="mini-pill">Signup link on this site</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- FOOTER STRIP -->
+    <section class="footer-strip">
+      <div>
+        <span class="footer-highlight">Next step:</span>
+        Use the buttons above to start <strong>team registration</strong> or
+        <strong>referee signup</strong>. Rules, field maps, and forms will be added
+        as they’re finalized.
+      </div>
+      <div class="footer-right">
+        <div class="footer-badge">AYSO Area 10W</div>
+        <div class="footer-badge">Hosted by Region 304</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function scrollToId(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    // Update these later when you have real pages:
+    function goToTeams() {
+      // Example for later:
+      // window.location.href = "https://alexdrey66.github.io/2026-Oxnard-Sports-Festival/teams.html";
+      scrollToId("divisions");
+    }
+
+    function goToRefs() {
+      // Example for later:
+      // window.location.href = "https://alexdrey66.github.io/2026-Oxnard-Sports-Festival/refs.html";
+      scrollToId("refs");
+    }
+  </script>
+</body>
+</html>
