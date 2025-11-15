@@ -74,6 +74,18 @@
       box-shadow: 0 18px 40px rgba(15,23,42,0.16);
       border: 1px solid rgba(148,163,184,0.4);
       padding: 16px 14px 12px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      margin: 0 0 6px;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 10px;
     }
 
     .login-row {
@@ -122,6 +134,11 @@
 
     .btn-decline {
       background: #ef4444;
+      color: white;
+    }
+
+    .btn-pending {
+      background: #f97316;
       color: white;
     }
 
@@ -228,6 +245,12 @@
       cursor: pointer;
     }
 
+    .empty-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
     @media (max-width: 640px) {
       .card { padding: 12px 8px 10px; }
       th:nth-child(5), td:nth-child(5) { display:none; }
@@ -243,31 +266,65 @@
     </div>
     <h1>Admin – Team Management</h1>
     <p class="subtitle">
-      Review pre-registered teams, confirm documents, and mark teams as approved or declined for the Oxnard Sports Festival.
+      Review pre-registered teams, confirm documents, and manage approvals for the Oxnard Sports Festival.
     </p>
   </header>
 
+  <!-- Login / Unlock -->
   <section class="card">
     <div class="login-row">
       <input type="password" id="adminPassword" placeholder="Admin password" />
       <button id="adminLoginBtn" class="btn btn-primary">Unlock Admin</button>
     </div>
     <div id="adminLoginMessage" class="message"></div>
+  </section>
 
-    <div id="adminTools" style="display:none;">
-      <table>
-        <thead>
-        <tr>
-          <th>Division</th>
-          <th>Region</th>
-          <th>Team / Coach</th>
-          <th>Docs (flags)</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="adminTeamsBody"></tbody>
-      </table>
+  <!-- Active (Pending + Approved) -->
+  <section class="card" id="activeCard" style="display:none;">
+    <h2 class="card-title">Active Teams (Pending &amp; Approved)</h2>
+    <p class="card-subtitle">
+      Use the checkboxes to flag documents received. Use Approve / Decline to change team status.
+    </p>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Division</th>
+        <th>Region</th>
+        <th>Team / Coach</th>
+        <th>Docs (flags)</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="adminTeamsBody"></tbody>
+    </table>
+    <div id="activeEmpty" class="empty-note" style="display:none;">
+      No pending or approved teams yet.
+    </div>
+  </section>
+
+  <!-- Declined -->
+  <section class="card" id="declinedCard" style="display:none;">
+    <h2 class="card-title">Declined Teams</h2>
+    <p class="card-subtitle">
+      These teams have been declined. You can move them back to Pending if needed.
+    </p>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Division</th>
+        <th>Region</th>
+        <th>Team / Coach</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="declinedTeamsBody"></tbody>
+    </table>
+    <div id="declinedEmpty" class="empty-note" style="display:none;">
+      No declined teams at this time.
     </div>
   </section>
 </div>
@@ -297,22 +354,29 @@
   const adminLoginBtn      = document.getElementById('adminLoginBtn');
   const adminPasswordInput = document.getElementById('adminPassword');
   const adminLoginMessage  = document.getElementById('adminLoginMessage');
-  const adminTools         = document.getElementById('adminTools');
+  const activeCard         = document.getElementById('activeCard');
+  const declinedCard       = document.getElementById('declinedCard');
   const adminTeamsBody     = document.getElementById('adminTeamsBody');
+  const declinedTeamsBody  = document.getElementById('declinedTeamsBody');
+  const activeEmpty        = document.getElementById('activeEmpty');
+  const declinedEmpty      = document.getElementById('declinedEmpty');
 
   adminLoginBtn.addEventListener('click', async () => {
     const entered = adminPasswordInput.value.trim();
     if (entered !== ADMIN_PASSWORD) {
       adminLoginMessage.textContent = 'Incorrect password. Please try again.';
       adminLoginMessage.className = 'message visible error';
-      adminTools.style.display = 'none';
+      activeCard.style.display   = 'none';
+      declinedCard.style.display = 'none';
       return;
     }
     adminLoginMessage.textContent = 'Admin panel unlocked.';
     adminLoginMessage.className = 'message visible success';
-    adminTools.style.display = 'block';
+    activeCard.style.display   = 'block';
+    declinedCard.style.display = 'block';
+
     await loadTeamsFromApi();
-    renderAdminTable();
+    renderTables();
   });
 
   async function loadTeamsFromApi() {
@@ -321,10 +385,21 @@
     teams = Array.isArray(data) ? data : [];
   }
 
-  function renderAdminTable() {
-    adminTeamsBody.innerHTML = '';
+  function renderTables() {
+    adminTeamsBody.innerHTML    = '';
+    declinedTeamsBody.innerHTML = '';
 
-    teams.forEach(team => {
+    const activeTeams   = teams.filter(t => (t.status || 'pending') !== 'declined');
+    const declinedTeams = teams.filter(t => t.status === 'declined');
+
+    // Active (pending + approved)
+    if (activeTeams.length === 0) {
+      activeEmpty.style.display = 'block';
+    } else {
+      activeEmpty.style.display = 'none';
+    }
+
+    activeTeams.forEach(team => {
       const tr = document.createElement('tr');
 
       const tdDiv = document.createElement('td');
@@ -437,35 +512,85 @@
 
       adminTeamsBody.appendChild(tr);
     });
+
+    // Declined table
+    if (declinedTeams.length === 0) {
+      declinedEmpty.style.display = 'block';
+    } else {
+      declinedEmpty.style.display = 'none';
+    }
+
+    declinedTeams.forEach(team => {
+      const tr = document.createElement('tr');
+
+      const tdDiv = document.createElement('td');
+      tdDiv.textContent = divisionLabel(team.division);
+
+      const tdRegion = document.createElement('td');
+      tdRegion.innerHTML = `<strong>${team.regionNumber || ''}</strong>`;
+
+      const tdTeamCoach = document.createElement('td');
+      tdTeamCoach.innerHTML =
+        `<strong>${team.teamName || ''}</strong><br>` +
+        `<div class="coach-line">Coach: ${team.coachName || ''}</div>` +
+        `<div class="email-line">${team.coachEmail || ''}</div>`;
+
+      const tdStatus = document.createElement('td');
+      const chip = document.createElement('span');
+      chip.classList.add('status-chip', 'status-declined');
+      chip.textContent = 'Declined';
+      tdStatus.appendChild(chip);
+
+      const tdActions = document.createElement('td');
+      const btnPending = document.createElement('button');
+      btnPending.textContent = 'Move to Pending';
+      btnPending.className = 'btn-small btn-pending';
+      btnPending.onclick = () => updateStatus(team.id, 'pending');
+      tdActions.appendChild(btnPending);
+
+      tr.appendChild(tdDiv);
+      tr.appendChild(tdRegion);
+      tr.appendChild(tdTeamCoach);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdActions);
+
+      declinedTeamsBody.appendChild(tr);
+    });
+  }
+
+  async function postUpdate(payload) {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      // Try to parse but don't depend on JSON
+      const text = await res.text();
+      if (!res.ok) {
+        console.error('Update failed:', text);
+      }
+    } catch (err) {
+      console.error('Network error during update:', err);
+    }
   }
 
   async function updateStatus(id, status) {
-    await fetch(API_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        mode: 'update',
-        team: { id, status }
-      })
+    await postUpdate({
+      mode: 'update',
+      team: { id, status }
     });
-
     await loadTeamsFromApi();
-    renderAdminTable();
+    renderTables();
   }
 
   async function updateDocs(id, docs) {
-    // docs: { docs_application, docs_roster, docs_check }
-    await fetch(API_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        mode: 'update',
-        team: { id, ...docs }
-      })
+    await postUpdate({
+      mode: 'update',
+      team: { id, ...docs }
     });
-
     await loadTeamsFromApi();
-    renderAdminTable();
+    renderTables();
   }
 </script>
 </body>
