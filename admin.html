@@ -209,6 +209,25 @@
       word-break: break-all;
     }
 
+    .docs-flags {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 11px;
+    }
+
+    .docs-flag-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .docs-flag-row input[type="checkbox"] {
+      width: 13px;
+      height: 13px;
+      cursor: pointer;
+    }
+
     @media (max-width: 640px) {
       .card { padding: 12px 8px 10px; }
       th:nth-child(5), td:nth-child(5) { display:none; }
@@ -267,6 +286,14 @@
     }[code] || code || '';
   }
 
+  // Normalize sheet values to booleans
+  function toBool(v) {
+    return v === true ||
+           v === 'TRUE' || v === 'true' ||
+           v === 1 || v === '1' ||
+           v === 'Yes' || v === 'YES' || v === 'yes';
+  }
+
   const adminLoginBtn      = document.getElementById('adminLoginBtn');
   const adminPasswordInput = document.getElementById('adminPassword');
   const adminLoginMessage  = document.getElementById('adminLoginMessage');
@@ -313,10 +340,65 @@
         `<div class="email-line">${team.coachEmail || ''}</div>`;
 
       const tdDocs = document.createElement('td');
-      tdDocs.innerHTML =
-        `App: ${team.docs_application || 0} &nbsp;·&nbsp;` +
-        `Roster: ${team.docs_roster || 0} &nbsp;·&nbsp;` +
-        `Check: ${team.docs_check || 0}`;
+      tdDocs.className = 'docs-flags';
+
+      // Application checkbox
+      const appRow = document.createElement('div');
+      appRow.className = 'docs-flag-row';
+      const appCb = document.createElement('input');
+      appCb.type = 'checkbox';
+      appCb.checked = toBool(team.docs_application);
+      appCb.addEventListener('change', () => {
+        updateDocs(team.id, {
+          docs_application: appCb.checked,
+          docs_roster:      toBool(team.docs_roster),
+          docs_check:       toBool(team.docs_check)
+        });
+      });
+      const appLabel = document.createElement('span');
+      appLabel.textContent = 'Application received';
+      appRow.appendChild(appCb);
+      appRow.appendChild(appLabel);
+
+      // Roster checkbox
+      const rosterRow = document.createElement('div');
+      rosterRow.className = 'docs-flag-row';
+      const rosterCb = document.createElement('input');
+      rosterCb.type = 'checkbox';
+      rosterCb.checked = toBool(team.docs_roster);
+      rosterCb.addEventListener('change', () => {
+        updateDocs(team.id, {
+          docs_application: toBool(team.docs_application),
+          docs_roster:      rosterCb.checked,
+          docs_check:       toBool(team.docs_check)
+        });
+      });
+      const rosterLabel = document.createElement('span');
+      rosterLabel.textContent = 'Roster received';
+      rosterRow.appendChild(rosterCb);
+      rosterRow.appendChild(rosterLabel);
+
+      // Check checkbox
+      const checkRow = document.createElement('div');
+      checkRow.className = 'docs-flag-row';
+      const checkCb = document.createElement('input');
+      checkCb.type = 'checkbox';
+      checkCb.checked = toBool(team.docs_check);
+      checkCb.addEventListener('change', () => {
+        updateDocs(team.id, {
+          docs_application: toBool(team.docs_application),
+          docs_roster:      toBool(team.docs_roster),
+          docs_check:       checkCb.checked
+        });
+      });
+      const checkLabel = document.createElement('span');
+      checkLabel.textContent = 'Check received';
+      checkRow.appendChild(checkCb);
+      checkRow.appendChild(checkLabel);
+
+      tdDocs.appendChild(appRow);
+      tdDocs.appendChild(rosterRow);
+      tdDocs.appendChild(checkRow);
 
       const tdStatus = document.createElement('td');
       const chip = document.createElement('span');
@@ -364,6 +446,21 @@
       body: JSON.stringify({
         mode: 'update',
         team: { id, status }
+      })
+    });
+
+    await loadTeamsFromApi();
+    renderAdminTable();
+  }
+
+  async function updateDocs(id, docs) {
+    // docs: { docs_application, docs_roster, docs_check }
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        mode: 'update',
+        team: { id, ...docs }
       })
     });
 
