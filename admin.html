@@ -1,33 +1,256 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Your CSS goes here -->
+  <meta charset="UTF-8" />
+  <title>OSF 2026 – Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #004b8d;
+      --accent:  #d62828;
+      --bg:      #f3f4f6;
+      --card-bg: #ffffff;
+      --text:    #111827;
+      --muted:   #6b7280;
+      --border:  #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe 0, #f9fafb 40%, #e5e7eb 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .header {
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.07);
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 600;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #facc15;
+      box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.32);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 16px 14px 12px;
+    }
+
+    .login-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .login-row input {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 7px 11px;
+      font-size: 13px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 13px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 12px 26px rgba(37,99,235,0.45);
+    }
+
+    .btn-small {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 3px;
+    }
+
+    .btn-approve {
+      background: #22c55e;
+      color: white;
+    }
+
+    .btn-decline {
+      background: #ef4444;
+      color: white;
+    }
+
+    .message {
+      font-size: 12px;
+      margin-top: 4px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .message.visible { display:block; }
+    .message.success {
+      background: #ecfdf3;
+      border: 1px solid #22c55e;
+      color: #166534;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+      color: #991b1b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    thead {
+      background: #f3f4f6;
+    }
+
+    th, td {
+      padding: 7px 9px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    .status-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-approved {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-declined {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .coach-line {
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .email-line {
+      font-size: 11px;
+      color: #6b7280;
+      word-break: break-all;
+    }
+
+    @media (max-width: 640px) {
+      .card { padding: 12px 8px 10px; }
+      th:nth-child(5), td:nth-child(5) { display:none; }
+    }
+  </style>
 </head>
 <body>
+<div class="page">
+  <header class="header">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Tournament Admin • OSF 2026
+    </div>
+    <h1>Admin – Team Management</h1>
+    <p class="subtitle">
+      Review pre-registered teams, confirm documents, and mark teams as approved or declined for the Oxnard Sports Festival.
+    </p>
+  </header>
 
-<h2>Admin – Manage Teams</h2>
+  <section class="card">
+    <div class="login-row">
+      <input type="password" id="adminPassword" placeholder="Admin password" />
+      <button id="adminLoginBtn" class="btn btn-primary">Unlock Admin</button>
+    </div>
+    <div id="adminLoginMessage" class="message"></div>
 
-<input type="password" id="adminPassword" placeholder="Admin Password">
-<button id="adminLoginBtn">Login</button>
-<div id="adminLoginMessage"></div>
-
-<div id="adminTools" style="display:none;">
-  <table>
-    <thead>
-      <tr>
-        <th>Division</th>
-        <th>Region</th>
-        <th>Team</th>
-        <th>Docs</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="adminTeamsBody"></tbody>
-  </table>
+    <div id="adminTools" style="display:none;">
+      <table>
+        <thead>
+        <tr>
+          <th>Division</th>
+          <th>Region</th>
+          <th>Team / Coach</th>
+          <th>Docs (flags)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="adminTeamsBody"></tbody>
+      </table>
+    </div>
+  </section>
 </div>
 
 <script>
@@ -36,43 +259,101 @@
 
   let teams = [];
 
-  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
-    const entered = document.getElementById('adminPassword').value;
+  function divisionLabel(code) {
+    return {
+      '10UB': '10U Boys', '10UG': '10U Girls',
+      '12UB': '12U Boys', '12UG': '12U Girls',
+      '14UB': '14U Boys', '14UG': '14U Girls'
+    }[code] || code || '';
+  }
+
+  const adminLoginBtn      = document.getElementById('adminLoginBtn');
+  const adminPasswordInput = document.getElementById('adminPassword');
+  const adminLoginMessage  = document.getElementById('adminLoginMessage');
+  const adminTools         = document.getElementById('adminTools');
+  const adminTeamsBody     = document.getElementById('adminTeamsBody');
+
+  adminLoginBtn.addEventListener('click', async () => {
+    const entered = adminPasswordInput.value.trim();
     if (entered !== ADMIN_PASSWORD) {
-      document.getElementById('adminLoginMessage').innerText = "Wrong password";
+      adminLoginMessage.textContent = 'Incorrect password. Please try again.';
+      adminLoginMessage.className = 'message visible error';
+      adminTools.style.display = 'none';
       return;
     }
-
-    document.getElementById('adminLoginMessage').innerText = "Access granted";
-    document.getElementById('adminTools').style.display = "block";
-
-    const res = await fetch(API_URL);
-    teams = await res.json();
+    adminLoginMessage.textContent = 'Admin panel unlocked.';
+    adminLoginMessage.className = 'message visible success';
+    adminTools.style.display = 'block';
+    await loadTeamsFromApi();
     renderAdminTable();
   });
 
-  async function renderAdminTable() {
-    const tbody = document.getElementById('adminTeamsBody');
-    tbody.innerHTML = '';
+  async function loadTeamsFromApi() {
+    const res  = await fetch(API_URL);
+    const data = await res.json();
+    teams = Array.isArray(data) ? data : [];
+  }
+
+  function renderAdminTable() {
+    adminTeamsBody.innerHTML = '';
 
     teams.forEach(team => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${team.division}</td>
-        <td>${team.regionNumber}</td>
-        <td>${team.teamName}</td>
-        <td>
-          App: ${team.docs_application} |
-          Roster: ${team.docs_roster} |
-          Check: ${team.docs_check}
-        </td>
-        <td>${team.status}</td>
-        <td>
-          <button onclick="updateStatus('${team.id}', 'approved')">Approve</button>
-          <button onclick="updateStatus('${team.id}', 'declined')">Decline</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
+
+      const tdDiv = document.createElement('td');
+      tdDiv.textContent = divisionLabel(team.division);
+
+      const tdRegion = document.createElement('td');
+      tdRegion.innerHTML = `<strong>${team.regionNumber || ''}</strong>`;
+
+      const tdTeamCoach = document.createElement('td');
+      tdTeamCoach.innerHTML =
+        `<strong>${team.teamName || ''}</strong><br>` +
+        `<div class="coach-line">Coach: ${team.coachName || ''}</div>` +
+        `<div class="email-line">${team.coachEmail || ''}</div>`;
+
+      const tdDocs = document.createElement('td');
+      tdDocs.innerHTML =
+        `App: ${team.docs_application || 0} &nbsp;·&nbsp;` +
+        `Roster: ${team.docs_roster || 0} &nbsp;·&nbsp;` +
+        `Check: ${team.docs_check || 0}`;
+
+      const tdStatus = document.createElement('td');
+      const chip = document.createElement('span');
+      chip.classList.add('status-chip');
+      const status = team.status || 'pending';
+      if (status === 'approved') chip.classList.add('status-approved');
+      else if (status === 'declined') chip.classList.add('status-declined');
+      else chip.classList.add('status-pending');
+      chip.textContent =
+        status === 'approved' ? 'Approved' :
+        status === 'declined' ? 'Declined' :
+        'Pending';
+      tdStatus.appendChild(chip);
+
+      const tdActions = document.createElement('td');
+      const btnApprove = document.createElement('button');
+      btnApprove.textContent = 'Approve';
+      btnApprove.className = 'btn-small btn-approve';
+      btnApprove.onclick = () => updateStatus(team.id, 'approved');
+
+      const btnDecline = document.createElement('button');
+      btnDecline.textContent = 'Decline';
+      btnDecline.className  = 'btn-small btn-decline';
+      btnDecline.onclick    = () => updateStatus(team.id, 'declined');
+
+      tdActions.appendChild(btnApprove);
+      tdActions.appendChild(document.createElement('br'));
+      tdActions.appendChild(btnDecline);
+
+      tr.appendChild(tdDiv);
+      tr.appendChild(tdRegion);
+      tr.appendChild(tdTeamCoach);
+      tr.appendChild(tdDocs);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdActions);
+
+      adminTeamsBody.appendChild(tr);
     });
   }
 
@@ -86,11 +367,9 @@
       })
     });
 
-    const res = await fetch(API_URL);
-    teams = await res.json();
+    await loadTeamsFromApi();
     renderAdminTable();
   }
 </script>
-
 </body>
 </html>
