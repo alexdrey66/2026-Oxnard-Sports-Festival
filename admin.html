@@ -1,257 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Your CSS goes here -->
+</head>
+<body>
+
+<h2>Admin – Manage Teams</h2>
+
+<input type="password" id="adminPassword" placeholder="Admin Password">
+<button id="adminLoginBtn">Login</button>
+<div id="adminLoginMessage"></div>
+
+<div id="adminTools" style="display:none;">
+  <table>
+    <thead>
+      <tr>
+        <th>Division</th>
+        <th>Region</th>
+        <th>Team</th>
+        <th>Docs</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="adminTeamsBody"></tbody>
+  </table>
+</div>
+
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
   const ADMIN_PASSWORD = 'PLAYSOCCER';
 
   let teams = [];
 
-  function divisionLabel(code) {
-    const map = {
-      '10UB': '10U Boys',
-      '10UG': '10U Girls',
-      '12UB': '12U Boys',
-      '12UG': '12U Girls',
-      '14UB': '14U Boys',
-      '14UG': '14U Girls'
-    };
-    return map[code] || code || '';
-  }
-
-  const adminLoginBtn = document.getElementById('adminLoginBtn');
-  const adminPasswordInput = document.getElementById('adminPassword');
-  const adminLoginMessage = document.getElementById('adminLoginMessage');
-  const adminTools = document.getElementById('adminTools');
-
-  const adminDivisionFilter = document.getElementById('adminDivisionFilter');
-  const adminStatusFilter = document.getElementById('adminStatusFilter');
-  const adminTeamsBody = document.getElementById('adminTeamsBody');
-  const exportJsonBtn = document.getElementById('exportJsonBtn');
-  const clearAllBtn = document.getElementById('clearAllBtn');
-
-  adminLoginBtn.addEventListener('click', async () => {
-    const entered = adminPasswordInput.value.trim();
+  document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+    const entered = document.getElementById('adminPassword').value;
     if (entered !== ADMIN_PASSWORD) {
-      adminLoginMessage.textContent = 'Incorrect password. Please try again.';
-      adminLoginMessage.className = 'message visible error';
-      adminTools.classList.remove('visible');
+      document.getElementById('adminLoginMessage').innerText = "Wrong password";
       return;
     }
-    adminLoginMessage.textContent = 'Admin panel unlocked.';
-    adminLoginMessage.className = 'message visible success';
-    adminTools.classList.add('visible');
-    await loadTeamsFromApi();
+
+    document.getElementById('adminLoginMessage').innerText = "Access granted";
+    document.getElementById('adminTools').style.display = "block";
+
+    const res = await fetch(API_URL);
+    teams = await res.json();
     renderAdminTable();
   });
 
-  adminDivisionFilter.addEventListener('change', renderAdminTable);
-  adminStatusFilter.addEventListener('change', renderAdminTable);
+  async function renderAdminTable() {
+    const tbody = document.getElementById('adminTeamsBody');
+    tbody.innerHTML = '';
 
-  async function loadTeamsFromApi() {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      teams = Array.isArray(data) ? data : [];
-    } catch (err) {
-      console.error(err);
-      alert('Unable to load teams from server.');
-    }
-  }
-
-  function renderAdminTable() {
-    adminTeamsBody.innerHTML = '';
-
-    const divFilter = adminDivisionFilter.value;
-    const statusFilter = adminStatusFilter.value;
-
-    const filtered = teams
-      .filter(t => (divFilter === 'ALL' || t.division === divFilter))
-      .filter(t => (statusFilter === 'ALL' || t.status === statusFilter))
-      .sort((a, b) => {
-        if ((a.status || '') === (b.status || '')) {
-          if ((a.division || '') === (b.division || '')) {
-            return (b.createdAt || '').localeCompare(a.createdAt || '');
-          }
-          return (a.division || '').localeCompare(b.division || '');
-        }
-        return (a.status || '').localeCompare(b.status || '');
-      });
-
-    filtered.forEach(team => {
+    teams.forEach(team => {
       const tr = document.createElement('tr');
-
-      const tdDiv = document.createElement('td');
-      const divTag = document.createElement('span');
-      divTag.className = 'tag tag-division';
-      divTag.textContent = divisionLabel(team.division);
-      tdDiv.appendChild(divTag);
-
-      const tdRegion = document.createElement('td');
-      tdRegion.innerHTML = `<strong>${team.regionNumber || ''}</strong>`;
-
-      const tdTeamCoach = document.createElement('td');
-      tdTeamCoach.innerHTML =
-        `<strong>${team.teamName || ''}</strong><br>` +
-        `<span style="font-size:11px;color:#4b5563;">Coach: ${team.coachName || ''}</span><br>` +
-        `<span style="font-size:11px;color:#6b7280;">${team.coachEmail || ''}</span>`;
-
-      const tdDocs = document.createElement('td');
-      const docsWrapper = document.createElement('div');
-      docsWrapper.className = 'doc-flags';
-
-      if (team.docs_application === undefined) team.docs_application = 0;
-      if (team.docs_roster === undefined) team.docs_roster = 0;
-      if (team.docs_check === undefined) team.docs_check = 0;
-
-      const makeDocCb = (key, label) => {
-        const l = document.createElement('label');
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = team[key] == 1 || team[key] === true;
-        cb.addEventListener('change', async () => {
-          team[key] = cb.checked ? 1 : 0;
-          await saveTeamUpdate(team);
-        });
-        l.appendChild(cb);
-        l.append(label);
-        return l;
-      };
-
-      docsWrapper.appendChild(makeDocCb('docs_application', 'Application PDF'));
-      docsWrapper.appendChild(makeDocCb('docs_roster', 'Official roster'));
-      docsWrapper.appendChild(makeDocCb('docs_check', 'Region check'));
-      tdDocs.appendChild(docsWrapper);
-
-      const tdStatus = document.createElement('td');
-      const statusTag = document.createElement('span');
-      const status = team.status || 'pending';
-      statusTag.className = 'tag tag-status ' + status;
-      let statusLabel = 'Pending';
-      if (status === 'approved') statusLabel = 'Approved';
-      if (status === 'declined') statusLabel = 'Declined';
-      statusTag.textContent = statusLabel;
-      tdStatus.appendChild(statusTag);
-
-      const tdActions = document.createElement('td');
-
-      const btnApprove = document.createElement('button');
-      btnApprove.type = 'button';
-      btnApprove.className = 'btn-small approve';
-      btnApprove.textContent = 'Approve';
-
-      const btnReject = document.createElement('button');
-      btnReject.type = 'button';
-      btnReject.className = 'btn-small reject';
-      btnReject.textContent = 'Decline';
-
-      const btnDelete = document.createElement('button');
-      btnDelete.type = 'button';
-      btnDelete.className = 'btn-small delete';
-      btnDelete.textContent = 'Delete';
-
-      btnApprove.addEventListener('click', async () => {
-        const docsOk = (team.docs_application == 1) && (team.docs_roster == 1) && (team.docs_check == 1);
-        if (!docsOk) {
-          const proceed = confirm(
-            'One or more required documents are not marked as received.\n\nApprove this team anyway?'
-          );
-          if (!proceed) return;
-        }
-        team.status = 'approved';
-        await saveTeamUpdate(team);
-      });
-
-      btnReject.addEventListener('click', async () => {
-        const reason = prompt('Optional internal note: reason for declining this team (for your records).');
-        if (reason !== null) {
-          team.status = 'declined';
-          team.internalNote = reason.trim();
-          await saveTeamUpdate(team);
-        }
-      });
-
-      btnDelete.addEventListener('click', async () => {
-        if (!confirm('Delete this team from the list? This cannot be undone.')) return;
-        await deleteTeam(team.id);
-      });
-
-      tdActions.appendChild(btnApprove);
-      tdActions.appendChild(document.createElement('br'));
-      tdActions.appendChild(btnReject);
-      tdActions.appendChild(document.createElement('br'));
-      tdActions.appendChild(btnDelete);
-
-      tr.appendChild(tdDiv);
-      tr.appendChild(tdRegion);
-      tr.appendChild(tdTeamCoach);
-      tr.appendChild(tdDocs);
-      tr.appendChild(tdStatus);
-      tr.appendChild(tdActions);
-
-      adminTeamsBody.appendChild(tr);
+      tr.innerHTML = `
+        <td>${team.division}</td>
+        <td>${team.regionNumber}</td>
+        <td>${team.teamName}</td>
+        <td>
+          App: ${team.docs_application} |
+          Roster: ${team.docs_roster} |
+          Check: ${team.docs_check}
+        </td>
+        <td>${team.status}</td>
+        <td>
+          <button onclick="updateStatus('${team.id}', 'approved')">Approve</button>
+          <button onclick="updateStatus('${team.id}', 'declined')">Decline</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
     });
   }
 
-  async function saveTeamUpdate(team) {
-    try {
-      await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mode: 'update',
-          team: {
-            id: team.id,
-            division: team.division,
-            regionNumber: team.regionNumber,
-            teamName: team.teamName,
-            city: team.city,
-            state: team.state,
-            coachName: team.coachName,
-            coachEmail: team.coachEmail,
-            coachPhone: team.coachPhone,
-            assistantCoach: team.assistantCoach,
-            notes: team.notes,
-            docs_application: team.docs_application,
-            docs_roster: team.docs_roster,
-            docs_check: team.docs_check,
-            status: team.status,
-            internalNote: team.internalNote
-          }
-        })
-      });
-      await loadTeamsFromApi();
-      renderAdminTable();
-    } catch (err) {
-      console.error(err);
-      alert('Error saving update.');
-    }
+  async function updateStatus(id, status) {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        mode: 'update',
+        team: { id, status }
+      })
+    });
+
+    const res = await fetch(API_URL);
+    teams = await res.json();
+    renderAdminTable();
   }
-
-  async function deleteTeam(id) {
-    try {
-      await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'delete', id })
-      });
-      await loadTeamsFromApi();
-      renderAdminTable();
-    } catch (err) {
-      console.error(err);
-      alert('Error deleting team.');
-    }
-  }
-
-  exportJsonBtn.addEventListener('click', () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(teams, null, 2));
-    const a = document.createElement('a');
-    a.href = dataStr;
-    a.download = 'osf2026_teams.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  });
-
-  clearAllBtn.addEventListener('click', () => {
-    alert('For safety, clear all rows directly in the Google Sheet if you really need a full reset.');
-  });
 </script>
 
+</body>
+</html>
