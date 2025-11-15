@@ -112,23 +112,6 @@
     .card-title { font-size: 18px; margin: 0; }
     .card-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
 
-    .chip-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .chip {
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 11px;
-      border: 1px solid rgba(148,163,184,0.7);
-      color: #4b5563;
-      background: #f9fafb;
-      white-space: nowrap;
-    }
-
     .info-banner {
       display: flex;
       gap: 8px;
@@ -238,13 +221,20 @@
 
     .btn-primary span:last-child { font-size: 16px; }
 
-    .btn-primary:hover {
+    .btn-primary[disabled] {
+      opacity: 0.7;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-primary:hover:not([disabled]) {
       filter: brightness(1.05);
       box-shadow: 0 16px 34px rgba(37,99,235,0.5);
       transform: translateY(-1px);
     }
 
-    .btn-primary:active {
+    .btn-primary:active:not([disabled]) {
       transform: translateY(0);
       box-shadow: 0 10px 22px rgba(37,99,235,0.4);
     }
@@ -318,11 +308,6 @@
             This form mirrors your 2026 Tournament Application and helps the committee track interest by division.
           </p>
         </div>
-        <div class="chip-row">
-          <div class="chip">Max 16 teams / division</div>
-          <div class="chip">AYSO teams only</div>
-          <div class="chip">10U · 12U · 14U · B &amp; G</div>
-        </div>
       </div>
 
       <div class="info-banner">
@@ -393,13 +378,13 @@
 
         <!-- Notes -->
         <div class="form-group full-width">
-          <label for="notes">Notes / Special Requests</label>
+          <label for="notes">Notes</label>
           <textarea id="notes"
             placeholder="Scheduling requests, travel notes, or brief comments that align with your 2026 application."></textarea>
         </div>
 
         <div class="actions">
-          <button type="submit" class="btn-primary">
+          <button type="submit" class="btn-primary" id="submitButton">
             <span>Submit Pre-Registration</span>
             <span>⚽</span>
           </button>
@@ -422,8 +407,11 @@
 
   const registrationForm = document.getElementById('registrationForm');
   const formMessage = document.getElementById('formMessage');
+  const submitButton = document.getElementById('submitButton');
 
-  registrationForm.addEventListener('submit', async (e) => {
+  registrationForm.addEventListener('submit', handleSubmit);
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const division       = document.getElementById('division').value.trim();
@@ -459,6 +447,12 @@
       status: 'pending'
     };
 
+    // disable button while submitting
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span>Submitting…</span><span>⏳</span>';
+    showFormMessage('', null); // clear message
+
     try {
       const res = await fetch(API_URL, {
         method: 'POST',
@@ -466,25 +460,44 @@
         body: JSON.stringify({ mode: 'create', team })
       });
 
-      const data = await res.json();
-      if (!data.ok) {
-        console.error(data);
-        showFormMessage('There was a problem submitting your registration. Please try again.', 'error');
-        return;
+      const text = await res.text();
+      let ok = res.ok;
+
+      // Try to read JSON if available, but don't rely on it
+      try {
+        const data = JSON.parse(text);
+        if (typeof data.ok !== 'undefined') {
+          ok = ok && !!data.ok;
+        }
+      } catch (_) {
+        // Not JSON, that's fine if status is OK
       }
 
-      registrationForm.reset();
-      showFormMessage(
-        'Thank you! Your pre-registration has been received. Your team will remain in "Pending" status until all required documents and fees are confirmed by the Tournament Committee.',
-        'success'
-      );
+      if (!ok) {
+        console.error('Response not OK:', text);
+        showFormMessage('There was a problem submitting your registration. Please try again or contact the tournament.', 'error');
+      } else {
+        registrationForm.reset();
+        showFormMessage(
+          'Thank you! Your pre-registration has been received. Your team will remain in "Pending" status until all required documents and fees are confirmed by the Tournament Committee.',
+          'success'
+        );
+      }
     } catch (err) {
       console.error(err);
       showFormMessage('Network error. Please check your connection and try again.', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.innerHTML = originalButtonText;
     }
-  });
+  }
 
   function showFormMessage(text, type) {
+    if (!type || !text) {
+      formMessage.textContent = '';
+      formMessage.className = 'message';
+      return;
+    }
     formMessage.textContent = text;
     formMessage.className = 'message visible ' + (type === 'error' ? 'error' : 'success');
   }
