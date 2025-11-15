@@ -332,4 +332,133 @@
         </div>
 
         <div class="form-group">
-          <label for="city"
+          <label for="city">City<span class="required">*</span></label>
+          <input type="text" id="city" placeholder="Home city" required>
+        </div>
+
+        <div class="form-group">
+          <label for="state">State<span class="required">*</span></label>
+          <input type="text" id="state" placeholder="CA, AZ, etc." required>
+        </div>
+
+        <!-- Coach info -->
+        <div class="form-group">
+          <label for="coachName">Head Coach Name<span class="required">*</span></label>
+          <input type="text" id="coachName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="coachEmail">Head Coach Email<span class="required">*</span></label>
+          <input type="email" id="coachEmail" required>
+        </div>
+
+        <div class="form-group">
+          <label for="coachPhone">Head Coach Phone<span class="required">*</span></label>
+          <input type="tel" id="coachPhone" placeholder="Mobile preferred" required>
+        </div>
+
+        <div class="form-group">
+          <label for="assistantCoach">Assistant Coach Name</label>
+          <input type="text" id="assistantCoach" placeholder="Optional">
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group full-width">
+          <label for="notes">Notes / Special Requests</label>
+          <textarea id="notes"
+            placeholder="Optional: scheduling requests, conflicts, or brief notes that match your 2026 application."></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">
+            <span>Submit Pre-Registration</span>
+            <span>⚽</span>
+          </button>
+
+          <div class="note">
+            After submitting, mail / upload your
+            <span class="highlight">PDF application, official roster, and Region check</span>
+            to the Tournament Registrar per the 2026 packet instructions.
+          </div>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
+
+  const registrationForm = document.getElementById('registrationForm');
+  const formMessage = document.getElementById('formMessage');
+
+  registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const division = document.getElementById('division').value.trim();
+    const regionNumber = document.getElementById('regionNumber').value.trim();
+    const teamName = document.getElementById('teamName').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const state = document.getElementById('state').value.trim();
+    const coachName = document.getElementById('coachName').value.trim();
+    const coachEmail = document.getElementById('coachEmail').value.trim();
+    const coachPhone = document.getElementById('coachPhone').value.trim();
+    const assistantCoach = document.getElementById('assistantCoach').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+
+    if (!division || !regionNumber || !teamName || !city || !state || !coachName || !coachEmail || !coachPhone) {
+      showFormMessage('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    const team = {
+      division,
+      regionNumber,
+      teamName,
+      city,
+      state,
+      coachName,
+      coachEmail,
+      coachPhone,
+      assistantCoach,
+      notes,
+      docs_application: false,
+      docs_roster: false,
+      docs_check: false,
+      status: 'pending'
+    };
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'create', team })
+      });
+
+      const data = await res.json();
+      if (!data.ok) {
+        console.error(data);
+        showFormMessage('There was a problem submitting your registration. Please try again.', 'error');
+        return;
+      }
+
+      registrationForm.reset();
+      showFormMessage(
+        'Thank you! Your pre-registration has been received. Your team will remain in "Pending" status until all required documents and fees are confirmed by the Tournament Committee.',
+        'success'
+      );
+    } catch (err) {
+      console.error(err);
+      showFormMessage('Network error. Please check your connection and try again.', 'error');
+    }
+  });
+
+  function showFormMessage(text, type) {
+    formMessage.textContent = text;
+    formMessage.className = 'message visible ' + (type === 'error' ? 'error' : 'success');
+  }
+</script>
+</body>
+</html>
