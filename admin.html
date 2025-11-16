@@ -127,20 +127,9 @@
       margin-bottom: 3px;
     }
 
-    .btn-approve {
-      background: #22c55e;
-      color: white;
-    }
-
-    .btn-decline {
-      background: #ef4444;
-      color: white;
-    }
-
-    .btn-pending {
-      background: #f97316;
-      color: white;
-    }
+    .btn-approve { background: #22c55e; color: white; }
+    .btn-decline { background: #ef4444; color: white; }
+    .btn-pending { background: #f97316; color: white; }
 
     .message {
       font-size: 12px;
@@ -156,12 +145,40 @@
       border: 1px solid #22c55e;
       color: #166534;
     }
-
     .message.error {
       background: #fef2f2;
       border: 1px solid #ef4444;
       color: #991b1b;
     }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-bottom: 1px solid rgba(148,163,184,0.5);
+      margin-bottom: 10px;
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 999px 999px 0 0;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #111827;
+      box-shadow: 0 -1px 0 #ffffff, 0 -2px 0 #1d4ed8;
+    }
+
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
 
     table {
       width: 100%;
@@ -170,9 +187,7 @@
       margin-top: 8px;
     }
 
-    thead {
-      background: #f3f4f6;
-    }
+    thead { background: #f3f4f6; }
 
     th, td {
       padding: 7px 9px;
@@ -188,9 +203,7 @@
       color: #6b7280;
     }
 
-    tbody tr:hover {
-      background: #f9fafb;
-    }
+    tbody tr:hover { background: #f9fafb; }
 
     .status-chip {
       display: inline-block;
@@ -200,31 +213,12 @@
       font-weight: 600;
     }
 
-    .status-pending {
-      background: #fef3c7;
-      color: #92400e;
-    }
+    .status-pending  { background: #fef3c7; color: #92400e; }
+    .status-approved { background: #dcfce7; color: #166534; }
+    .status-declined { background: #fee2e2; color: #991b1b; }
 
-    .status-approved {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-declined {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .coach-line {
-      font-size: 11px;
-      color: #4b5563;
-    }
-
-    .email-line {
-      font-size: 11px;
-      color: #6b7280;
-      word-break: break-all;
-    }
+    .coach-line { font-size: 11px; color: #4b5563; }
+    .email-line { font-size: 11px; color: #6b7280; word-break: break-all; }
 
     .docs-flags {
       display: flex;
@@ -251,6 +245,87 @@
       margin-top: 6px;
     }
 
+    .chip {
+      display:inline-flex;
+      align-items:center;
+      padding:2px 8px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#3730a3;
+      font-size:11px;
+      gap:4px;
+    }
+
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#f3f4f6;
+      font-size:12px;
+      gap:6px;
+      margin-right:6px;
+      margin-bottom:4px;
+    }
+
+    .pill span:last-child {
+      font-size:11px;
+      color:#6b7280;
+    }
+
+    .tag {
+      display:inline-block;
+      padding:2px 6px;
+      border-radius:999px;
+      background:#e5e7eb;
+      font-size:11px;
+      margin-right:4px;
+      margin-bottom:2px;
+    }
+
+    .small-input-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:8px;
+      font-size:13px;
+    }
+
+    .small-input-row input,
+    .small-input-row select {
+      padding:6px 9px;
+      border-radius:8px;
+      border:1px solid var(--border);
+      font-size:13px;
+    }
+
+    .small-label {
+      font-size:12px;
+      color:#4b5563;
+      margin-bottom:2px;
+    }
+
+    .game-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:center;
+      font-size:12px;
+      padding:4px 0;
+      border-bottom:1px solid #e5e7eb;
+    }
+
+    .game-row:last-child { border-bottom:none; }
+
+    .score-input {
+      width:40px;
+      padding:2px 4px;
+      border-radius:4px;
+      border:1px solid var(--border);
+      font-size:12px;
+      text-align:center;
+    }
+
     @media (max-width: 640px) {
       .card { padding: 12px 8px 10px; }
       th:nth-child(5), td:nth-child(5) { display:none; }
@@ -264,9 +339,9 @@
       <span class="badge-dot"></span>
       Tournament Admin • OSF 2026
     </div>
-    <h1>Admin – Team Management</h1>
+    <h1>Admin – Tournament Control Center</h1>
     <p class="subtitle">
-      Review pre-registered teams, confirm documents, and manage approvals for the Oxnard Sports Festival.
+      One-stop hub to manage teams, pools, schedules, and scoring for the Oxnard Sports Festival.
     </p>
   </header>
 
@@ -277,54 +352,171 @@
       <button id="adminLoginBtn" class="btn btn-primary">Unlock Admin</button>
     </div>
     <div id="adminLoginMessage" class="message"></div>
-  </section>
 
-  <!-- Active (Pending + Approved) -->
-  <section class="card" id="activeCard" style="display:none;">
-    <h2 class="card-title">Active Teams (Pending &amp; Approved)</h2>
-    <p class="card-subtitle">
-      Use the checkboxes to flag documents received. Use Approve / Decline to change team status.
-    </p>
+    <div id="adminMain" style="display:none; margin-top:10px;">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="teamsTab">Teams</button>
+        <button class="tab-btn" data-tab="poolsTab">Pools</button>
+        <button class="tab-btn" data-tab="scheduleTab">Game Schedules</button>
+        <button class="tab-btn" data-tab="scoringTab">Scoring</button>
+      </div>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Division</th>
-        <th>Region</th>
-        <th>Team / Coach</th>
-        <th>Docs (flags)</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody id="adminTeamsBody"></tbody>
-    </table>
-    <div id="activeEmpty" class="empty-note" style="display:none;">
-      No pending or approved teams yet.
-    </div>
-  </section>
+      <!-- TEAMS TAB -->
+      <div id="teamsTab" class="tab-panel active">
+        <!-- Pending & Approved -->
+        <section class="card" style="margin-top:4px;">
+          <h2 class="card-title">Active Teams (Pending &amp; Approved)</h2>
+          <p class="card-subtitle">
+            Use the checkboxes to flag documents received. Use Approve / Decline to change team status.
+          </p>
 
-  <!-- Declined -->
-  <section class="card" id="declinedCard" style="display:none;">
-    <h2 class="card-title">Declined Teams</h2>
-    <p class="card-subtitle">
-      These teams have been declined. You can move them back to Pending if needed.
-    </p>
+          <table>
+            <thead>
+            <tr>
+              <th>Division</th>
+              <th>Region</th>
+              <th>Team / Coach</th>
+              <th>Docs (flags)</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="adminTeamsBody"></tbody>
+          </table>
+          <div id="activeEmpty" class="empty-note" style="display:none;">
+            No pending or approved teams yet.
+          </div>
+        </section>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Division</th>
-        <th>Region</th>
-        <th>Team / Coach</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody id="declinedTeamsBody"></tbody>
-    </table>
-    <div id="declinedEmpty" class="empty-note" style="display:none;">
-      No declined teams at this time.
+        <!-- Declined -->
+        <section class="card">
+          <h2 class="card-title">Declined Teams</h2>
+          <p class="card-subtitle">
+            Teams that have been declined. You can move them back to Pending if needed.
+          </p>
+
+          <table>
+            <thead>
+            <tr>
+              <th>Division</th>
+              <th>Region</th>
+              <th>Team / Coach</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="declinedTeamsBody"></tbody>
+          </table>
+          <div id="declinedEmpty" class="empty-note" style="display:none;">
+            No declined teams at this time.
+          </div>
+        </section>
+      </div>
+
+      <!-- POOLS TAB -->
+      <div id="poolsTab" class="tab-panel">
+        <section class="card" style="margin-top:4px;">
+          <h2 class="card-title">Pools by Division</h2>
+          <p class="card-subtitle">
+            Create pools using the list of <strong>approved teams</strong>. (Saved in this browser for now.)
+          </p>
+
+          <div class="small-input-row">
+            <div>
+              <div class="small-label">Division</div>
+              <select id="poolDivision">
+                <option value="10UB">10U Boys</option>
+                <option value="10UG">10U Girls</option>
+                <option value="12UB">12U Boys</option>
+                <option value="12UG">12U Girls</option>
+                <option value="14UB">14U Boys</option>
+                <option value="14UG">14U Girls</option>
+              </select>
+            </div>
+            <div>
+              <div class="small-label">New Pool Name</div>
+              <input type="text" id="poolName" placeholder="e.g., Pool A" />
+            </div>
+            <div style="align-self:flex-end;">
+              <button class="btn btn-primary" id="createPoolBtn">Add Pool</button>
+            </div>
+          </div>
+
+          <p class="small-label">Assign Teams to Pools (division-specific)</p>
+          <div id="poolTeamsArea" style="font-size:12px; margin-bottom:6px;">
+            <span class="empty-note">Select a division with approved teams to assign pools.</span>
+          </div>
+
+          <div id="poolsList"></div>
+        </section>
+      </div>
+
+      <!-- SCHEDULE TAB -->
+      <div id="scheduleTab" class="tab-panel">
+        <section class="card" style="margin-top:4px;">
+          <h2 class="card-title">Game Schedule Generator</h2>
+          <p class="card-subtitle">
+            Define fields and game times per division. A simple round-robin schedule will be generated in this browser.
+          </p>
+
+          <div class="small-input-row">
+            <div>
+              <div class="small-label">Division</div>
+              <select id="schedDivision">
+                <option value="10UB">10U Boys</option>
+                <option value="10UG">10U Girls</option>
+                <option value="12UB">12U Boys</option>
+                <option value="12UG">12U Girls</option>
+                <option value="14UB">14U Boys</option>
+                <option value="14UG">14U Girls</option>
+              </select>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <div class="small-label">Fields (comma separated)</div>
+              <input type="text" id="schedFields" placeholder="Field 1, Field 2" style="width:100%;" />
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <div class="small-label">Game Times (comma separated)</div>
+              <input type="text" id="schedTimes" placeholder="8:00, 9:00, 10:00" style="width:100%;" />
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="generateScheduleBtn">Generate Schedule (local)</button>
+
+          <div id="scheduleOutput" style="margin-top:10px; font-size:12px;"></div>
+        </section>
+      </div>
+
+      <!-- SCORING TAB -->
+      <div id="scoringTab" class="tab-panel">
+        <section class="card" style="margin-top:4px;">
+          <h2 class="card-title">Scoring & Standings</h2>
+          <p class="card-subtitle">
+            Enter scores for scheduled games. Points use: Win 6 • Tie 3 • Loss 0 • Shutout 1 • Goals 1 each (max 3).
+            (All scoring stored locally for now.)
+          </p>
+
+          <div class="small-input-row">
+            <div>
+              <div class="small-label">Division</div>
+              <select id="scoreDivision">
+                <option value="10UB">10U Boys</option>
+                <option value="10UG">10U Girls</option>
+                <option value="12UB">12U Boys</option>
+                <option value="12UG">12U Girls</option>
+                <option value="14UB">14U Boys</option>
+                <option value="14UG">14U Girls</option>
+              </select>
+            </div>
+            <div style="align-self:flex-end;">
+              <button class="btn btn-primary" id="loadScoresBtn">Load Games</button>
+            </div>
+          </div>
+
+          <div id="scoringGames" style="margin-top:6px;"></div>
+          <div id="standingsOutput" style="margin-top:10px; font-size:12px;"></div>
+        </section>
+      </div>
     </div>
   </section>
 </div>
@@ -334,6 +526,13 @@
   const ADMIN_PASSWORD = 'PLAYSOCCER';
 
   let teams = [];
+  let pools = JSON.parse(localStorage.getItem('osf_pools') || '[]');           // {id, division, name, teamIds[]}
+  let schedules = JSON.parse(localStorage.getItem('osf_schedules') || '[]');   // {division, games[]}
+  let scores = JSON.parse(localStorage.getItem('osf_scores') || '{}');         // { gameId: {home, away} }
+
+  function savePools()     { localStorage.setItem('osf_pools', JSON.stringify(pools)); }
+  function saveSchedules() { localStorage.setItem('osf_schedules', JSON.stringify(schedules)); }
+  function saveScores()    { localStorage.setItem('osf_scores', JSON.stringify(scores)); }
 
   function divisionLabel(code) {
     return {
@@ -343,7 +542,6 @@
     }[code] || code || '';
   }
 
-  // Normalize sheet values to booleans
   function toBool(v) {
     return v === true ||
            v === 'TRUE' || v === 'true' ||
@@ -354,29 +552,39 @@
   const adminLoginBtn      = document.getElementById('adminLoginBtn');
   const adminPasswordInput = document.getElementById('adminPassword');
   const adminLoginMessage  = document.getElementById('adminLoginMessage');
-  const activeCard         = document.getElementById('activeCard');
-  const declinedCard       = document.getElementById('declinedCard');
+  const adminMain          = document.getElementById('adminMain');
+
   const adminTeamsBody     = document.getElementById('adminTeamsBody');
   const declinedTeamsBody  = document.getElementById('declinedTeamsBody');
   const activeEmpty        = document.getElementById('activeEmpty');
   const declinedEmpty      = document.getElementById('declinedEmpty');
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'poolsTab') refreshPoolsUI();
+    });
+  });
 
   adminLoginBtn.addEventListener('click', async () => {
     const entered = adminPasswordInput.value.trim();
     if (entered !== ADMIN_PASSWORD) {
       adminLoginMessage.textContent = 'Incorrect password. Please try again.';
       adminLoginMessage.className = 'message visible error';
-      activeCard.style.display   = 'none';
-      declinedCard.style.display = 'none';
+      adminMain.style.display = 'none';
       return;
     }
     adminLoginMessage.textContent = 'Admin panel unlocked.';
     adminLoginMessage.className = 'message visible success';
-    activeCard.style.display   = 'block';
-    declinedCard.style.display = 'block';
+    adminMain.style.display = 'block';
 
     await loadTeamsFromApi();
-    renderTables();
+    renderTeamsTables();
+    refreshPoolsUI();
   });
 
   async function loadTeamsFromApi() {
@@ -385,20 +593,19 @@
     teams = Array.isArray(data) ? data : [];
   }
 
-  function renderTables() {
+  /* ---------------- TEAMS TAB ---------------- */
+
+  function renderTeamsTables() {
     adminTeamsBody.innerHTML    = '';
     declinedTeamsBody.innerHTML = '';
 
     const activeTeams   = teams.filter(t => (t.status || 'pending') !== 'declined');
     const declinedTeams = teams.filter(t => t.status === 'declined');
 
-    // Active (pending + approved)
-    if (activeTeams.length === 0) {
-      activeEmpty.style.display = 'block';
-    } else {
-      activeEmpty.style.display = 'none';
-    }
+    activeEmpty.style.display   = activeTeams.length   ? 'none' : 'block';
+    declinedEmpty.style.display = declinedTeams.length ? 'none' : 'block';
 
+    // Active
     activeTeams.forEach(team => {
       const tr = document.createElement('tr');
 
@@ -417,59 +624,38 @@
       const tdDocs = document.createElement('td');
       tdDocs.className = 'docs-flags';
 
-      // Application checkbox
       const appRow = document.createElement('div');
       appRow.className = 'docs-flag-row';
       const appCb = document.createElement('input');
       appCb.type = 'checkbox';
       appCb.checked = toBool(team.docs_application);
       appCb.addEventListener('change', () => {
-        updateDocs(team.id, {
-          docs_application: appCb.checked,
-          docs_roster:      toBool(team.docs_roster),
-          docs_check:       toBool(team.docs_check)
-        });
+        updateDocs(team.id, { docs_application: appCb.checked, docs_roster: toBool(team.docs_roster), docs_check: toBool(team.docs_check) });
       });
-      const appLabel = document.createElement('span');
-      appLabel.textContent = 'Application received';
       appRow.appendChild(appCb);
-      appRow.appendChild(appLabel);
+      appRow.appendChild(document.createElement('span')).textContent = 'Application received';
 
-      // Roster checkbox
       const rosterRow = document.createElement('div');
       rosterRow.className = 'docs-flag-row';
       const rosterCb = document.createElement('input');
       rosterCb.type = 'checkbox';
       rosterCb.checked = toBool(team.docs_roster);
       rosterCb.addEventListener('change', () => {
-        updateDocs(team.id, {
-          docs_application: toBool(team.docs_application),
-          docs_roster:      rosterCb.checked,
-          docs_check:       toBool(team.docs_check)
-        });
+        updateDocs(team.id, { docs_application: toBool(team.docs_application), docs_roster: rosterCb.checked, docs_check: toBool(team.docs_check) });
       });
-      const rosterLabel = document.createElement('span');
-      rosterLabel.textContent = 'Roster received';
       rosterRow.appendChild(rosterCb);
-      rosterRow.appendChild(rosterLabel);
+      rosterRow.appendChild(document.createElement('span')).textContent = 'Roster received';
 
-      // Check checkbox
       const checkRow = document.createElement('div');
       checkRow.className = 'docs-flag-row';
       const checkCb = document.createElement('input');
       checkCb.type = 'checkbox';
       checkCb.checked = toBool(team.docs_check);
       checkCb.addEventListener('change', () => {
-        updateDocs(team.id, {
-          docs_application: toBool(team.docs_application),
-          docs_roster:      toBool(team.docs_roster),
-          docs_check:       checkCb.checked
-        });
+        updateDocs(team.id, { docs_application: toBool(team.docs_application), docs_roster: toBool(team.docs_roster), docs_check: checkCb.checked });
       });
-      const checkLabel = document.createElement('span');
-      checkLabel.textContent = 'Check received';
       checkRow.appendChild(checkCb);
-      checkRow.appendChild(checkLabel);
+      checkRow.appendChild(document.createElement('span')).textContent = 'Check received';
 
       tdDocs.appendChild(appRow);
       tdDocs.appendChild(rosterRow);
@@ -493,12 +679,10 @@
       btnApprove.textContent = 'Approve';
       btnApprove.className = 'btn-small btn-approve';
       btnApprove.onclick = () => updateStatus(team.id, 'approved');
-
       const btnDecline = document.createElement('button');
-      btnDecline.textContent = 'Decline';
-      btnDecline.className  = 'btn-small btn-decline';
-      btnDecline.onclick    = () => updateStatus(team.id, 'declined');
-
+      btnDecline.textContent  = 'Decline';
+      btnDecline.className    = 'btn-small btn-decline';
+      btnDecline.onclick      = () => updateStatus(team.id, 'declined');
       tdActions.appendChild(btnApprove);
       tdActions.appendChild(document.createElement('br'));
       tdActions.appendChild(btnDecline);
@@ -513,13 +697,7 @@
       adminTeamsBody.appendChild(tr);
     });
 
-    // Declined table
-    if (declinedTeams.length === 0) {
-      declinedEmpty.style.display = 'block';
-    } else {
-      declinedEmpty.style.display = 'none';
-    }
-
+    // Declined
     declinedTeams.forEach(team => {
       const tr = document.createElement('tr');
 
@@ -565,7 +743,6 @@
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
-      // Try to parse but don't depend on JSON
       const text = await res.text();
       if (!res.ok) {
         console.error('Update failed:', text);
@@ -576,21 +753,334 @@
   }
 
   async function updateStatus(id, status) {
-    await postUpdate({
-      mode: 'update',
-      team: { id, status }
-    });
+    await postUpdate({ mode: 'update', team: { id, status } });
     await loadTeamsFromApi();
-    renderTables();
+    renderTeamsTables();
+    refreshPoolsUI();
   }
 
   async function updateDocs(id, docs) {
-    await postUpdate({
-      mode: 'update',
-      team: { id, ...docs }
-    });
+    await postUpdate({ mode: 'update', team: { id, ...docs } });
     await loadTeamsFromApi();
-    renderTables();
+    renderTeamsTables();
+  }
+
+  /* ---------------- POOLS TAB (local) ---------------- */
+
+  const poolDivisionSel = document.getElementById('poolDivision');
+  const poolNameInput   = document.getElementById('poolName');
+  const createPoolBtn   = document.getElementById('createPoolBtn');
+  const poolTeamsArea   = document.getElementById('poolTeamsArea');
+  const poolsList       = document.getElementById('poolsList');
+
+  createPoolBtn.addEventListener('click', () => {
+    const division = poolDivisionSel.value;
+    const name = poolNameInput.value.trim();
+    if (!name) return;
+    const id = 'pool_' + Date.now();
+    pools.push({ id, division, name, teamIds: [] });
+    savePools();
+    poolNameInput.value = '';
+    refreshPoolsUI();
+  });
+
+  function refreshPoolsUI() {
+    const division = poolDivisionSel.value;
+    const approvedTeams = teams.filter(t => t.status === 'approved' && t.division === division);
+
+    // Team assignment chips
+    poolTeamsArea.innerHTML = '';
+    if (!approvedTeams.length) {
+      poolTeamsArea.innerHTML = '<span class="empty-note">No approved teams yet for this division.</span>';
+    } else {
+      approvedTeams.forEach(team => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pill';
+        const poolsForDiv = pools.filter(p => p.division === division);
+        const select = document.createElement('select');
+        const noneOpt = document.createElement('option');
+        noneOpt.value = '';
+        noneOpt.textContent = 'No pool';
+        select.appendChild(noneOpt);
+        poolsForDiv.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name;
+          if (p.teamIds.includes(String(team.id))) opt.selected = true;
+          select.appendChild(opt);
+        });
+        select.addEventListener('change', () => assignTeamToPool(division, String(team.id), select.value));
+        wrapper.innerHTML = `<strong>${team.teamName || 'Team'}</strong><span>${divisionLabel(division)}</span>`;
+        wrapper.appendChild(select);
+        poolTeamsArea.appendChild(wrapper);
+      });
+    }
+
+    // Pools list
+    poolsList.innerHTML = '';
+    const poolsForDiv = pools.filter(p => p.division === division);
+    if (!poolsForDiv.length) {
+      poolsList.innerHTML = '<div class="empty-note">No pools created for this division yet.</div>';
+    } else {
+      poolsForDiv.forEach(p => {
+        const div = document.createElement('div');
+        div.style.marginTop = '8px';
+        const header = document.createElement('div');
+        header.innerHTML = `<span class="chip">${divisionLabel(p.division)}</span> <strong>${p.name}</strong>`;
+        const body = document.createElement('div');
+        body.style.marginTop = '4px';
+        const members = teams.filter(t => p.teamIds.includes(String(t.id)));
+        if (!members.length) {
+          body.innerHTML = '<span class="empty-note">No teams assigned yet.</span>';
+        } else {
+          members.forEach(m => {
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = m.teamName || 'Team';
+            body.appendChild(tag);
+          });
+        }
+        div.appendChild(header);
+        div.appendChild(body);
+        poolsList.appendChild(div);
+      });
+    }
+  }
+
+  function assignTeamToPool(division, teamId, poolId) {
+    // Remove from any pool in this division
+    pools.forEach(p => {
+      if (p.division !== division) return;
+      p.teamIds = p.teamIds.filter(id => id !== teamId);
+    });
+    // Add to selected pool
+    if (poolId) {
+      const pool = pools.find(p => p.id === poolId);
+      if (pool && !pool.teamIds.includes(teamId)) pool.teamIds.push(teamId);
+    }
+    savePools();
+    refreshPoolsUI();
+  }
+
+  /* ---------------- SCHEDULE TAB (local) ---------------- */
+
+  const schedDivisionSel = document.getElementById('schedDivision');
+  const schedFieldsInput = document.getElementById('schedFields');
+  const schedTimesInput  = document.getElementById('schedTimes');
+  const generateScheduleBtn = document.getElementById('generateScheduleBtn');
+  const scheduleOutput   = document.getElementById('scheduleOutput');
+
+  generateScheduleBtn.addEventListener('click', () => {
+    const division = schedDivisionSel.value;
+    const fields = schedFieldsInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    const times  = schedTimesInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    const poolsForDiv = pools.filter(p => p.division === division);
+
+    if (!poolsForDiv.length) {
+      scheduleOutput.innerHTML = '<div class="empty-note">Create pools for this division first.</div>';
+      return;
+    }
+    if (!fields.length || !times.length) {
+      scheduleOutput.innerHTML = '<div class="empty-note">Enter at least one field and one game time.</div>';
+      return;
+    }
+
+    const games = [];
+    let gameCounter = 1;
+
+    // Simple round-robin per pool
+    poolsForDiv.forEach(pool => {
+      const poolTeams = teams.filter(t => pool.teamIds.includes(String(t.id)));
+      for (let i = 0; i < poolTeams.length; i++) {
+        for (let j = i + 1; j < poolTeams.length; j++) {
+          games.push({
+            id: `${division}_${pool.id}_g${gameCounter++}`,
+            division,
+            poolId: pool.id,
+            poolName: pool.name,
+            homeId: String(poolTeams[i].id),
+            awayId: String(poolTeams[j].id)
+          });
+        }
+      }
+    });
+
+    // Assign field/time slots
+    const slots = [];
+    fields.forEach(f => times.forEach(t => slots.push({ field: f, time: t })));
+    games.forEach((g, idx) => {
+      const slot = slots[idx % slots.length];
+      g.field = slot.field;
+      g.time  = slot.time;
+    });
+
+    // Store schedule
+    schedules = schedules.filter(s => s.division !== division);
+    schedules.push({ division, games });
+    saveSchedules();
+
+    renderSchedule(division);
+  });
+
+  function renderSchedule(division) {
+    const sched = schedules.find(s => s.division === division);
+    scheduleOutput.innerHTML = '';
+    if (!sched || !sched.games.length) {
+      scheduleOutput.innerHTML = '<div class="empty-note">No schedule generated yet for this division.</div>';
+      return;
+    }
+
+    const byPool = {};
+    sched.games.forEach(g => {
+      byPool[g.poolName] = byPool[g.poolName] || [];
+      byPool[g.poolName].push(g);
+    });
+
+    Object.keys(byPool).forEach(poolName => {
+      const block = document.createElement('div');
+      block.style.marginTop = '8px';
+      block.innerHTML = `<div><span class="chip">${divisionLabel(division)}</span> <strong>${poolName}</strong></div>`;
+      const list = document.createElement('div');
+      list.style.marginTop = '4px';
+      byPool[poolName].forEach(g => {
+        const home = teams.find(t => String(t.id) === g.homeId);
+        const away = teams.find(t => String(t.id) === g.awayId);
+        const row = document.createElement('div');
+        row.style.fontSize = '12px';
+        row.style.marginBottom = '2px';
+        row.textContent = `${g.time} @ ${g.field} – ${(home && home.teamName) || 'Team'} vs ${(away && away.teamName) || 'Team'}`;
+        list.appendChild(row);
+      });
+      block.appendChild(list);
+      scheduleOutput.appendChild(block);
+    });
+  }
+
+  /* ---------------- SCORING TAB (local) ---------------- */
+
+  const scoreDivisionSel = document.getElementById('scoreDivision');
+  const loadScoresBtn    = document.getElementById('loadScoresBtn');
+  const scoringGamesDiv  = document.getElementById('scoringGames');
+  const standingsOutput  = document.getElementById('standingsOutput');
+
+  loadScoresBtn.addEventListener('click', () => {
+    const division = scoreDivisionSel.value;
+    renderScoringGames(division);
+  });
+
+  function renderScoringGames(division) {
+    const sched = schedules.find(s => s.division === division);
+    scoringGamesDiv.innerHTML = '';
+    standingsOutput.innerHTML = '';
+
+    if (!sched || !sched.games.length) {
+      scoringGamesDiv.innerHTML = '<div class="empty-note">Generate a schedule for this division first.</div>';
+      return;
+    }
+
+    sched.games.forEach(g => {
+      const home = teams.find(t => String(t.id) === g.homeId);
+      const away = teams.find(t => String(t.id) === g.awayId);
+      const gameKey = g.id;
+      const existing = scores[gameKey] || { home: '', away: '' };
+
+      const row = document.createElement('div');
+      row.className = 'game-row';
+      row.innerHTML = `<strong>${g.time}</strong> @ ${g.field} – ${(home && home.teamName) || 'Team'} vs ${(away && away.teamName) || 'Team'}`;
+
+      const homeInput = document.createElement('input');
+      homeInput.type = 'number';
+      homeInput.min = '0';
+      homeInput.className = 'score-input';
+      homeInput.value = existing.home;
+
+      const awayInput = document.createElement('input');
+      awayInput.type = 'number';
+      awayInput.min = '0';
+      awayInput.className = 'score-input';
+      awayInput.value = existing.away;
+
+      homeInput.addEventListener('change', () => {
+        scores[gameKey] = { home: Number(homeInput.value || 0), away: Number(awayInput.value || 0) };
+        saveScores(); renderStandings(division);
+      });
+      awayInput.addEventListener('change', () => {
+        scores[gameKey] = { home: Number(homeInput.value || 0), away: Number(awayInput.value || 0) };
+        saveScores(); renderStandings(division);
+      });
+
+      row.appendChild(document.createTextNode('  '));
+      row.appendChild(homeInput);
+      row.appendChild(document.createTextNode(' - '));
+      row.appendChild(awayInput);
+
+      scoringGamesDiv.appendChild(row);
+    });
+
+    renderStandings(division);
+  }
+
+  function renderStandings(division) {
+    const sched = schedules.find(s => s.division === division);
+    standingsOutput.innerHTML = '';
+    if (!sched || !sched.games.length) return;
+
+    const points = {}; // teamId -> {name, played, wins, draws, losses, goalsFor, goalsAgainst, pts}
+    function ensureTeam(id) {
+      if (!points[id]) {
+        const t = teams.find(tt => String(tt.id) === id) || {};
+        points[id] = {
+          name: t.teamName || 'Team',
+          played:0,wins:0,draws:0,losses:0,goalsFor:0,goalsAgainst:0,pts:0
+        };
+      }
+      return points[id];
+    }
+
+    sched.games.forEach(g => {
+      const gameKey = g.id;
+      const result = scores[gameKey];
+      if (!result) return;
+      const h = ensureTeam(g.homeId);
+      const a = ensureTeam(g.awayId);
+      const hs = Number(result.home);
+      const as = Number(result.away);
+      if (isNaN(hs) || isNaN(as)) return;
+
+      h.played++; a.played++;
+      h.goalsFor += hs; h.goalsAgainst += as;
+      a.goalsFor += as; a.goalsAgainst += hs;
+
+      // base points: win 6, tie 3, loss 0
+      if (hs > as) { h.wins++; a.losses++; h.pts += 6; }
+      else if (hs < as) { a.wins++; h.losses++; a.pts += 6; }
+      else { h.draws++; a.draws++; h.pts += 3; a.pts += 3; }
+
+      // shutout: +1 if opponent scores 0
+      if (as === 0 && hs > 0) h.pts += 1;
+      if (hs === 0 && as > 0) a.pts += 1;
+
+      // goal points: 1 per goal, max 3
+      h.pts += Math.min(hs, 3);
+      a.pts += Math.min(as, 3);
+    });
+
+    const rows = Object.entries(points)
+      .map(([id, p]) => ({ id, ...p }))
+      .sort((a,b) => b.pts - a.pts || (b.goalsFor-b.goalsAgainst) - (a.goalsFor-a.goalsAgainst));
+
+    if (!rows.length) {
+      standingsOutput.innerHTML = '<div class="empty-note">Enter some scores to see standings.</div>';
+      return;
+    }
+
+    let html = '<h3 class="card-title">Standings</h3>';
+    html += '<table><thead><tr><th>Team</th><th>GP</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>Pts</th></tr></thead><tbody>';
+    rows.forEach(r => {
+      html += `<tr><td>${r.name}</td><td>${r.played}</td><td>${r.wins}</td><td>${r.draws}</td><td>${r.losses}</td><td>${r.goalsFor}</td><td>${r.goalsAgainst}</td><td>${r.pts}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    standingsOutput.innerHTML = html;
   }
 </script>
 </body>
