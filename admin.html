@@ -513,8 +513,7 @@
         <section class="card" style="margin-top:4px;">
           <h2 class="card-title">Game Schedule Generator</h2>
           <p class="card-subtitle">
-            Define days, fields, and game times per division. Pool-play schedule is generated locally
-            (max 3 pool-play games per team) with spacing between games.
+            Define days, fields, and game times per division. Round-based scheduler enforces fair ordering and spacing.
           </p>
 
           <div class="small-input-row">
@@ -548,9 +547,55 @@
 
           <hr style="margin:12px 0; border:none; border-top:1px solid #e5e7eb;" />
 
+          <h3 class="card-title">Knockout Games (Semis / Finals)</h3>
+          <p class="card-subtitle">
+            Add bracket games with date/time/field now. Teams can stay <strong>TBD</strong> until you assign them.
+          </p>
+
+          <div class="small-input-row">
+            <div>
+              <div class="small-label">Stage</div>
+              <select id="finalStage">
+                <option value="Semi">Semi</option>
+                <option value="Final">Final</option>
+                <option value="Consolation">Consolation</option>
+              </select>
+            </div>
+            <div>
+              <div class="small-label">Date</div>
+              <input type="text" id="finalDate" class="admin-game-input" placeholder="Sunday (Apr 26)" />
+            </div>
+            <div>
+              <div class="small-label">Time</div>
+              <input type="text" id="finalTime" class="admin-game-input" placeholder="1:00pm" />
+            </div>
+            <div>
+              <div class="small-label">Field</div>
+              <input type="text" id="finalField" class="admin-game-input" placeholder="Field 5" />
+            </div>
+          </div>
+
+          <div class="small-input-row">
+            <div>
+              <div class="small-label">Home Team</div>
+              <select id="finalHomeTeam" class="admin-game-input"></select>
+            </div>
+            <div>
+              <div class="small-label">Away Team</div>
+              <select id="finalAwayTeam" class="admin-game-input"></select>
+            </div>
+            <div style="align-self:flex-end;">
+              <button class="btn btn-ghost" id="addFinalBtn">Add Knockout Game</button>
+            </div>
+          </div>
+
+          <div id="finalsList" style="margin-top:8px; font-size:12px;"></div>
+
+          <hr style="margin:14px 0; border:none; border-top:1px solid #e5e7eb;" />
+
           <h3 class="card-title">Parent-Facing Schedule Preview</h3>
           <p class="card-subtitle">
-            Grouped by date with time down the side and fields across, similar to the printed sheets.
+            Grouped by date with time down the side and fields across. Includes pool-play and knockout games.
           </p>
           <div id="schedulePreview"></div>
         </section>
@@ -562,7 +607,7 @@
           <h2 class="card-title">Scoring & Standings</h2>
           <p class="card-subtitle">
             Enter scores for pool-play games. Points: Win 6 • Tie 3 • Loss 0 • Shutout 1 • Goals 1 each (max 3).
-            Standings and games are grouped by pool.
+            Games and standings are grouped by pool.
           </p>
 
           <div class="small-input-row">
@@ -597,7 +642,7 @@
   let teams = []; // from Apps Script
   let manualTeams = JSON.parse(localStorage.getItem('osf_manualTeams') || '[]'); // {id, division, teamName, manual:true}
   let pools = JSON.parse(localStorage.getItem('osf_pools') || '[]');             // {id, division, name, teamIds[]}
-  let schedules = JSON.parse(localStorage.getItem('osf_schedules') || '[]');     // {division, games:[]}
+  let schedules = JSON.parse(localStorage.getItem('osf_schedules') || '[]');     // {division, games:[], finals:[]}
   let scores = JSON.parse(localStorage.getItem('osf_scores') || '{}');           // { gameId: {home, away} }
 
   function saveManualTeams() { localStorage.setItem('osf_manualTeams', JSON.stringify(manualTeams)); }
@@ -650,6 +695,7 @@
       if (btn.dataset.tab === 'poolsTab') refreshPoolsUI();
       if (btn.dataset.tab === 'scheduleTab') {
         renderDayConfigs();
+        populateFinalTeamDropdowns();
         renderScheduleAdmin(document.getElementById('schedDivision').value);
         renderSchedulePreview(document.getElementById('schedDivision').value);
       }
@@ -672,6 +718,7 @@
     renderTeamsTables();
     refreshPoolsUI();
     renderDayConfigs();
+    populateFinalTeamDropdowns();
   });
 
   async function loadTeamsFromApi() {
@@ -847,6 +894,7 @@
     await loadTeamsFromApi();
     renderTeamsTables();
     refreshPoolsUI();
+    populateFinalTeamDropdowns();
   }
 
   async function updateDocs(id, docs) {
@@ -865,7 +913,10 @@
   const manualTeamNameInput = document.getElementById('manualTeamName');
   const addManualTeamBtn    = document.getElementById('addManualTeamBtn');
 
-  poolDivisionSel.addEventListener('change', refreshPoolsUI);
+  poolDivisionSel.addEventListener('change', () => {
+    refreshPoolsUI();
+    populateFinalTeamDropdowns();
+  });
 
   createPoolBtn.addEventListener('click', () => {
     const division = poolDivisionSel.value;
@@ -895,6 +946,7 @@
     saveManualTeams();
     manualTeamNameInput.value = '';
     refreshPoolsUI();
+    populateFinalTeamDropdowns();
   });
 
   function assignTeamToPool(division, teamId, poolId) {
@@ -953,7 +1005,6 @@
       });
     }
 
-    // pools list with edit/delete
     poolsList.innerHTML = '';
     const poolsForDiv = pools.filter(p => p.division === division);
     if (!poolsForDiv.length) {
@@ -982,6 +1033,8 @@
             pool.name = newName.trim();
             savePools();
             refreshPoolsUI();
+            renderScheduleAdmin(pool.division);
+            renderSchedulePreview(pool.division);
           }
         });
 
@@ -994,6 +1047,8 @@
           pools = pools.filter(p => p.id !== pool.id);
           savePools();
           refreshPoolsUI();
+          renderScheduleAdmin(pool.division);
+          renderSchedulePreview(pool.division);
         });
 
         header.appendChild(editBtn);
@@ -1030,11 +1085,21 @@
   const scheduleAdmin    = document.getElementById('scheduleAdmin');
   const schedulePreview  = document.getElementById('schedulePreview');
 
-  // dayConfigs is kept per-division (local only)
-  let dayConfigs = {}; // {division: [ {label, fields, times} ] }
+  const finalStageSel   = document.getElementById('finalStage');
+  const finalDateInput  = document.getElementById('finalDate');
+  const finalTimeInput  = document.getElementById('finalTime');
+  const finalFieldInput = document.getElementById('finalField');
+  const finalHomeSel    = document.getElementById('finalHomeTeam');
+  const finalAwaySel    = document.getElementById('finalAwayTeam');
+  const addFinalBtn     = document.getElementById('addFinalBtn');
+  const finalsList      = document.getElementById('finalsList');
+
+  // dayConfigs kept in memory: {division: [ {label, fields, times} ]}
+  let dayConfigs = {};
 
   schedDivisionSel.addEventListener('change', () => {
     renderDayConfigs();
+    populateFinalTeamDropdowns();
     renderScheduleAdmin(schedDivisionSel.value);
     renderSchedulePreview(schedDivisionSel.value);
   });
@@ -1042,11 +1107,7 @@
   addDayBtn.addEventListener('click', () => {
     const division = schedDivisionSel.value;
     if (!dayConfigs[division]) dayConfigs[division] = [];
-    dayConfigs[division].push({
-      label: '',
-      fields: '',
-      times: ''
-    });
+    dayConfigs[division].push({ label: '', fields: '', times: '' });
     renderDayConfigs();
   });
 
@@ -1131,6 +1192,40 @@
     });
   }
 
+  function buildRoundRobin(teamIds, maxGamesPerTeam) {
+    const ids = teamIds.map(String);
+    if (ids.length < 2) return [];
+    let teamsWorking = [...ids];
+    const n = teamsWorking.length;
+    if (n % 2 === 1) {
+      teamsWorking.push('BYE');
+    }
+    const m = teamsWorking.length;
+    const rounds = [];
+    const gameCount = {};
+    function canPlay(a, b) {
+      const ca = gameCount[a] || 0;
+      const cb = gameCount[b] || 0;
+      return ca < maxGamesPerTeam && cb < maxGamesPerTeam;
+    }
+    for (let r = 0; r < m - 1; r++) {
+      const roundMatches = [];
+      for (let i = 0; i < m / 2; i++) {
+        const t1 = teamsWorking[i];
+        const t2 = teamsWorking[m - 1 - i];
+        if (t1 === 'BYE' || t2 === 'BYE') continue;
+        if (!canPlay(t1, t2)) continue;
+        roundMatches.push({ homeId: String(t1), awayId: String(t2) });
+        gameCount[t1] = (gameCount[t1] || 0) + 1;
+        gameCount[t2] = (gameCount[t2] || 0) + 1;
+      }
+      if (roundMatches.length) rounds.push(roundMatches);
+      // rotate (standard round robin)
+      teamsWorking = [teamsWorking[0], ...teamsWorking.slice(2), teamsWorking[1]];
+    }
+    return rounds;
+  }
+
   generateScheduleBtn.addEventListener('click', () => {
     const division = schedDivisionSel.value;
     const poolsForDiv = pools.filter(p => p.division === division);
@@ -1154,94 +1249,234 @@
 
     const includeCross = crossPoolCheckbox.checked;
 
-    // build game list (pool-play only)
-    const games = [];
-    const gameCountByTeam = {}; // teamId -> #pool games
-    function addGame(poolId, poolName, homeId, awayId) {
-      homeId = String(homeId);
-      awayId = String(awayId);
-      const hc = gameCountByTeam[homeId] || 0;
-      const ac = gameCountByTeam[awayId] || 0;
-      if (hc >= 3 || ac >= 3) return; // cap 3 pool games per team
-      const id = `${division}_${poolId}_g${games.length + 1}`;
-      games.push({
-        id,
-        division,
-        poolId,
-        poolName,
-        homeId,
-        awayId,
-        stage: 'pool'
-      });
-      gameCountByTeam[homeId] = hc + 1;
-      gameCountByTeam[awayId] = ac + 1;
-    }
-
-    // round robin inside each pool
+    // 1. Round-robin by pool (max 3 pool games per team)
+    const poolRounds = []; // [{poolId, poolName, rounds:[ [match] ]}]
+    const allTeamsForDiv = getAllTeams().filter(t => t.division === division);
     poolsForDiv.forEach(pool => {
-      const poolTeams = getAllTeams().filter(t => pool.teamIds.includes(String(t.id)));
-      for (let i = 0; i < poolTeams.length; i++) {
-        for (let j = i + 1; j < poolTeams.length; j++) {
-          addGame(pool.id, pool.name, poolTeams[i].id, poolTeams[j].id);
-        }
+      const teamIds = allTeamsForDiv
+        .filter(t => pool.teamIds.includes(String(t.id)))
+        .map(t => String(t.id));
+      if (teamIds.length < 2) return;
+      const rounds = buildRoundRobin(teamIds, 3);
+      if (rounds.length) {
+        poolRounds.push({
+          poolId: pool.id,
+          poolName: pool.name,
+          rounds
+        });
       }
     });
 
-    // optional cross-pool games (still respecting 3 max)
-    if (includeCross && poolsForDiv.length > 1) {
+    // Optionally generate cross-pool games (as extra rounds, still max 3 per team)
+    // For simplicity, cross-pool will only be generated if teams have <3 games after pool RR.
+    const crossRounds = [];
+    if (includeCross && poolRounds.length > 1) {
+      const gameCount = {};
+      poolRounds.forEach(pr => {
+        pr.rounds.forEach(r => {
+          r.forEach(m => {
+            gameCount[m.homeId] = (gameCount[m.homeId] || 0) + 1;
+            gameCount[m.awayId] = (gameCount[m.awayId] || 0) + 1;
+          });
+        });
+      });
+
       const all = poolsForDiv.map(p =>
-        getAllTeams().filter(t => p.teamIds.includes(String(t.id))).map(t => ({ pool: p, team: t }))
+        allTeamsForDiv.filter(t => p.teamIds.includes(String(t.id))).map(t => ({ pool: p, team: t }))
       ).flat();
+
+      const usedPairs = new Set();
+      const crMatches = [];
       for (let i = 0; i < all.length; i++) {
         for (let j = i + 1; j < all.length; j++) {
           const a = all[i];
           const b = all[j];
           if (a.pool.id === b.pool.id) continue;
-          addGame('xpool', `${a.pool.name} vs ${b.pool.name}`, a.team.id, b.team.id);
+          const key = [a.team.id, b.team.id].sort().join('_');
+          if (usedPairs.has(key)) continue;
+          const ca = gameCount[a.team.id] || 0;
+          const cb = gameCount[b.team.id] || 0;
+          if (ca >= 3 || cb >= 3) continue;
+          usedPairs.add(key);
+          gameCount[a.team.id] = ca + 1;
+          gameCount[b.team.id] = cb + 1;
+          crMatches.push({
+            poolId: 'xpool',
+            poolName: `${a.pool.name} vs ${b.pool.name}`,
+            homeId: String(a.team.id),
+            awayId: String(b.team.id)
+          });
+        }
+      }
+      if (crMatches.length) {
+        // treat cross-pool as one or more extra rounds (roughly balanced)
+        const roundSize = Math.max(1, Math.floor(crMatches.length / 2));
+        for (let i = 0; i < crMatches.length; i += roundSize) {
+          crossRounds.push(crMatches.slice(i, i + roundSize));
         }
       }
     }
 
-    // flatten slots: each slot has global index (for spacing)
-    const slots = [];
-    let slotIndex = 0;
+    // 2. Build global rounds list
+    const globalRounds = []; // each = [ {poolId, poolName, homeId, awayId} ]
+
+    const maxRounds = poolRounds.reduce((max, pr) => Math.max(max, pr.rounds.length), 0);
+    for (let r = 0; r < maxRounds; r++) {
+      const roundMatches = [];
+      poolRounds.forEach(pr => {
+        if (pr.rounds[r]) {
+          pr.rounds[r].forEach(m => {
+            roundMatches.push({
+              poolId: pr.poolId,
+              poolName: pr.poolName,
+              homeId: m.homeId,
+              awayId: m.awayId
+            });
+          });
+        }
+      });
+      if (roundMatches.length) globalRounds.push(roundMatches);
+    }
+
+    // Append cross-pool rounds (if any) AFTER all pool rounds,
+    // so no cross-pool game happens before teams get their 3 pool games.
+    crossRounds.forEach(rmatches => {
+      globalRounds.push(rmatches.map(m => ({
+        poolId: m.poolId,
+        poolName: m.poolName,
+        homeId: m.homeId,
+        awayId: m.awayId
+      })));
+    });
+
+    if (!globalRounds.length) {
+      scheduleAdmin.innerHTML = '<div class="empty-note">No games generated. Check pools and teams.</div>';
+      schedulePreview.innerHTML = '';
+      return;
+    }
+
+    // 3. Build time blocks (day/time) with multiple fields
+    const timeBlocks = []; // {index, dayIndex, label, timeIndex, time, fields:[]}
+    let blockIdx = 0;
     days.forEach((day, dIdx) => {
       day.times.forEach((time, tIdx) => {
-        day.fields.forEach(field => {
-          slots.push({ index: slotIndex++, dayIndex: dIdx, label: day.label, timeIndex: tIdx, time, field });
+        timeBlocks.push({
+          index: blockIdx++,
+          dayIndex: dIdx,
+          label: day.label,
+          timeIndex: tIdx,
+          time,
+          fields: [...day.fields]
         });
       });
     });
 
-    // assign games greedily with spacing: no same-time, and at least 1 timeslot between
-    const assignedSlotsByTeam = {}; // teamId -> [slotIndex]
-    games.forEach(g => {
-      for (const slot of slots) {
-        const teamIds = [String(g.homeId), String(g.awayId)];
-        let ok = true;
-        for (const teamId of teamIds) {
-          const used = assignedSlotsByTeam[teamId] || [];
-          // same slot?
-          if (used.includes(slot.index)) { ok = false; break; }
-          // at least one time slot between (index gap >= 2)
-          if (used.some(idx => Math.abs(idx - slot.index) < 2)) { ok = false; break; }
-        }
-        if (!ok) continue;
-        // assign
-        g.date  = slot.label;
-        g.time  = slot.time;
-        g.field = slot.field;
-        teamIds.forEach(teamId => {
-          if (!assignedSlotsByTeam[teamId]) assignedSlotsByTeam[teamId] = [];
-          assignedSlotsByTeam[teamId].push(slot.index);
-        });
-        break;
+    if (!timeBlocks.length) {
+      scheduleAdmin.innerHTML = '<div class="empty-note">No time blocks available. Add times and fields.</div>';
+      schedulePreview.innerHTML = '';
+      return;
+    }
+
+    const blocksCount = timeBlocks.length;
+    const roundCount  = globalRounds.length;
+    let blocksPerRound = Math.max(1, Math.floor(blocksCount / roundCount));
+    // Try to leave some spacing between rounds when possible
+    if (blocksCount >= 2 * roundCount) {
+      blocksPerRound = Math.floor(blocksCount / roundCount);
+    }
+
+    // 4. Assign games to blocks with constraints:
+    // - no team in two games at same time
+    // - at least one block between their games when possible
+    const usedBlocksByTeam = {}; // teamId -> [blockIndex]
+    const blockUsage = timeBlocks.map(() => 0); // how many fields filled in this block
+    const assignedGames = []; // final game list
+
+    function teamCanPlayAtBlock(teamId, blockIndex) {
+      teamId = String(teamId);
+      const used = usedBlocksByTeam[teamId] || [];
+      for (const idx of used) {
+        if (idx === blockIndex) return false;          // same time
+        if (Math.abs(idx - blockIndex) < 2) return false; // need a gap if possible
       }
+      return true;
+    }
+
+    function assignGameToBlock(game, roundIndex) {
+      // Prefer earliest block in this round's slot range, but allow spill if needed
+      const start = roundIndex * blocksPerRound;
+      let end = (roundIndex + 1) * blocksPerRound - 1;
+      if (roundIndex === roundCount - 1) end = blocksCount - 1;
+      const minIndex = Math.max(0, start);
+      const maxIndex = Math.min(blocksCount - 1, end);
+
+      // first try in [minIndex, maxIndex], then anywhere if we fail there
+      const ranges = [[minIndex, maxIndex], [0, blocksCount - 1]];
+
+      for (const [from, to] of ranges) {
+        for (let b = from; b <= to; b++) {
+          const block = timeBlocks[b];
+          if (blockUsage[b] >= block.fields.length) continue;
+          if (!teamCanPlayAtBlock(game.homeId, b)) continue;
+          if (!teamCanPlayAtBlock(game.awayId, b)) continue;
+
+          // assign to this block
+          const field = block.fields[blockUsage[b]];
+          blockUsage[b]++;
+
+          const assigned = {
+            id: `${division}_${game.poolId}_${assignedGames.length + 1}`,
+            division,
+            poolId: game.poolId,
+            poolName: game.poolName,
+            homeId: game.homeId,
+            awayId: game.awayId,
+            date: block.label,
+            time: block.time,
+            field: field,
+            stage: 'pool'
+          };
+          assignedGames.push(assigned);
+
+          [game.homeId, game.awayId].forEach(tid => {
+            tid = String(tid);
+            if (!usedBlocksByTeam[tid]) usedBlocksByTeam[tid] = [];
+            usedBlocksByTeam[tid].push(b);
+          });
+          return true;
+        }
+      }
+      // if we can't find anything, leave unassigned (shows with blank date/time/field)
+      assignedGames.push({
+        id: `${division}_${game.poolId}_${assignedGames.length + 1}`,
+        division,
+        poolId: game.poolId,
+        poolName: game.poolName,
+        homeId: game.homeId,
+        awayId: game.awayId,
+        date: '',
+        time: '',
+        field: '',
+        stage: 'pool'
+      });
+      return false;
+    }
+
+    globalRounds.forEach((roundMatches, rIndex) => {
+      // sort so games from same pool are near each other (helps "same time" by pool)
+      const sorted = roundMatches.slice().sort((a, b) =>
+        (a.poolId || '').localeCompare(b.poolId || '')
+      );
+      sorted.forEach(game => {
+        assignGameToBlock(game, rIndex);
+      });
     });
 
-    // save schedule (overwrite division)
+    // 5. Save schedule (keep existing finals)
+    const existing = schedules.find(s => s.division === division);
+    const finalsExisting = existing && existing.finals ? existing.finals : [];
     schedules = schedules.filter(s => s.division !== division);
-    schedules.push({ division, games });
+    schedules.push({ division, games: assignedGames, finals: finalsExisting });
     saveSchedules();
 
     renderScheduleAdmin(division);
@@ -1257,7 +1492,7 @@
     }
 
     const gamesByPool = {};
-    sched.games.forEach(g => {
+    sched.games.filter(g => g.stage === 'pool').forEach(g => {
       const pool = g.poolId === 'xpool'
         ? 'Cross Pool'
         : (getPoolForTeam(division, g.homeId)?.name || g.poolName || 'Pool');
@@ -1276,12 +1511,7 @@
         const row = document.createElement('div');
         row.className = 'game-row';
 
-        const home = getTeamById(g.homeId);
-        const away = getTeamById(g.awayId);
-
-        const info = document.createElement('span');
-        info.textContent = 'Game:';
-        row.appendChild(info);
+        const allTeams = getAllTeams().filter(t => t.division === division);
 
         const dateInput = document.createElement('input');
         dateInput.className = 'admin-game-input';
@@ -1318,13 +1548,12 @@
         const awaySel = document.createElement('select');
         awaySel.className = 'admin-game-input';
 
-        const allTeams = getAllTeams().filter(t => t.division === division);
         function fillTeamSelect(sel, currentId) {
           sel.innerHTML = '';
-          const optBlank = document.createElement('option');
-          optBlank.value = '';
-          optBlank.textContent = 'Team';
-          sel.appendChild(optBlank);
+          const optTBD = document.createElement('option');
+          optTBD.value = '';
+          optTBD.textContent = 'TBD';
+          sel.appendChild(optTBD);
           allTeams.forEach(t => {
             const opt = document.createElement('option');
             opt.value = String(t.id);
@@ -1361,16 +1590,84 @@
     });
   }
 
+  function populateFinalTeamDropdowns() {
+    const division = schedDivisionSel.value;
+    const divTeams = getAllTeams().filter(t => t.division === division && (t.status === 'approved' || t.manual));
+
+    [finalHomeSel, finalAwaySel].forEach(sel => {
+      sel.innerHTML = '';
+      const tbd = document.createElement('option');
+      tbd.value = '';
+      tbd.textContent = 'TBD';
+      sel.appendChild(tbd);
+      divTeams.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = String(t.id);
+        opt.textContent = t.teamName || 'Team';
+        sel.appendChild(opt);
+      });
+    });
+
+    renderFinalsList(division);
+  }
+
+  addFinalBtn.addEventListener('click', () => {
+    const division = schedDivisionSel.value;
+    const stage = finalStageSel.value;
+    const date  = finalDateInput.value.trim();
+    const time  = finalTimeInput.value.trim();
+    const field = finalFieldInput.value.trim();
+    const homeId = finalHomeSel.value || '';
+    const awayId = finalAwaySel.value || '';
+
+    const sched = schedules.find(s => s.division === division) || { division, games: [], finals: [] };
+    const finals = sched.finals || [];
+    const id = `${division}_final_${finals.length + 1}`;
+    finals.push({ id, division, stage, date, time, field, homeId, awayId, stageType: 'final' });
+
+    const idx = schedules.findIndex(s => s.division === division);
+    if (idx >= 0) {
+      schedules[idx].finals = finals;
+    } else {
+      schedules.push({ division, games: [], finals });
+    }
+    saveSchedules();
+    renderFinalsList(division);
+    renderSchedulePreview(division);
+  });
+
+  function renderFinalsList(division) {
+    finalsList.innerHTML = '';
+    const sched = schedules.find(s => s.division === division);
+    if (!sched || !sched.finals || !sched.finals.length) {
+      finalsList.innerHTML = '<div class="empty-note">No knockout games added yet.</div>';
+      return;
+    }
+    sched.finals.forEach(f => {
+      const home = f.homeId ? getTeamById(f.homeId) : null;
+      const away = f.awayId ? getTeamById(f.awayId) : null;
+      const row = document.createElement('div');
+      row.className = 'game-row';
+      row.textContent = `${f.stage}: ${f.date || ''} ${f.time || ''} @ ${f.field || ''} – ${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}`;
+      finalsList.appendChild(row);
+    });
+  }
+
   function renderSchedulePreview(division) {
     const sched = schedules.find(s => s.division === division);
     schedulePreview.innerHTML = '';
-    if (!sched || !sched.games.length) {
-      schedulePreview.innerHTML = '<div class="empty-note">No pool-play schedule yet for this division.</div>';
+    if (!sched) {
+      schedulePreview.innerHTML = '<div class="empty-note">No schedule yet for this division.</div>';
       return;
     }
 
-    const games = sched.games.filter(g => g.stage === 'pool');
-    const dates = [...new Set(games.map(g => g.date || ''))].filter(Boolean);
+    const poolGames = (sched.games || []).filter(g => g.stage === 'pool');
+    if (!poolGames.length) {
+      schedulePreview.innerHTML = '<div class="empty-note">No pool-play games yet for this division.</div>';
+      return;
+    }
+
+    const dates = [...new Set(poolGames.map(g => g.date || ''))].filter(Boolean);
 
     dates.forEach(dateLabel => {
       const block = document.createElement('div');
@@ -1380,7 +1677,7 @@
       header.textContent = `${divisionLabel(division)} – ${dateLabel}`;
       block.appendChild(header);
 
-      const gamesForDay = games.filter(g => g.date === dateLabel);
+      const gamesForDay = poolGames.filter(g => g.date === dateLabel);
       const fields = [...new Set(gamesForDay.map(g => g.field || 'Field'))];
       const times  = [...new Set(gamesForDay.map(g => g.time || ''))];
 
@@ -1410,10 +1707,10 @@
           const td = document.createElement('td');
           const g = gamesForDay.find(x => x.time === t && x.field === f);
           if (g) {
-            const home = getTeamById(g.homeId);
-            const away = getTeamById(g.awayId);
+            const home = g.homeId ? getTeamById(g.homeId) : null;
+            const away = g.awayId ? getTeamById(g.awayId) : null;
             const poolName = getPoolForTeam(division, g.homeId)?.name || g.poolName || '';
-            td.innerHTML = `<span class="highlight">${(home && home.teamName) || 'Team'} vs ${(away && away.teamName) || 'Team'}</span><br><span style="font-size:10px;">${poolName}</span>`;
+            td.innerHTML = `<span class="highlight">${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}</span><br><span style="font-size:10px;">${poolName}</span>`;
           } else {
             td.textContent = '';
           }
@@ -1425,6 +1722,51 @@
 
       table.appendChild(tbody);
       block.appendChild(table);
+
+      // Knockout games for this date
+      const dayFinals = (sched.finals || []).filter(f => f.date === dateLabel);
+      if (dayFinals.length) {
+        const finalsHeader = document.createElement('div');
+        finalsHeader.style.padding = '6px 10px';
+        finalsHeader.style.fontSize = '12px';
+        finalsHeader.style.borderTop = '1px solid #e5e7eb';
+        finalsHeader.textContent = 'Knockout Games';
+        block.appendChild(finalsHeader);
+
+        const fTable = document.createElement('table');
+        const fHead = document.createElement('thead');
+        const fHeadRow = document.createElement('tr');
+        ['Stage','Time','Field','Match'].forEach(lbl => {
+          const th = document.createElement('th');
+          th.textContent = lbl;
+          fHeadRow.appendChild(th);
+        });
+        fHead.appendChild(fHeadRow);
+        fTable.appendChild(fHead);
+
+        const fBody = document.createElement('tbody');
+        dayFinals.forEach(fg => {
+          const home = fg.homeId ? getTeamById(fg.homeId) : null;
+          const away = fg.awayId ? getTeamById(fg.awayId) : null;
+          const trF = document.createElement('tr');
+          const tdStage = document.createElement('td');
+          tdStage.textContent = fg.stage;
+          const tdTime = document.createElement('td');
+          tdTime.textContent = fg.time || '';
+          const tdField = document.createElement('td');
+          tdField.textContent = fg.field || '';
+          const tdMatch = document.createElement('td');
+          tdMatch.textContent = `${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}`;
+          trF.appendChild(tdStage);
+          trF.appendChild(tdTime);
+          trF.appendChild(tdField);
+          trF.appendChild(tdMatch);
+          fBody.appendChild(trF);
+        });
+        fTable.appendChild(fBody);
+        block.appendChild(fTable);
+      }
+
       schedulePreview.appendChild(block);
     });
   }
@@ -1469,15 +1811,15 @@
       scoringGamesDiv.appendChild(heading);
 
       byPool[poolName].forEach(g => {
-        const home = getTeamById(g.homeId);
-        const away = getTeamById(g.awayId);
+        const home = g.homeId ? getTeamById(g.homeId) : null;
+        const away = g.awayId ? getTeamById(g.awayId) : null;
         const gameKey = g.id;
         const existing = scores[gameKey] || { home: '', away: '' };
 
         const row = document.createElement('div');
         row.className = 'game-row';
         const label = document.createElement('span');
-        label.innerHTML = `<strong>${g.date || ''}</strong> ${g.time || ''} @ ${g.field || ''} – ${(home && home.teamName) || 'Team'} vs ${(away && away.teamName) || 'Team'}`;
+        label.innerHTML = `<strong>${g.date || ''}</strong> ${g.time || ''} @ ${g.field || ''} – ${(home && home.teamName) || 'TBD'} vs ${(away && away.teamName) || 'TBD'}`;
         row.appendChild(label);
 
         const homeInput = document.createElement('input');
@@ -1496,7 +1838,7 @@
           const hVal = homeInput.value;
           const aVal = awayInput.value;
           if (hVal === '' && aVal === '') {
-            delete scores[gameKey]; // treat as no result
+            delete scores[gameKey];
           } else {
             scores[gameKey] = {
               home: Number(hVal || 0),
