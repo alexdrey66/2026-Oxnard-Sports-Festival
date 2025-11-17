@@ -438,7 +438,7 @@
 
           <h3 class="card-title">Manual Placeholder Teams</h3>
           <p class="card-subtitle">
-            Use this for saved spots (e.g., “Reserved Extra Team”).
+            Use this for saved spots (e.g., “Reserved Spot 1”).
           </p>
           <div class="small-input-row">
             <div style="flex:1;">
@@ -549,26 +549,19 @@
 </div>
 
 <script>
-  // ==== CONFIG ==========
+  // ========= CONFIG ==========
   const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
   const ADMIN_PASSWORD = 'PLAYSOCCER';
 
-  // ==== DATA ============
-  let teams = []; // from Apps Script
-  let manualTeams = JSON.parse(localStorage.getItem('osf_manualTeams') || '[]'); // {id, division, teamName, manual:true}
-  let pools = JSON.parse(localStorage.getItem('osf_pools') || '[]');             // {id, division, name, teamIds[]}
-  let schedules = JSON.parse(localStorage.getItem('osf_schedules') || '[]');     // {division, games:[], knockouts:[]}
-  let scores = JSON.parse(localStorage.getItem('osf_scores') || '{}');           // {gameId:{home,away}}
+  // ========= SHARED STATE (loaded from AdminState) ==========
+  let teams = [];        // from Teams sheet
+  let manualTeams = [];  // from AdminState
+  let pools = [];        // from AdminState
+  let schedules = [];    // from AdminState
+  let scores = {};       // from AdminState
+  let dayConfigs = {};   // from AdminState
 
-  // dayConfigs only kept in memory (per division)
-  let dayConfigs = JSON.parse(localStorage.getItem('osf_dayConfigs') || '{}');   // {division: [{label,fields,times}]}
-
-  function saveManualTeams(){ localStorage.setItem('osf_manualTeams', JSON.stringify(manualTeams)); }
-  function savePools(){ localStorage.setItem('osf_pools', JSON.stringify(pools)); }
-  function saveSchedules(){ localStorage.setItem('osf_schedules', JSON.stringify(schedules)); }
-  function saveScoresStore(){ localStorage.setItem('osf_scores', JSON.stringify(scores)); }
-  function saveDayConfigs(){ localStorage.setItem('osf_dayConfigs', JSON.stringify(dayConfigs)); }
-
+  // ========= HELPERS ==========
   function divisionLabel(code){
     return {
       '10UB':'10U Boys','10UG':'10U Girls',
@@ -598,7 +591,56 @@
     return pools.find(p => p.division === division && p.teamIds.includes(teamId)) || null;
   }
 
-  // ==== LOGIN + TABS =====
+  // ========= STATE SYNC (ADMINSTATE SHEET) ==========
+  async function loadStateFromApi() {
+    try {
+      const res = await fetch(API_URL + '?entity=state');
+      const data = await res.json();
+
+      if (data) {
+        manualTeams = Array.isArray(data.manualTeams) ? data.manualTeams : [];
+        pools       = Array.isArray(data.pools)       ? data.pools       : [];
+        schedules   = Array.isArray(data.schedules)   ? data.schedules   : [];
+        scores      = data.scores && typeof data.scores === 'object' ? data.scores : {};
+        dayConfigs  = data.dayConfigs && typeof data.dayConfigs === 'object' ? data.dayConfigs : {};
+      }
+    } catch (err) {
+      console.error('Error loading admin state from API:', err);
+      // If this fails, state just stays at defaults.
+    }
+  }
+
+  async function saveStateToApi() {
+    const state = {
+      manualTeams,
+      pools,
+      schedules,
+      scores,
+      dayConfigs
+    };
+
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entity: 'state',
+          state
+        })
+      });
+    } catch (err) {
+      console.error('Error saving admin state to API:', err);
+    }
+  }
+
+  // These are now just wrappers around saveStateToApi
+  function saveManualTeams(){ saveStateToApi(); }
+  function savePools(){ saveStateToApi(); }
+  function saveSchedules(){ saveStateToApi(); }
+  function saveScoresStore(){ saveStateToApi(); }
+  function saveDayConfigs(){ saveStateToApi(); }
+
+  // ========= LOGIN + TABS ==========
   const adminLoginBtn = document.getElementById('adminLoginBtn');
   const adminPasswordInput = document.getElementById('adminPassword');
   const adminLoginMessage = document.getElementById('adminLoginMessage');
@@ -615,7 +657,11 @@
     adminLoginMessage.className = 'message visible success';
     adminMain.style.display = 'block';
 
+    // 1. Load teams from Teams sheet
     await loadTeamsFromApi();
+    // 2. Load shared admin state (pools, schedules, scores, etc.)
+    await loadStateFromApi();
+
     renderTeamsTables();
     refreshPoolsUI();
     renderDayConfigsUI();
@@ -643,20 +689,20 @@
     try {
       const res = await fetch(API_URL, {
         method:'POST',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        headers:{'Content-Type':'application/json'},
         body: JSON.stringify(payload)
       });
-      await res.text(); // ignore body; we re-fetch teams
+      await res.text();
     } catch(err){
       console.error('Update error', err);
     }
   }
 
-  // ==== TEAMS TAB =======
-  const adminTeamsBody = document.getElementById('adminTeamsBody');
-  const declinedTeamsBody = document.getElementById('declinedTeamsBody');
-  const activeEmpty = document.getElementById('activeEmpty');
-  const declinedEmpty = document.getElementById('declinedEmpty');
+  // ========= TEAMS TAB ==========
+  const adminTeamsBody   = document.getElementById('adminTeamsBody');
+  const declinedTeamsBody= document.getElementById('declinedTeamsBody');
+  const activeEmpty      = document.getElementById('activeEmpty');
+  const declinedEmpty    = document.getElementById('declinedEmpty');
 
   function renderTeamsTables(){
     adminTeamsBody.innerHTML = '';
@@ -797,14 +843,14 @@
     renderTeamsTables();
   }
 
-  // ==== POOLS TAB =========
-  const poolDivisionSel = document.getElementById('poolDivision');
-  const poolNameInput = document.getElementById('poolName');
-  const createPoolBtn = document.getElementById('createPoolBtn');
-  const poolTeamsArea = document.getElementById('poolTeamsArea');
-  const poolsList = document.getElementById('poolsList');
+  // ========= POOLS TAB ==========
+  const poolDivisionSel   = document.getElementById('poolDivision');
+  const poolNameInput     = document.getElementById('poolName');
+  const createPoolBtn     = document.getElementById('createPoolBtn');
+  const poolTeamsArea     = document.getElementById('poolTeamsArea');
+  const poolsList         = document.getElementById('poolsList');
   const manualTeamNameInput = document.getElementById('manualTeamName');
-  const addManualTeamBtn = document.getElementById('addManualTeamBtn');
+  const addManualTeamBtn  = document.getElementById('addManualTeamBtn');
 
   poolDivisionSel.addEventListener('change', () => {
     refreshPoolsUI();
@@ -816,8 +862,8 @@
     if (!name) return;
     const id = 'pool_' + Date.now();
     pools.push({id, division, name, teamIds:[]});
-    savePools();
     poolNameInput.value = '';
+    savePools();
     refreshPoolsUI();
   });
 
@@ -835,8 +881,8 @@
       coachName:'',
       coachEmail:''
     });
-    saveManualTeams();
     manualTeamNameInput.value = '';
+    saveManualTeams();
     refreshPoolsUI();
     renderSchedulePreview(document.getElementById('schedDivision').value);
   });
@@ -968,15 +1014,15 @@
     }
   }
 
-  // ==== SCHEDULE TAB =========
+  // ========= SCHEDULE TAB ==========
   const schedDivisionSel = document.getElementById('schedDivision');
-  const dayConfigsDiv = document.getElementById('dayConfigs');
-  const addDayBtn = document.getElementById('addDayBtn');
-  const crossPoolCheckbox = document.getElementById('crossPoolCheckbox');
+  const dayConfigsDiv    = document.getElementById('dayConfigs');
+  const addDayBtn        = document.getElementById('addDayBtn');
+  const crossPoolCheckbox= document.getElementById('crossPoolCheckbox');
   const generateScheduleBtn = document.getElementById('generateScheduleBtn');
-  const scheduleAdmin = document.getElementById('scheduleAdmin');
-  const schedulePreview = document.getElementById('schedulePreview');
-  const knockoutEditor = document.getElementById('knockoutEditor');
+  const scheduleAdmin    = document.getElementById('scheduleAdmin');
+  const schedulePreview  = document.getElementById('schedulePreview');
+  const knockoutEditor   = document.getElementById('knockoutEditor');
 
   schedDivisionSel.addEventListener('change', () => {
     renderDayConfigsUI();
@@ -1447,7 +1493,7 @@
     });
   }
 
-  // ==== KNOCKOUT GAMES (4 per division) ====
+  // ========= KNOCKOUT GAMES ==========
   function getDivisionSchedule(division){
     return schedules.find(s => s.division === division) || {division, games:[], knockouts:[]};
   }
@@ -1457,7 +1503,6 @@
     const sched = getDivisionSchedule(division);
     if (!sched.knockouts) sched.knockouts = [];
 
-    // Ensure we have 4 fixed types: Semi1, Semi2, Consolation, Final
     const types = ['Semi 1','Semi 2','Consolation','Championship'];
     types.forEach(t => {
       if (!sched.knockouts.find(k => k.type === t)){
@@ -1473,7 +1518,7 @@
         });
       }
     });
-    // Keep only those 4
+
     sched.knockouts = sched.knockouts.filter(k => types.includes(k.type));
     schedules = schedules.filter(s => s.division !== division);
     schedules.push(sched);
@@ -1557,11 +1602,11 @@
         renderSchedulePreview(division);
       });
 
-      const tdDate = document.createElement('td'); tdDate.appendChild(dateInput);
-      const tdTime = document.createElement('td'); tdTime.appendChild(timeInput);
+      const tdDate  = document.createElement('td'); tdDate.appendChild(dateInput);
+      const tdTime  = document.createElement('td'); tdTime.appendChild(timeInput);
       const tdField = document.createElement('td'); tdField.appendChild(fieldInput);
-      const tdHome = document.createElement('td'); tdHome.appendChild(homeSel);
-      const tdAway = document.createElement('td'); tdAway.appendChild(awaySel);
+      const tdHome  = document.createElement('td'); tdHome.appendChild(homeSel);
+      const tdAway  = document.createElement('td'); tdAway.appendChild(awaySel);
 
       tr.appendChild(tdType);
       tr.appendChild(tdDate);
@@ -1577,7 +1622,7 @@
     knockoutEditor.appendChild(table);
   }
 
-  // ==== SCHEDULE PREVIEW (POOL + KNOCKOUT) ====
+  // ========= SCHEDULE PREVIEW ==========
   function renderSchedulePreview(division){
     const sched = schedules.find(s => s.division === division);
     schedulePreview.innerHTML = '';
@@ -1594,7 +1639,6 @@
       return;
     }
 
-    // Collect all dates
     const dates = new Set();
     poolGames.forEach(g => { if (g.date) dates.add(g.date); });
     knockouts.forEach(k => { if (k.date) dates.add(k.date); });
@@ -1680,11 +1724,11 @@
     });
   }
 
-  // ==== SCORING TAB =========
+  // ========= SCORING TAB ==========
   const scoreDivisionSel = document.getElementById('scoreDivision');
-  const loadScoresBtn = document.getElementById('loadScoresBtn');
-  const scoringGamesDiv = document.getElementById('scoringGames');
-  const standingsOutput = document.getElementById('standingsOutput');
+  const loadScoresBtn    = document.getElementById('loadScoresBtn');
+  const scoringGamesDiv  = document.getElementById('scoringGames');
+  const standingsOutput  = document.getElementById('standingsOutput');
 
   loadScoresBtn.addEventListener('click', () => {
     const division = scoreDivisionSel.value;
@@ -1774,7 +1818,7 @@
     if (!sched || !sched.games.length) return;
     const games = sched.games.filter(g => g.stage === 'pool');
 
-    const stats = {}; // teamId -> object
+    const stats = {};
 
     function ensureTeam(id){
       id = String(id);
