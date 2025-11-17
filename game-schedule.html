@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+ <head>
   <meta charset="UTF-8">
   <title>Game Schedules</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -73,7 +73,7 @@
       padding: 2rem;
       border: 3px solid #faca3d;
       margin-bottom: 2rem;
-      box-shadow:
+      box-shadow: 
         0 15px 40px rgba(18, 65, 117, 0.4),
         0 8px 20px rgba(0, 0, 0, 0.3),
         0 3px 15px rgba(250, 202, 61, 0.2);
@@ -123,7 +123,7 @@
       border: 3px solid #faca3d;
       border-radius: 16px;
       padding: 2rem;
-      box-shadow:
+      box-shadow: 
         0 15px 40px rgba(18, 65, 117, 0.4),
         0 8px 20px rgba(0, 0, 0, 0.3),
         0 3px 15px rgba(250, 202, 61, 0.2);
@@ -179,7 +179,7 @@
       overflow: hidden;
       padding: 4px;
       position: relative;
-      box-shadow:
+      box-shadow: 
         0 25px 60px rgba(18, 65, 117, 0.6),
         0 15px 35px rgba(0, 0, 0, 0.5),
         0 5px 15px rgba(250, 202, 61, 0.4),
@@ -217,7 +217,7 @@
       letter-spacing: 1px;
       position: relative;
       border-radius: 12px 12px 0 0;
-      box-shadow:
+      box-shadow: 
         0 6px 20px rgba(250, 202, 61, 0.4),
         0 3px 10px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4),
@@ -250,7 +250,7 @@
       letter-spacing: 1px;
       position: relative;
       border-radius: 0 12px 12px 0;
-      box-shadow:
+      box-shadow: 
         0 6px 20px rgba(250, 202, 61, 0.4),
         0 3px 10px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4),
@@ -283,7 +283,7 @@
       position: relative;
       border-radius: 12px;
       border: 2px solid rgba(250, 202, 61, 0.1);
-      box-shadow:
+      box-shadow: 
         0 4px 12px rgba(0, 0, 0, 0.08),
         0 2px 6px rgba(0, 0, 0, 0.04),
         inset 0 1px 0 rgba(255, 255, 255, 0.9),
@@ -329,7 +329,7 @@
     .game-slot:hover {
       transform: translateY(-6px) scale(1.03);
       border-color: rgba(250, 202, 61, 0.4);
-      box-shadow:
+      box-shadow: 
         0 20px 40px rgba(250, 202, 61, 0.3),
         0 10px 25px rgba(0, 0, 0, 0.15),
         0 5px 15px rgba(250, 202, 61, 0.2),
@@ -344,6 +344,34 @@
       position: relative;
     }
 
+    .game-slot.has-game::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.3) 0%, rgba(18, 65, 117, 0.2) 100%);
+      border-radius: 10px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .game-slot.has-game:hover::after {
+      opacity: 1;
+    }
+
+    .game-slot.has-game:hover {
+      border-color: #faca3d;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(250, 202, 61, 0.05) 100%);
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 
+        0 15px 40px rgba(250, 202, 61, 0.5),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
+
     .game-teams {
       font-weight: 900;
       color: #124175;
@@ -353,6 +381,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       position: relative;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -384,7 +413,7 @@
       border-radius: 12px;
       border: 2px solid rgba(250, 202, 61, 0.4);
       position: relative;
-      box-shadow:
+      box-shadow: 
         0 2px 8px rgba(250, 202, 61, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
       white-space: nowrap;
@@ -473,32 +502,31 @@
       }
     }
   </style>
-</head>
-<body>
+ </head>
+ <body>
   <div class="page">
-    <div class="header-section">
-      <h1>Game Schedule</h1>
-      <p class="subtitle">Schedules auto-update as your tournament staff publish games.</p>
+   <div class="header-section">
+    <h1>Game Schedule</h1>
+    <p class="subtitle">Schedules auto-update as scores and brackets are entered.</p>
+   </div>
+   <div class="controls-section">
+    <div id="divisionTabs">
+      <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
+      <button class="tab-btn" data-division="10UB">10U Boys</button>
+      <button class="tab-btn" data-division="10UG">10U Girls</button>
+      <button class="tab-btn" data-division="12UB">12U Boys</button>
+      <button class="tab-btn" data-division="12UG">12U Girls</button>
+      <button class="tab-btn" data-division="14UB">14U Boys</button>
+      <button class="tab-btn" data-division="14UG">14U Girls</button>
     </div>
+   </div>
 
-    <div class="controls-section">
-      <div id="divisionTabs">
-        <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
-        <button class="tab-btn" data-division="10UB">10U Boys</button>
-        <button class="tab-btn" data-division="10UG">10U Girls</button>
-        <button class="tab-btn" data-division="12UB">12U Boys</button>
-        <button class="tab-btn" data-division="12UG">12U Girls</button>
-        <button class="tab-btn" data-division="14UB">14U Boys</button>
-        <button class="tab-btn" data-division="14UG">14U Girls</button>
-      </div>
+   <div id="scheduleContainer">
+    <div class="sched-block">
+      <div class="sched-title">Loading schedule…</div>
+      <p class="empty-message">If this stays here, ask your tournament staff to verify the admin portal and spreadsheet.</p>
     </div>
-
-    <div id="scheduleContainer">
-      <div class="sched-block">
-        <div class="sched-title">Loading schedule…</div>
-        <p class="empty-message">If this message stays here, check that your admin portal has published games.</p>
-      </div>
-    </div>
+   </div>
   </div>
 
   <script>
@@ -548,7 +576,6 @@
     function parseTimeToMinutes(t){
       if (!t) return 0;
       let s = String(t).trim().toLowerCase();
-      // handle formats like "8:00am", "8:00 am", "20:15"
       let m = s.match(/^(\d{1,2}):(\d{2})\s*([ap]m)$/);
       if (m){
         let h = parseInt(m[1],10);
@@ -558,7 +585,6 @@
         if (ampm === 'pm') h += 12;
         return h*60 + min;
       }
-      // 24h fallback "13:30"
       m = s.match(/^(\d{1,2}):(\d{2})$/);
       if (m){
         const h = parseInt(m[1],10);
@@ -597,7 +623,9 @@
         scheduleContainer.innerHTML = `
           <div class="sched-block">
             <div class="sched-title">Unable to load schedule</div>
-            <p class="empty-message">Please refresh the page. If this continues, ask the tournament staff to verify the admin portal and spreadsheet.</p>
+            <p class="empty-message">
+              Please refresh the page. If this continues, ask the tournament staff to verify the admin portal and spreadsheet.
+            </p>
           </div>
         `;
       }
@@ -611,9 +639,8 @@
         const div = sched.division;
         if (divisionFilter && div !== divisionFilter) return;
 
-        // pool-play games
         (sched.games || []).forEach(g=>{
-          if (!g.date || !g.time || !g.field) return; // only scheduled games
+          if (!g.date || !g.time || !g.field) return;
           all.push({
             id: g.id,
             division: div,
@@ -628,7 +655,6 @@
           });
         });
 
-        // knockout games (Semis/Final/etc) – only if they have date & time
         (sched.knockouts || []).forEach(k=>{
           if (!k.date || !k.time || !k.field) return;
           all.push({
@@ -672,9 +698,6 @@
         return;
       }
 
-      // Grouping:
-      // - All divisions tab: group by date
-      // - Individual division tabs: group by {division + date}
       const groups = {};
       games.forEach(g=>{
         const key = divisionFilter
@@ -723,7 +746,6 @@
         const grid = document.createElement('div');
         grid.className = 'schedule-grid';
 
-        // header row: Time + fields
         const timeHeader = document.createElement('div');
         timeHeader.className = 'grid-header';
         timeHeader.textContent = 'Time';
@@ -736,7 +758,6 @@
           grid.appendChild(h);
         });
 
-        // rows by time
         times.forEach(time=>{
           const timeCell = document.createElement('div');
           timeCell.className = 'time-slot';
@@ -817,5 +838,5 @@
 
     document.addEventListener('DOMContentLoaded', loadData);
   </script>
-</body>
+ </body>
 </html>
