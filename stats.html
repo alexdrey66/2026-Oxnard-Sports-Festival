@@ -1,375 +1,367 @@
 <!doctype html>
-<html lang="en">
- <head>
+<html>
+<head>
   <meta charset="UTF-8">
   <title>Stats</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
   <style>
-body {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
-  min-height: 100%;
-  color: #ffffff;
-}
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
+      min-height: 100%;
+      color: #ffffff;
+    }
 
-html {
-  height: 100%;
-}
+    html {
+      height: 100%;
+    }
 
-.page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  min-height: 100%;
-}
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      min-height: 100%;
+    }
 
-.header {
-  background: transparent;
-  border-radius: 16px;
-  padding: 3rem;
-  border: 3px solid #faca3d;
-  margin-bottom: 2rem;
-  position: relative;
-  text-align: center;
-}
+    .header {
+      background: transparent;
+      border-radius: 16px;
+      padding: 3rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
+      position: relative;
+      text-align: center;
+    }
 
-.header::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
-  border-radius: 19px;
-  z-index: -1;
-  opacity: 0.1;
-}
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
+      border-radius: 19px;
+      z-index: -1;
+      opacity: 0.1;
+    }
 
-.header h1 {
-  font-size: 4rem;
-  font-weight: 900;
-  margin: 0;
-  color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin: 0;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
 
-.tabs {
-  background: #124175;
-  border-radius: 16px;
-  padding: 2rem;
-  border: 3px solid #faca3d;
-  margin-bottom: 2rem;
-  box-shadow: 
-    0 15px 40px rgba(18, 65, 117, 0.4),
-    0 8px 20px rgba(0, 0, 0, 0.3),
-    0 3px 15px rgba(250, 202, 61, 0.2);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-}
+    .tabs {
+      background: #124175;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
+      box-shadow:
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
 
-.tab {
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  border: 2px solid #e5e7eb;
-  background: white;
-  color: #124175;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
+    .tab {
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #124175;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
 
-.tab:hover {
-  border-color: #faca3d;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
-}
+    .tab:hover {
+      border-color: #faca3d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
+    }
 
-.tab.active {
-  background: #faca3d;
-  color: #124175;
-  border-color: #124175;
-  box-shadow: 0 4px 14px rgba(250, 202, 61, 0.4);
-}
+    .tab.active {
+      background: #faca3d;
+      color: #124175;
+      border-color: #124175;
+      box-shadow: 0 4px 14px rgba(250, 202, 61, 0.4);
+    }
 
-.block {
-  background: #124175;
-  border: 3px solid #faca3d;
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 
-    0 15px 40px rgba(18, 65, 117, 0.4),
-    0 8px 20px rgba(0, 0, 0, 0.3),
-    0 3px 15px rgba(250, 202, 61, 0.2);
-  position: relative;
-  overflow: hidden;
-}
+    .block {
+      background: #124175;
+      border: 3px solid #faca3d;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow:
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
 
-.block::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
-}
+    .block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
+    }
 
-.block::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
-  pointer-events: none;
-}
+    .block::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+    }
 
-.block h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 1.5rem 0;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
+    .block h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 1.5rem 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-.block h2::before {
-  content: '';
-  width: 4px;
-  height: 24px;
-  background: #faca3d;
-  border-radius: 2px;
-}
+    .block h2::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: #faca3d;
+      border-radius: 2px;
+    }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
-  border-radius: 20px;
-  overflow: hidden;
-  padding: 4px;
-  position: relative;
-  box-shadow: 
-    0 25px 60px rgba(18, 65, 117, 0.6),
-    0 15px 35px rgba(0, 0, 0, 0.5),
-    0 5px 15px rgba(250, 202, 61, 0.4),
-    inset 0 2px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-}
+    .empty-message {
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      opacity: 0.8;
+    }
 
-table::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #faca3d, #f59e0b, #faca3d, #f59e0b);
-  background-size: 400% 400%;
-  border-radius: 22px;
-  z-index: -1;
-  animation: shimmer 3s ease-in-out infinite;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 4px;
+      position: relative;
+      box-shadow:
+        0 25px 60px rgba(18, 65, 117, 0.6),
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(250, 202, 61, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    }
 
-@keyframes shimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
+    table::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #faca3d, #f59e0b, #faca3d, #f59e0b);
+      background-size: 400% 400%;
+      border-radius: 22px;
+      z-index: -1;
+      animation: shimmer 3s ease-in-out infinite;
+    }
 
-thead {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
-  border-radius: 16px 16px 0 0;
-}
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
 
-tbody {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
-  border-radius: 0 0 16px 16px;
-}
+    thead {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border-radius: 16px 16px 0 0;
+    }
 
-th {
-  background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
-  color: #124175;
-  padding: 1rem 0.75rem;
-  font-weight: 900;
-  text-align: center;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  position: relative;
-  box-shadow: 
-    0 6px 20px rgba(250, 202, 61, 0.4),
-    0 3px 10px rgba(0, 0, 0, 0.2),
-    inset 0 2px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-}
+    tbody {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border-radius: 0 0 16px 16px;
+    }
 
-th::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
-}
+    th {
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      color: #124175;
+      padding: 1rem 0.75rem;
+      font-weight: 900;
+      text-align: center;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      box-shadow:
+        0 6px 20px rgba(250, 202, 61, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
 
-td {
-  padding: 0.75rem;
-  border-bottom: 1px solid rgba(250, 202, 61, 0.2);
-  font-size: 0.9rem;
-  text-align: center;
-  color: #124175;
-  font-weight: 600;
-  position: relative;
-  transition: all 0.2s ease;
-}
+    th::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+    }
 
-tr:hover td {
-  background: linear-gradient(135deg, rgba(250, 202, 61, 0.05) 0%, rgba(250, 202, 61, 0.1) 100%);
-}
+    td {
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(250, 202, 61, 0.2);
+      font-size: 0.9rem;
+      text-align: center;
+      color: #124175;
+      font-weight: 600;
+      position: relative;
+      transition: all 0.2s ease;
+    }
 
-tr:last-child td {
-  border-bottom: none;
-}
+    tr:hover td {
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.05) 0%, rgba(250, 202, 61, 0.1) 100%);
+    }
 
-.team {
-  text-align: left;
-  font-weight: 700;
-  color: #124175;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+    tr:last-child td {
+      border-bottom: none;
+    }
 
-.rank, .pts {
-  display: inline-block;
-  padding: 0.3rem 0.8rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  position: relative;
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  white-space: nowrap;
-  min-width: 30px;
-  text-align: center;
-}
+    .team {
+      text-align: left;
+      font-weight: 700;
+      color: #124175;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-.rank::before, .pts::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
-  border-radius: 12px;
-}
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      white-space: nowrap;
+      min-width: 30px;
+      text-align: center;
+    }
 
-.rank {
-  background: linear-gradient(135deg, rgba(250, 202, 61, 0.8) 0%, rgba(250, 202, 61, 0.9) 100%);
-  color: #124175;
-  border: 2px solid rgba(250, 202, 61, 0.6);
-}
+    .badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+      border-radius: 12px;
+    }
 
-.pts {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.25) 100%);
-  color: #166534;
-  border: 2px solid rgba(34, 197, 94, 0.4);
-}
+    .rank {
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.8) 0%, rgba(250, 202, 61, 0.9) 100%);
+      color: #124175;
+      border: 2px solid rgba(250, 202, 61, 0.6);
+    }
 
-.empty-message {
-  font-size: 0.95rem;
-  color: #e5e7eb;
-  opacity: 0.8;
-}
+    .pts {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.25) 100%);
+      color: #166534;
+      border: 2px solid rgba(34, 197, 94, 0.4);
+    }
 
-@media (max-width: 768px) {
-  .page {
-    padding: 1rem;
-  }
+    @media (max-width: 768px) {
+      .page {
+        padding: 1rem;
+      }
+      .header {
+        padding: 2rem 1.5rem;
+      }
+      .header h1 {
+        font-size: 2rem;
+      }
+      .tabs {
+        padding: 1.5rem;
+        justify-content: flex-start;
+      }
+      .tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      .block {
+        padding: 1.5rem;
+      }
+      th, td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.8rem;
+      }
+      .badge {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
 
-  .header {
-    padding: 2rem 1.5rem;
-  }
-
-  .header h1 {
-    font-size: 2rem;
-  }
-
-  .tabs {
-    padding: 1.5rem;
-    justify-content: flex-start;
-  }
-
-  .tab {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .block {
-    padding: 1.5rem;
-  }
-
-  th, td {
-    padding: 0.5rem 0.25rem;
-    font-size: 0.8rem;
-  }
-
-  .rank, .pts {
-    padding: 0.2rem 0.5rem;
-    font-size: 0.7rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .header, .tabs, .block {
-    padding: 1.5rem 1rem;
-  }
-
-  .header h1 {
-    font-size: 1.75rem;
-  }
-}
-</style>
- </head>
- <body>
+    @media (max-width: 480px) {
+      .header, .tabs, .block {
+        padding: 1.5rem 1rem;
+      }
+      .header h1 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
   <div class="page">
-   <div class="header">
-    <h1>Tournament Stats</h1>
-   </div>
-
-   <div id="statsTabs" class="tabs">
-    <button class="tab active" data-division="">All</button>
-    <button class="tab" data-division="10UB">10U Boys</button>
-    <button class="tab" data-division="10UG">10U Girls</button>
-    <button class="tab" data-division="12UB">12U Boys</button>
-    <button class="tab" data-division="12UG">12U Girls</button>
-    <button class="tab" data-division="14UB">14U Boys</button>
-    <button class="tab" data-division="14UG">14U Girls</button>
-   </div>
-
-   <div id="statsContainer">
-    <div class="block">
-      <h2>Loading standings…</h2>
-      <p class="empty-message">
-        If this doesn’t update, check that the admin portal is publishing scores correctly.
-      </p>
+    <div class="header">
+      <h1>Tournament Stats</h1>
     </div>
-   </div>
+
+    <div id="statsTabs" class="tabs">
+      <button class="tab active" data-division="">All</button>
+      <button class="tab" data-division="10UB">10U Boys</button>
+      <button class="tab" data-division="10UG">10U Girls</button>
+      <button class="tab" data-division="12UB">12U Boys</button>
+      <button class="tab" data-division="12UG">12U Girls</button>
+      <button class="tab" data-division="14UB">14U Boys</button>
+      <button class="tab" data-division="14UG">14U Girls</button>
+    </div>
+
+    <div id="statsContainer">
+      <div class="block">
+        <h2>Loading standings…</h2>
+        <p class="empty-message">If this doesn’t update, check that scores are entered in the admin portal and that the web app is published.</p>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -411,244 +403,287 @@ tr:last-child td {
       return allTeams.concat(manual);
     }
 
-    function getTeamById(id) {
-      if (id === undefined || id === null) return null;
-      id = String(id);
-      return getAllTeamsCombined().find(t => String(t.id) === id) || null;
+    function buildTeamLookup() {
+      const byId = {};
+      getAllTeamsCombined().forEach(t => {
+        if (!t) return;
+        const id = String(t.id);
+        byId[id] = t;
+      });
+      return byId;
     }
 
-    // Build standings index: key "division||poolId"
-    function buildStandingsIndex() {
-      const index = {};
-      const schedules = adminState.schedules || [];
-      const scores = adminState.scores || {};
+    function getScoresForGame(game) {
+      let home = null;
+      let away = null;
 
-      schedules.forEach(sched => {
-        const division = sched.division;
-        const games = (sched.games || []).filter(g => {
-          const stage = g.stage || 'pool';
-          return stage === 'pool'; // only pool play contributes to standings
+      if (game.homeGoals !== undefined && game.awayGoals !== undefined) {
+        home = Number(game.homeGoals);
+        away = Number(game.awayGoals);
+      } else if (game.homeScore !== undefined && game.awayScore !== undefined) {
+        home = Number(game.homeScore);
+        away = Number(game.awayScore);
+      } else if (adminState.scores) {
+        const s = adminState.scores[game.id] || adminState.scores[String(game.id)];
+        if (s) {
+          if (s.homeGoals !== undefined && s.awayGoals !== undefined) {
+            home = Number(s.homeGoals);
+            away = Number(s.awayGoals);
+          } else if (s.homeScore !== undefined && s.awayScore !== undefined) {
+            home = Number(s.homeScore);
+            away = Number(s.awayScore);
+          }
+        }
+      }
+
+      if (home === null || away === null) return null;
+      if (Number.isNaN(home) || Number.isNaN(away)) return null;
+      return { home, away };
+    }
+
+    function makeEmptyStats(teamId, teamName) {
+      return {
+        teamId,
+        teamName: teamName || 'Team ' + teamId,
+        GP: 0, W: 0, D: 0, L: 0,
+        GF: 0, GA: 0, GD: 0, PTS: 0
+      };
+    }
+
+    // Win: 6, Tie: 3, Loss: 0, 1 pt per goal up to 3
+    function updateStatsForGame(homeStats, awayStats, homeGoals, awayGoals) {
+      homeGoals = Number(homeGoals) || 0;
+      awayGoals = Number(awayGoals) || 0;
+
+      homeStats.GP++;
+      awayStats.GP++;
+
+      homeStats.GF += homeGoals;
+      homeStats.GA += awayGoals;
+      awayStats.GF += awayGoals;
+      awayStats.GA += homeGoals;
+
+      homeStats.GD = homeStats.GF - homeStats.GA;
+      awayStats.GD = awayStats.GF - awayStats.GA;
+
+      if (homeGoals > awayGoals) {
+        homeStats.W++;
+        awayStats.L++;
+        homeStats.PTS += 6;
+      } else if (homeGoals < awayGoals) {
+        awayStats.W++;
+        homeStats.L++;
+        awayStats.PTS += 6;
+      } else {
+        homeStats.D++;
+        awayStats.D++;
+        homeStats.PTS += 3;
+        awayStats.PTS += 3;
+      }
+
+      const maxGoalPts = 3;
+      homeStats.PTS += Math.min(homeGoals, maxGoalPts);
+      awayStats.PTS += Math.min(awayGoals, maxGoalPts);
+    }
+
+    function collectPoolGames(divisionFilter) {
+      const games = [];
+      (adminState.schedules || []).forEach(sched => {
+        const div = sched.division;
+        if (divisionFilter && div !== divisionFilter) return;
+
+        (sched.games || []).forEach(g => {
+          games.push(Object.assign({}, g, { division: div }));
         });
+        // pool standings usually ignore knockouts; skip sched.knockouts
+      });
+      return games;
+    }
 
-        games.forEach(g => {
-          const score = scores[g.id];
-          if (!score) return; // no score yet, skip
+    function buildStandings(divisionFilter) {
+      const teamsById = buildTeamLookup();
+      const pools = adminState.pools || [];
+      const games = collectPoolGames(divisionFilter);
 
-          const homeId = g.homeId;
-          const awayId = g.awayId;
-          const poolId = g.poolId || 'POOL';
+      const standingsByPool = {};
 
-          const key = division + '||' + poolId;
-          if (!index[key]) {
-            index[key] = {
-              division,
-              poolId,
-              teams: {}
-            };
+      function poolKey(division, poolId) {
+        return `${division || ''}||${poolId || 'pool'}`;
+      }
+
+      // Seed teams from pool definitions
+      pools.forEach(pool => {
+        if (divisionFilter && pool.division !== divisionFilter) return;
+        const div = pool.division || '';
+        const key = poolKey(div, pool.id);
+        if (!standingsByPool[key]) {
+          standingsByPool[key] = {
+            division: div,
+            poolId: pool.id,
+            poolName: pool.name || '',
+            teams: {}
+          };
+        }
+        const teamIds = pool.teamIds || pool.teams || [];
+        teamIds.forEach(tid => {
+          const id = typeof tid === 'object' ? tid.id : tid;
+          if (!id) return;
+          const k = String(id);
+          if (!standingsByPool[key].teams[k]) {
+            const t = teamsById[k] || {};
+            standingsByPool[key].teams[k] = makeEmptyStats(k, t.teamName);
           }
-
-          function ensureTeam(teamId) {
-            const teamKey = String(teamId);
-            if (!index[key].teams[teamKey]) {
-              const team = getTeamById(teamKey);
-              index[key].teams[teamKey] = {
-                teamId: teamKey,
-                teamName: team ? team.teamName : 'TBD',
-                division,
-                poolId,
-                gp: 0,
-                w: 0,
-                d: 0,
-                l: 0,
-                gf: 0,
-                ga: 0,
-                gd: 0,
-                pts: 0
-              };
-            }
-            return index[key].teams[teamKey];
-          }
-
-          const homeTeam = ensureTeam(homeId);
-          const awayTeam = ensureTeam(awayId);
-
-          const homeScore = Number(score.homeScore);
-          const awayScore = Number(score.awayScore);
-          if (isNaN(homeScore) || isNaN(awayScore)) return;
-
-          homeTeam.gp += 1;
-          awayTeam.gp += 1;
-
-          homeTeam.gf += homeScore;
-          homeTeam.ga += awayScore;
-          awayTeam.gf += awayScore;
-          awayTeam.ga += homeScore;
-
-          homeTeam.gd = homeTeam.gf - homeTeam.ga;
-          awayTeam.gd = awayTeam.gf - awayTeam.ga;
-
-          // Result points
-          if (homeScore > awayScore) {
-            homeTeam.w += 1;
-            awayTeam.l += 1;
-            homeTeam.pts += 6;
-          } else if (homeScore < awayScore) {
-            awayTeam.w += 1;
-            homeTeam.l += 1;
-            awayTeam.pts += 6;
-          } else {
-            homeTeam.d += 1;
-            awayTeam.d += 1;
-            homeTeam.pts += 3;
-            awayTeam.pts += 3;
-          }
-
-          // Goal bonus: 1 pt per goal, max 3 per game
-          homeTeam.pts += Math.min(homeScore, 3);
-          awayTeam.pts += Math.min(awayScore, 3);
         });
       });
 
-      return index;
+      // Apply game results
+      games.forEach(game => {
+        const scores = getScoresForGame(game);
+        if (!scores) return;
+
+        const div = game.division || '';
+        const poolId = game.poolId || (game.pool && game.pool.id);
+        const key = poolKey(div, poolId);
+
+        if (!standingsByPool[key]) {
+          const poolInfo = pools.find(p => String(p.id) === String(poolId)) || {};
+          standingsByPool[key] = {
+            division: div,
+            poolId,
+            poolName: poolInfo.name || (poolId ? `Pool ${poolId}` : 'Pool'),
+            teams: {}
+          };
+        }
+
+        const homeId = game.homeId ?? game.homeTeamId ?? (game.home && game.home.id);
+        const awayId = game.awayId ?? game.awayTeamId ?? (game.away && game.away.id);
+        if (homeId == null || awayId == null) return;
+
+        const homeKey = String(homeId);
+        const awayKey = String(awayId);
+
+        const poolStats = standingsByPool[key];
+
+        if (!poolStats.teams[homeKey]) {
+          const t = teamsById[homeKey] || {};
+          poolStats.teams[homeKey] = makeEmptyStats(homeKey, t.teamName);
+        }
+        if (!poolStats.teams[awayKey]) {
+          const t = teamsById[awayKey] || {};
+          poolStats.teams[awayKey] = makeEmptyStats(awayKey, t.teamName);
+        }
+
+        updateStatsForGame(
+          poolStats.teams[homeKey],
+          poolStats.teams[awayKey],
+          scores.home,
+          scores.away
+        );
+      });
+
+      // Convert to sorted arrays
+      Object.values(standingsByPool).forEach(pool => {
+        pool.teamArray = Object.values(pool.teams).sort((a, b) => {
+          if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+          if (b.GD !== a.GD) return b.GD - a.GD;
+          if (b.GF !== a.GF) return b.GF - a.GF;
+          return a.teamName.localeCompare(b.teamName);
+        });
+      });
+
+      return standingsByPool;
     }
 
-    function renderStats(divisionFilter) {
-      const standingsIndex = buildStandingsIndex();
-      const poolsById = {};
-      (adminState.pools || []).forEach(p => { poolsById[p.id] = p; });
+    function renderStandings(divisionFilter) {
+      const standingsByPool = buildStandings(divisionFilter);
+      const poolKeys = Object.keys(standingsByPool);
 
       statsContainer.innerHTML = '';
 
-      const keys = Object.keys(standingsIndex).filter(key => {
-        if (!divisionFilter) return true;
-        const [div] = key.split('||');
-        return div === divisionFilter;
-      });
-
-      if (!keys.length) {
-        statsContainer.innerHTML = `
-          <div class="block">
-            <h2>No standings yet</h2>
-            <p class="empty-message">
-              Once scores are entered in the admin portal, standings will appear here automatically.
-            </p>
-          </div>
-        `;
+      if (!poolKeys.length) {
+        const block = document.createElement('div');
+        block.className = 'block';
+        const h = document.createElement('h2');
+        h.textContent = divisionFilter
+          ? (DIVISION_LABELS[divisionFilter] || divisionFilter) + ' – No games with scores yet'
+          : 'No games with scores yet';
+        const p = document.createElement('p');
+        p.className = 'empty-message';
+        p.textContent = 'Standings will populate automatically as scores are entered in the admin portal.';
+        block.appendChild(h);
+        block.appendChild(p);
+        statsContainer.appendChild(block);
         return;
       }
 
-      // Sort blocks by division name then pool name
-      keys.sort((a, b) => {
-        const [divA, poolA] = a.split('||');
-        const [divB, poolB] = b.split('||');
-
-        const labelA = DIVISION_LABELS[divA] || divA;
-        const labelB = DIVISION_LABELS[divB] || divB;
-
-        if (labelA !== labelB) return labelA.localeCompare(labelB);
-
-        const poolObjA = poolsById[poolA];
-        const poolObjB = poolsById[poolB];
-        const nameA = poolObjA ? poolObjA.name : poolA;
-        const nameB = poolObjB ? poolObjB.name : poolB;
-        return String(nameA).localeCompare(String(nameB));
+      // Sort pools by division + name for consistent order
+      poolKeys.sort((a, b) => {
+        const pa = standingsByPool[a];
+        const pb = standingsByPool[b];
+        const la = DIVISION_LABELS[pa.division] || pa.division || '';
+        const lb = DIVISION_LABELS[pb.division] || pb.division || '';
+        if (la !== lb) return la.localeCompare(lb);
+        return (pa.poolName || '').localeCompare(pb.poolName || '');
       });
 
-      keys.forEach(key => {
-        const { division, poolId, teams } = standingsIndex[key];
-        const teamArray = Object.values(teams);
-
-        if (!teamArray.length) return;
-
-        // Sort teams within pool
-        teamArray.sort((a, b) => {
-          if (b.pts !== a.pts) return b.pts - a.pts;
-          if (b.gd !== a.gd) return b.gd - a.gd;
-          if (b.gf !== a.gf) return b.gf - a.gf;
-          return a.teamName.localeCompare(b.teamName);
-        });
-
-        const divLabel = DIVISION_LABELS[division] || division;
-        const poolObj = poolsById[poolId];
-        const poolName = poolObj ? poolObj.name : (poolId === 'POOL' ? 'Pool' : poolId);
-
+      poolKeys.forEach(key => {
+        const pool = standingsByPool[key];
         const block = document.createElement('div');
         block.className = 'block';
 
-        const h2 = document.createElement('h2');
-        h2.textContent = `${divLabel} – ${poolName}`;
-        block.appendChild(h2);
+        const title = document.createElement('h2');
+        const divLabel = DIVISION_LABELS[pool.division] || pool.division || 'Division';
+        const poolLabel = pool.poolName || (pool.poolId ? `Pool ${pool.poolId}` : 'Pool');
+        title.textContent = `${divLabel} – ${poolLabel}`;
+        block.appendChild(title);
 
         const table = document.createElement('table');
-
         const thead = document.createElement('thead');
-        thead.innerHTML = `
-          <tr>
-            <th>Rank</th>
-            <th>Team</th>
-            <th>GP</th>
-            <th>W</th>
-            <th>D</th>
-            <th>L</th>
-            <th>GF</th>
-            <th>GA</th>
-            <th>GD</th>
-            <th>Pts</th>
-          </tr>
-        `;
+        const headRow = document.createElement('tr');
+        ['Rank', 'Team', 'GP', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts'].forEach(h => {
+          const th = document.createElement('th');
+          th.textContent = h;
+          headRow.appendChild(th);
+        });
+        thead.appendChild(headRow);
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
 
-        teamArray.forEach((t, idx) => {
+        pool.teamArray.forEach((t, index) => {
           const tr = document.createElement('tr');
 
           const rankTd = document.createElement('td');
           const rankSpan = document.createElement('span');
-          rankSpan.className = 'rank';
-          rankSpan.textContent = idx + 1;
+          rankSpan.className = 'badge rank';
+          rankSpan.textContent = index + 1;
           rankTd.appendChild(rankSpan);
+          tr.appendChild(rankTd);
 
           const teamTd = document.createElement('td');
           teamTd.className = 'team';
-          teamTd.textContent = t.teamName || 'TBD';
+          teamTd.textContent = t.teamName || 'Team ' + t.teamId;
+          tr.appendChild(teamTd);
 
-          const gpTd = document.createElement('td');
-          gpTd.textContent = t.gp;
+          const makeCell = (val) => {
+            const td = document.createElement('td');
+            td.textContent = val;
+            return td;
+          };
 
-          const wTd = document.createElement('td');
-          wTd.textContent = t.w;
-
-          const dTd = document.createElement('td');
-          dTd.textContent = t.d;
-
-          const lTd = document.createElement('td');
-          lTd.textContent = t.l;
-
-          const gfTd = document.createElement('td');
-          gfTd.textContent = t.gf;
-
-          const gaTd = document.createElement('td');
-          gaTd.textContent = t.ga;
-
-          const gdTd = document.createElement('td');
-          gdTd.textContent = (t.gd > 0 ? '+' : '') + t.gd;
+          tr.appendChild(makeCell(t.GP));
+          tr.appendChild(makeCell(t.W));
+          tr.appendChild(makeCell(t.D));
+          tr.appendChild(makeCell(t.L));
+          tr.appendChild(makeCell(t.GF));
+          tr.appendChild(makeCell(t.GA));
+          tr.appendChild(makeCell(t.GD));
 
           const ptsTd = document.createElement('td');
           const ptsSpan = document.createElement('span');
-          ptsSpan.className = 'pts';
-          ptsSpan.textContent = t.pts;
+          ptsSpan.className = 'badge pts';
+          ptsSpan.textContent = t.PTS;
           ptsTd.appendChild(ptsSpan);
-
-          tr.appendChild(rankTd);
-          tr.appendChild(teamTd);
-          tr.appendChild(gpTd);
-          tr.appendChild(wTd);
-          tr.appendChild(dTd);
-          tr.appendChild(lTd);
-          tr.appendChild(gfTd);
-          tr.appendChild(gaTd);
-          tr.appendChild(gdTd);
           tr.appendChild(ptsTd);
 
           tbody.appendChild(tr);
@@ -671,9 +706,9 @@ tr:last-child td {
         const stateJson = await stateRes.json();
         adminState = normalizeState(stateJson);
 
-        renderStats('');
-      } catch (e) {
-        console.error(e);
+        renderStandings('');
+      } catch (err) {
+        console.error(err);
         statsContainer.innerHTML = `
           <div class="block">
             <h2>Unable to load standings</h2>
@@ -689,12 +724,12 @@ tr:last-child td {
       btn.addEventListener('click', () => {
         tabButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const div = btn.getAttribute('data-division') || '';
-        renderStats(div);
+        const division = btn.getAttribute('data-division') || '';
+        renderStandings(division);
       });
     });
 
     document.addEventListener('DOMContentLoaded', loadData);
   </script>
- </body>
+</body>
 </html>
