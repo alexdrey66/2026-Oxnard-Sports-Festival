@@ -1422,8 +1422,12 @@ async function updateTeamOnServer(updatedTeam) {
       rightWrap.style.flexWrap='wrap';
 
       const meta=document.createElement('div');
-      meta.className='game-meta';
-      meta.textContent=`${g.date||''} • ${g.time||''} • ${g.field||''}`;
+meta.className='game-meta';
+let metaText = `${g.date||''} • ${g.time||''} • ${g.field||''}`;
+if (g.crossPool) metaText += ' • Cross Pool';
+meta.textContent = metaText;
+
+
 
       const delBtn=document.createElement('button');
       delBtn.className='btn btn-decline btn-small';
