@@ -215,6 +215,7 @@
       align-items:center;
       gap:6px;
       margin-bottom:2px;
+      flex-wrap:wrap;
     }
     .team-title{font-weight:600;font-size:13px;}
     .team-meta{font-size:11px;color:#6b7280;}
@@ -337,10 +338,103 @@
       font-size:11px;
       color:#6b7280;
     }
+
+    /* AUTH GATE */
+    #authGate{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at top,#1e293b,#020617);
+      color:#e5e7eb;
+      z-index:100;
+    }
+    .auth-card{
+      width:100%;
+      max-width:360px;
+      background:#020617;
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,0.4);
+      box-shadow:0 24px 60px rgba(0,0,0,0.7);
+      padding:18px 18px 16px;
+    }
+    .auth-title{
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .auth-sub{
+      font-size:12px;
+      color:#9ca3af;
+      margin-bottom:12px;
+    }
+    .auth-label{
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:3px;
+      color:#9ca3af;
+    }
+    .auth-input{
+      width:100%;
+      border-radius:10px;
+      border:1px solid #4b5563;
+      background:#020617;
+      padding:7px 9px;
+      color:#e5e7eb;
+      font-size:13px;
+      outline:none;
+    }
+    .auth-input:focus{
+      border-color:#2563eb;
+      box-shadow:0 0 0 1px rgba(37,99,235,0.35);
+    }
+    .auth-error{
+      font-size:11px;
+      color:#f97316;
+      margin-top:4px;
+      min-height:14px;
+    }
+    .auth-footer{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:11px;
+      color:#6b7280;
+    }
   </style>
 </head>
 <body>
-<main class="page">
+
+<!-- PASSWORD GATE -->
+<div id="authGate">
+  <div class="auth-card">
+    <div class="badge" style="margin-bottom:8px;background:rgba(37,99,235,0.16);color:#bfdbfe;">
+      OSF 2026 • Admin
+    </div>
+    <div class="auth-title">Tournament Admin Login</div>
+    <div class="auth-sub">
+      This page is for tournament staff. Enter the admin password to continue.
+    </div>
+    <div>
+      <div class="auth-label">Password</div>
+      <input id="authPassword" type="password" class="auth-input" placeholder="Enter password">
+      <div id="authError" class="auth-error"></div>
+    </div>
+    <div style="margin-top:10px;display:flex;justify-content:flex-end;">
+      <button id="authSubmit" class="btn btn-primary btn-small">Enter</button>
+    </div>
+    <div class="auth-footer">
+      <span>Hint: same password used for admin access.</span>
+      <span>AYSO • Area 10W</span>
+    </div>
+  </div>
+</div>
+
+<main id="adminMain" class="page" style="display:none;">
   <div class="badge">OSF 2026 • Tournament Admin</div>
   <h1>Admin Portal</h1>
   <p class="subtitle">
@@ -589,6 +683,7 @@
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
+  const ADMIN_PASSWORD = 'PLAYSOCCER';
 
   const DIVISION_LABELS = {
     '10UB':'10U Boys',
@@ -612,6 +707,13 @@
   const saveStateBtn = document.getElementById('saveStateBtn');
   let toastTimer = null;
 
+  const authGate = document.getElementById('authGate');
+  const adminMain = document.getElementById('adminMain');
+  const authPasswordInput = document.getElementById('authPassword');
+  const authSubmitBtn = document.getElementById('authSubmit');
+  const authError = document.getElementById('authError');
+
+  /* ===== Toast ===== */
   function showToast(msg){
     toastEl.textContent = msg;
     toastEl.classList.add('visible');
@@ -619,6 +721,7 @@
     toastTimer = setTimeout(()=>toastEl.classList.remove('visible'),1500);
   }
 
+  /* ===== Admin state normalize ===== */
   function normalizeState(state){
     if (!state || typeof state !== 'object') state = {};
     state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
@@ -629,6 +732,7 @@
     return state;
   }
 
+  /* ===== Save to Apps Script (no JSON parse) ===== */
   async function saveStateToApi(showMessage = true){
     try{
       const res = await fetch(API_URL,{
@@ -636,10 +740,8 @@
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({entity:'state',state:adminState})
       });
-      let data = {};
-      try { data = await res.json(); } catch(e){}
-      if (!res.ok || (data && data.ok === false)){
-        console.error('Save error', data);
+      if (!res.ok){
+        console.error('Save HTTP error', res.status);
         if (showMessage) showToast('Save failed');
         return false;
       }
@@ -656,6 +758,7 @@
     saveStateToApi(true);
   });
 
+  /* ===== Load from Apps Script ===== */
   async function loadAdminData(){
     try{
       const [teamsRes,stateRes] = await Promise.all([
@@ -681,11 +784,45 @@
     renderScoringTab();
   }
 
-  /* Tabs */
+  /* ===== AUTH GATE ===== */
+  function unlockAdmin(){
+    authGate.style.display = 'none';
+    adminMain.style.display = 'block';
+    loadAdminData();
+  }
+
+  function handleAuth(){
+    const val = authPasswordInput.value.trim();
+    if (val === ADMIN_PASSWORD){
+      localStorage.setItem('osf2026_admin_authed','true');
+      authError.textContent = '';
+      unlockAdmin();
+    }else{
+      authError.textContent = 'Incorrect password. Please try again.';
+    }
+  }
+
+  authSubmitBtn.addEventListener('click', handleAuth);
+  authPasswordInput.addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter') handleAuth();
+  });
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const authed = localStorage.getItem('osf2026_admin_authed') === 'true';
+    if (authed){
+      unlockAdmin();
+    }else{
+      authGate.style.display = 'flex';
+      adminMain.style.display = 'none';
+    }
+  });
+
+  /* ===== Tabs ===== */
   document.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const tab = btn.dataset.tab;
       document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.addEventListener('click',()=>{});
       btn.classList.add('active');
       document.querySelectorAll('.tab-panel').forEach(p=>{
         p.classList.toggle('active',p.id==='tab-'+tab);
@@ -917,12 +1054,12 @@
   function getPoolsForDivision(division){
     return adminState.pools.filter(p=>p.division===division);
   }
-  function getAllTeams(){
+  function getAllTeamsCombined(){
     const manual = adminState.manualTeams.map(m=>Object.assign({manual:true},m));
     return allTeams.concat(manual);
   }
   function getAllTeamsForDivision(division){
-    return getAllTeams().filter(t=>t.division===division);
+    return getAllTeamsCombined().filter(t=>t.division===division);
   }
 
   function assignTeamToPool(division,teamId,poolId){
@@ -1060,7 +1197,7 @@
 
       const body=document.createElement('div');
       body.style.marginTop='4px';
-      const members=getAllTeams().filter(t=>(pool.teamIds||[]).map(String).includes(String(t.id)));
+      const members=getAllTeamsCombined().filter(t=>(pool.teamIds||[]).map(String).includes(String(t.id)));
       if(!members.length){
         body.innerHTML='<span class="empty-note">No teams assigned yet.</span>';
       }else{
@@ -1096,7 +1233,7 @@
   }
   function getTeamByIdAll(id){
     id=String(id);
-    return getAllTeams().find(t=>String(t.id)===id)||null;
+    return getAllTeamsCombined().find(t=>String(t.id)===id)||null;
   }
 
   /* ---- SCHEDULE TAB ---- */
@@ -1232,6 +1369,7 @@
 
     saveStateToApi(false);
     renderGamesUI();
+    renderScoringTab();  // make sure games appear on scoring tab right away
     showToast('Schedule generated');
   });
 
@@ -1507,8 +1645,6 @@
       scoringContent.appendChild(section);
     });
   }
-
-  document.addEventListener('DOMContentLoaded',loadAdminData);
 </script>
 </body>
 </html>
