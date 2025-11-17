@@ -1,624 +1,809 @@
 <!doctype html>
 <html lang="en">
-<head>
+ <head>
   <meta charset="UTF-8">
-  <title>OSF 2026 – Game Schedule</title>
+  <title>Game Schedules</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <style>
-    :root{
-      --primary:#004b8d;
-      --accent:#d62828;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --border:#e5e7eb;
-      --text:#111827;
-      --muted:#6b7280;
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-      background:radial-gradient(circle at top left,#e0f2fe 0,#f9fafb 45%,#e5e7eb 100%);
-      color:var(--text);
-    }
-    .page{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px 12px 40px;
-    }
-    h1{
-      margin:0 0 4px;
-      font-size:26px;
-      letter-spacing:0.04em;
-    }
-    .subtitle{
-      margin:0 0 12px;
-      font-size:13px;
-      color:var(--muted);
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:4px 10px;
-      border-radius:999px;
-      background:rgba(37,99,235,0.08);
-      color:#1d4ed8;
-      font-size:12px;
-      font-weight:600;
-      margin-bottom:6px;
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
+      min-height: 100%;
+      color: #ffffff;
     }
 
-    .tabs{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-bottom:14px;
-    }
-    .tab-btn{
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.8);
-      background:rgba(15,23,42,0.02);
-      padding:7px 13px;
-      font-size:12px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      color:#374151;
-    }
-    .tab-btn.active{
-      background:#111827;
-      color:#fff;
-      border-color:#0f172a;
+    html {
+      height: 100%;
     }
 
-    .card{
-      background:var(--card);
-      border-radius:16px;
-      box-shadow:0 18px 40px rgba(15,23,42,0.18);
-      border:1px solid rgba(148,163,184,0.4);
-      padding:14px 12px 14px;
-      margin-bottom:16px;
-    }
-    .card-header{
-      font-size:14px;
-      font-weight:600;
-      margin-bottom:4px;
-    }
-    .card-sub{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:8px;
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      min-height: 100%;
     }
 
-    /* Pool cards */
-    .pools-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-      gap:10px;
-      margin-bottom:14px;
-    }
-    .pool-card{
-      border-radius:14px;
-      border:1px solid #e5e7eb;
-      background:linear-gradient(145deg,#eef2ff,#eff6ff);
-      padding:8px 9px;
-      font-size:12px;
-    }
-    .pool-name{
-      font-weight:700;
-      font-size:13px;
-      margin-bottom:2px;
-    }
-    .pool-division{
-      font-size:11px;
-      color:#4b5563;
-      margin-bottom:4px;
-    }
-    .pool-team{
-      display:flex;
-      flex-direction:column;
-      padding:4px 0;
-      border-top:1px solid rgba(148,163,184,0.35);
-    }
-    .pool-team:first-of-type{
-      border-top:none;
-    }
-    .pool-team-name{
-      font-weight:600;
-      font-size:12px;
-    }
-    .pool-team-meta{
-      font-size:11px;
-      color:#6b7280;
+    .header-section {
+      background: transparent;
+      border-radius: 16px;
+      padding: 3rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
+      position: relative;
     }
 
-    /* Schedule tables */
-    .day-block{
-      margin-bottom:16px;
-    }
-    .day-title{
-      font-weight:600;
-      font-size:13px;
-      margin-bottom:6px;
-    }
-    .schedule-table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      overflow:hidden;
-      border-radius:12px;
-      box-shadow:0 10px 24px rgba(15,23,42,0.08);
-    }
-    .schedule-table th,
-    .schedule-table td{
-      border:1px solid #e5e7eb;
-      padding:6px 8px;
-      text-align:left;
-      vertical-align:top;
-    }
-    .schedule-table th{
-      background:#f3f4f6;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.05em;
-      color:#6b7280;
-    }
-    .time-cell{
-      width:70px;
-      background:#f9fafb;
-      font-weight:600;
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .game-cell-main{
-      font-weight:600;
-    }
-    .game-cell{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-    }
-    .game-meta-line{
-      font-size:11px;
-      color:#6b7280;
-    }
-    .chip-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:4px;
-      margin-top:1px;
-    }
-    .chip{
-      border-radius:999px;
-      padding:2px 7px;
-      font-size:10px;
-      font-weight:600;
-      border:1px solid rgba(148,163,184,0.7);
-      background:#f9fafb;
-      color:#374151;
-    }
-    .chip-division{
-      border-color:#93c5fd;
-      background:#eff6ff;
-      color:#1d4ed8;
-    }
-    .chip-cross{
-      border-color:#fed7aa;
-      background:#fffbeb;
-      color:#b45309;
-    }
-    .chip-knockout{
-      border-color:#fecaca;
-      background:#fef2f2;
-      color:#b91c1c;
-    }
-    .chip-pool{
-      border-color:#bbf7d0;
-      background:#f0fdf4;
-      color:#166534;
+    .header-section::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
+      border-radius: 19px;
+      z-index: -1;
+      opacity: 0.1;
     }
 
-    .empty-note{
-      font-size:12px;
-      color:#9ca3af;
-      padding:6px 2px;
+    h1 {
+      font-size: 10rem;
+      font-weight: 900;
+      text-align: center;
+      margin: 0 0 1rem 0;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.6;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    .controls-section {
+      background: #124175;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
+      box-shadow: 
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
+    }
+
+    #divisionTabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #124175;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      border-color: #faca3d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
+    }
+
+    .tab-btn.active {
+      background: #faca3d;
+      color: #124175;
+      border-color: #124175;
+      box-shadow: 0 4px 14px rgba(250, 202, 61, 0.4);
+    }
+
+    #scheduleContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .sched-block {
+      background: #124175;
+      border: 3px solid #faca3d;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sched-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
+    }
+
+    .sched-block::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .sched-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 1.5rem 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sched-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: #faca3d;
+      border-radius: 2px;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 120px repeat(6, 1fr);
+      gap: 4px;
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 4px;
+      position: relative;
+      box-shadow: 
+        0 25px 60px rgba(18, 65, 117, 0.6),
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(250, 202, 61, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .schedule-grid::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #faca3d, #f59e0b, #faca3d, #f59e0b);
+      background-size: 400% 400%;
+      border-radius: 22px;
+      z-index: -1;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .grid-header {
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      color: #124175;
+      padding: 1.5rem 1rem;
+      font-weight: 900;
+      text-align: center;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 
+        0 6px 20px rgba(250, 202, 61, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .grid-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .time-slot {
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      color: #124175;
+      padding: 1.5rem 1rem;
+      font-weight: 900;
+      text-align: center;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 
+        0 6px 20px rgba(250, 202, 61, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+      white-space: nowrap;
+    }
+
+    .time-slot::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .game-slot {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+      padding: 1rem;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      border-radius: 12px;
+      border: 2px solid rgba(250, 202, 61, 0.1);
+      box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 2px 6px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+    }
+
+    .game-slot::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.3) 0%, rgba(18, 65, 117, 0.1) 50%, rgba(250, 202, 61, 0.3) 100%);
+      border-radius: 14px;
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: -1;
+    }
+
+    .game-slot::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(250, 202, 61, 0.03) 50%, transparent 100%);
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .game-slot:hover::before {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+
+    .game-slot:hover::after {
+      opacity: 1;
+    }
+
+    .game-slot:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: rgba(250, 202, 61, 0.4);
+      box-shadow: 
+        0 20px 40px rgba(250, 202, 61, 0.3),
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        0 5px 15px rgba(250, 202, 61, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .game-slot.has-game {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+
+    .game-slot.has-game::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.3) 0%, rgba(18, 65, 117, 0.2) 100%);
+      border-radius: 10px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .game-slot.has-game:hover::after {
+      opacity: 1;
+    }
+
+    .game-slot.has-game:hover {
+      border-color: #faca3d;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(250, 202, 61, 0.05) 100%);
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 
+        0 15px 40px rgba(250, 202, 61, 0.5),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
+
+    .game-teams {
+      font-weight: 900;
+      color: #124175;
+      font-size: 0.8rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+    }
+
+    .team-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .vs-text {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      font-weight: 600;
+    }
+
+    .game-info {
+      font-size: 0.75rem;
+      color: #374151;
+      line-height: 1;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0.3rem 0.8rem;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.15) 0%, rgba(250, 202, 61, 0.25) 100%);
+      border-radius: 12px;
+      border: 2px solid rgba(250, 202, 61, 0.4);
+      position: relative;
+      box-shadow: 
+        0 2px 8px rgba(250, 202, 61, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      white-space: nowrap;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .game-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+      border-radius: 14px;
+    }
+
+    .extra-note {
+      margin-top: 4px;
+      font-size: 0.7rem;
+      color: #6b7280;
+    }
+
+    .empty-slot {
+      color: #9ca3af;
+      font-size: 2rem;
+      font-weight: 200;
+      opacity: 0.3;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .page {
+        padding: 1rem;
+      }
+
+      .header-section, .controls-section {
+        padding: 2rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .schedule-grid {
+        grid-template-columns: 80px repeat(3, 1fr);
+        font-size: 0.8rem;
+      }
+
+      .grid-header, .time-slot {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .game-slot {
+        padding: 0.75rem 0.5rem;
+        min-height: 70px;
+      }
+
+      .game-teams {
+        font-size: 0.75rem;
+      }
+
+      .game-info {
+        font-size: 0.7rem;
+      }
+
+      #divisionTabs {
+        justify-content: flex-start;
+      }
+
+      .tab-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-section, .controls-section, .sched-block {
+        padding: 1.5rem 1rem;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
     }
   </style>
-</head>
-<body>
-<div class="page">
-  <div class="badge">OSF 2026 • Game Schedule</div>
-  <h1>Match Schedule</h1>
-  <p class="subtitle">
-    Select a division to view its games, or view all games together by field and time.
-  </p>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="page">
+   <div class="header-section">
+    <h1>Game Schedule</h1>
+    <p class="subtitle">Schedules auto-update as scores and brackets are entered.</p>
+   </div>
+   <div class="controls-section">
+    <div id="divisionTabs">
+      <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
+      <button class="tab-btn" data-division="10UB">10U Boys</button>
+      <button class="tab-btn" data-division="10UG">10U Girls</button>
+      <button class="tab-btn" data-division="12UB">12U Boys</button>
+      <button class="tab-btn" data-division="12UG">12U Girls</button>
+      <button class="tab-btn" data-division="14UB">14U Boys</button>
+      <button class="tab-btn" data-division="14UG">14U Girls</button>
+    </div>
+   </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" data-div="ALL">All Games</button>
-    <button class="tab-btn" data-div="10UB">10U Boys</button>
-    <button class="tab-btn" data-div="10UG">10U Girls</button>
-    <button class="tab-btn" data-div="12UB">12U Boys</button>
-    <button class="tab-btn" data-div="12UG">12U Girls</button>
-    <button class="tab-btn" data-div="14UB">14U Boys</button>
-    <button class="tab-btn" data-div="14UG">14U Girls</button>
+   <!-- LIVE SCHEDULES WILL BE INJECTED HERE -->
+   <div id="scheduleContainer"></div>
   </div>
 
-  <div id="poolsWrapper"></div>
-  <div id="scheduleWrapper"></div>
-</div>
+  <script>
+    // ===== CONFIG =====
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
-<script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
+    const DIVISION_LABELS = {
+      '10UB':'10U Boys',
+      '10UG':'10U Girls',
+      '12UB':'12U Boys',
+      '12UG':'12U Girls',
+      '14UB':'14U Boys',
+      '14UG':'14U Girls'
+    };
 
-  const DIVISION_LABELS = {
-    '10UB':'10U Boys',
-    '10UG':'10U Girls',
-    '12UB':'12U Boys',
-    '12UG':'12U Girls',
-    '14UB':'14U Boys',
-    '14UG':'14U Girls'
-  };
+    let allTeams = [];
+    let adminState = {
+      manualTeams: [],
+      pools: [],
+      schedules: [],
+      scores: {},
+      dayConfigs: {}
+    };
 
-  const tabs = document.querySelectorAll('.tab-btn');
-  const poolsWrapper = document.getElementById('poolsWrapper');
-  const scheduleWrapper = document.getElementById('scheduleWrapper');
+    const scheduleContainer = document.getElementById('scheduleContainer');
 
-  let allTeams = [];
-  let adminState = {
-    manualTeams: [],
-    pools: [],
-    schedules: [],
-    scores: {},
-    dayConfigs: {}
-  };
+    // ===== HELPERS =====
+    function normalizeState(state){
+      if (!state || typeof state !== 'object') state = {};
+      state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
+      state.pools = Array.isArray(state.pools) ? state.pools : [];
+      state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
+      state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
+      state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
+      return state;
+    }
 
-  function normalizeState(state){
-    if (!state || typeof state !== 'object') state = {};
-    state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
-    state.pools = Array.isArray(state.pools) ? state.pools : [];
-    state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
-    state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
-    state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
-    return state;
-  }
+    function getAllTeamsCombined(){
+      const manual = (adminState.manualTeams || []).map(m => Object.assign({manual:true}, m));
+      return (Array.isArray(allTeams) ? allTeams : []).concat(manual);
+    }
 
-  function getAllTeamsCombined(){
-    const manual = (adminState.manualTeams || []).map(m => Object.assign({manual:true}, m));
-    return allTeams.concat(manual);
-  }
+    function getTeamByIdAll(id){
+      if (id == null) return null;
+      id = String(id);
+      return getAllTeamsCombined().find(t => String(t.id) === id) || null;
+    }
 
-  function getTeamById(id){
-    if (!id && id !== 0) return null;
-    id = String(id);
-    return getAllTeamsCombined().find(t => String(t.id) === id) || null;
-  }
+    function parseTimeToMinutes(str){
+      if (!str) return 0;
+      let s = String(str).trim().toUpperCase();
+      let ampm = null;
+      if (s.endsWith('AM') || s.endsWith('PM')) {
+        ampm = s.slice(-2);
+        s = s.slice(0, -2).trim();
+      }
+      s = s.replace(/\s+/g,'');
+      const parts = s.split(':');
+      let h = parseInt(parts[0],10);
+      let m = parts[1] ? parseInt(parts[1],10) : 0;
+      if (Number.isNaN(h) || Number.isNaN(m)) return 0;
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return h * 60 + m;
+    }
 
-  function divisionLabel(code){
-    return DIVISION_LABELS[code] || code || '';
-  }
+    // ===== LOAD DATA =====
+    async function loadDataAndRender(initialDivision = ''){
+      try {
+        const [teamsRes, stateRes] = await Promise.all([
+          fetch(API_URL),
+          fetch(API_URL + '?entity=state')
+        ]);
+        allTeams = await teamsRes.json();
+        adminState = normalizeState(await stateRes.json());
+        renderSchedulesForDivision(initialDivision);
+      } catch (e){
+        console.error('Load error', e);
+        scheduleContainer.innerHTML = '<p style="text-align:center;opacity:.8;">Unable to load schedules right now.</p>';
+      }
+    }
 
-  function getScheduleForDivision(division){
-    if (!Array.isArray(adminState.schedules)) return null;
-    return adminState.schedules.find(s => s.division === division) || null;
-  }
+    // ===== RENDERING =====
+    function renderSchedulesForDivision(divisionFilter){
+      scheduleContainer.innerHTML = '';
 
-  function collectGamesForDivision(division){
-    const result = [];
-    if (division === 'ALL'){
-      (adminState.schedules || []).forEach(s => {
-        const div = s.division;
-        const schedGames = Array.isArray(s.games) ? s.games : [];
-        const ko = Array.isArray(s.knockouts) ? s.knockouts : [];
+      const schedules = adminState.schedules || [];
+      const gamesByDate = {};
+      const poolsById = {};
+      (adminState.pools || []).forEach(p => { poolsById[p.id] = p; });
 
-        schedGames.forEach(g => {
-          result.push(Object.assign({}, g, {
-            division: div,
+      // Pool-play & knockout games
+      schedules.forEach(sched => {
+        const divCode = sched.division;
+        if (divisionFilter && divCode !== divisionFilter) return;
+
+        const games = Array.isArray(sched.games) ? sched.games : [];
+        games.forEach(g => {
+          if (!g.date || !g.time || !g.field) return;
+          const key = String(g.date);
+          if (!gamesByDate[key]) gamesByDate[key] = [];
+          gamesByDate[key].push(Object.assign({}, g, {
+            division: divCode,
             stage: g.stage || 'pool'
           }));
         });
 
+        const ko = Array.isArray(sched.knockouts) ? sched.knockouts : [];
         ko.forEach(k => {
-          if (!k.date || !k.time) return; // only show scheduled knockouts
-          result.push({
+          if (!k.date || !k.time || !k.field) return;
+          const key = String(k.date);
+          if (!gamesByDate[key]) gamesByDate[key] = [];
+          gamesByDate[key].push({
             id: k.id,
-            division: div,
-            poolId: null,
-            homeId: k.homeId,
-            awayId: k.awayId,
+            division: divCode,
             date: k.date,
             time: k.time,
             field: k.field,
-            type: k.type || '',
+            homeId: k.homeId,
+            awayId: k.awayId,
+            poolId: null,
+            type: k.type || 'Knockout',
             stage: 'knockout'
           });
         });
       });
-      return result;
-    }
 
-    const sched = getScheduleForDivision(division);
-    if (!sched) return [];
-
-    const poolGames = (sched.games || []).map(g =>
-      Object.assign({}, g, { division, stage: g.stage || 'pool' })
-    );
-
-    const koGames = (sched.knockouts || [])
-      .filter(k => k.date && k.time)
-      .map(k => ({
-        id: k.id,
-        division,
-        poolId: null,
-        homeId: k.homeId,
-        awayId: k.awayId,
-        date: k.date,
-        time: k.time,
-        field: k.field,
-        type: k.type || '',
-        stage: 'knockout'
-      }));
-
-    return poolGames.concat(koGames);
-  }
-
-  function renderPoolsForDivision(division){
-    poolsWrapper.innerHTML = '';
-    if (division === 'ALL') return; // no pools on combined view
-
-    const pools = (adminState.pools || []).filter(p => p.division === division);
-    if (!pools.length){
-      poolsWrapper.innerHTML = '<div class="card"><div class="empty-note">No pools created yet for this division.</div></div>';
-      return;
-    }
-
-    const allTeamsCombined = getAllTeamsCombined();
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-header">Pools – ${divisionLabel(division)}</div>
-      <div class="card-sub">Pool assignments for this division.</div>
-    `;
-
-    const grid = document.createElement('div');
-    grid.className = 'pools-grid';
-
-    pools.forEach(pool => {
-      const pCard = document.createElement('div');
-      pCard.className = 'pool-card';
-
-      const name = document.createElement('div');
-      name.className = 'pool-name';
-      name.textContent = pool.name || 'Pool';
-      const divText = document.createElement('div');
-      divText.className = 'pool-division';
-      divText.textContent = divisionLabel(pool.division);
-      pCard.appendChild(name);
-      pCard.appendChild(divText);
-
-      const teamIds = (pool.teamIds || []).map(String);
-      const members = allTeamsCombined.filter(t => teamIds.includes(String(t.id)));
-
-      if (!members.length){
-        const empty = document.createElement('div');
-        empty.className = 'pool-team-meta';
-        empty.textContent = 'No teams assigned yet.';
-        pCard.appendChild(empty);
-      } else {
-        members.forEach(t => {
-          const row = document.createElement('div');
-          row.className = 'pool-team';
-
-          const top = document.createElement('div');
-          top.className = 'pool-team-name';
-          top.textContent = t.teamName || 'Team';
-
-          const meta = document.createElement('div');
-          meta.className = 'pool-team-meta';
-          const region = t.regionNumber ? `Region ${t.regionNumber}` : 'Region TBD';
-          const coach = t.coachName ? `Coach: ${t.coachName}` : 'Coach: TBD';
-          meta.textContent = `${region} • ${coach}`;
-
-          row.appendChild(top);
-          row.appendChild(meta);
-          pCard.appendChild(row);
-        });
+      const dateKeys = Object.keys(gamesByDate);
+      if (!dateKeys.length){
+        scheduleContainer.innerHTML = '<p style="text-align:center;opacity:.8;">No games scheduled yet.</p>';
+        return;
       }
 
-      grid.appendChild(pCard);
-    });
+      // Sort date labels alphabetically (you can tweak if you use real date strings)
+      dateKeys.sort((a,b) => a.localeCompare(b));
 
-    card.appendChild(grid);
-    poolsWrapper.appendChild(card);
-  }
-  function timeToMinutes(t){
-    if (!t) return 24 * 60 + 1; // push empties to the end
-    t = String(t).trim().toLowerCase();
+      dateKeys.forEach(dateKey => {
+        const games = gamesByDate[dateKey];
 
-    if (t === 'tbd') return 24 * 60 + 1;
+        // Unique fields and times for this date
+        const fields = Array.from(new Set(games.map(g => g.field || 'Field'))).sort();
+        const times = Array.from(new Set(games.map(g => g.time || ''))).sort(
+          (a,b) => parseTimeToMinutes(a) - parseTimeToMinutes(b)
+        );
 
-    // Handles formats like:
-    // 8am, 8:00am, 8:00 am, 12pm, 12:15pm, etc.
-    const match = t.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
-    if (!match) return 24 * 60 + 1;
+        const block = document.createElement('div');
+        block.className = 'sched-block';
 
-    let hour = parseInt(match[1], 10);
-    let minute = match[2] ? parseInt(match[2], 10) : 0;
-    const mer = match[3];
+        const title = document.createElement('div');
+        title.className = 'sched-title';
+        if (divisionFilter){
+          title.textContent = dateKey + ' • ' + (DIVISION_LABELS[divisionFilter] || divisionFilter);
+        } else {
+          title.textContent = dateKey;
+        }
+        block.appendChild(title);
 
-    if (mer === 'pm' && hour !== 12) hour += 12;
-    if (mer === 'am' && hour === 12) hour = 0;
+        const grid = document.createElement('div');
+        grid.className = 'schedule-grid';
 
-    return hour * 60 + minute;
-  }
-
-  function renderSchedule(division){
-    scheduleWrapper.innerHTML = '';
-
-    const games = collectGamesForDivision(division);
-    if (!games.length){
-      scheduleWrapper.innerHTML = '<div class="card"><div class="empty-note">No games scheduled yet.</div></div>';
-      return;
-    }
-
-    const poolMap = {};
-    (adminState.pools || []).forEach(p => { poolMap[p.id] = p; });
-
-    // group by date
-    const byDate = {};
-    games.forEach(g => {
-      const dateKey = g.date || 'TBD';
-      if (!byDate[dateKey]) byDate[dateKey] = [];
-      byDate[dateKey].push(g);
-    });
-
-    Object.keys(byDate).forEach(dateKey => {
-      const dayGames = byDate[dateKey];
-
-      // unique fields and times
-      const fields = Array.from(new Set(dayGames.map(g => g.field || 'TBD'))).sort();
-      const times  = Array.from(new Set(dayGames.map(g => g.time || 'TBD')))
-        .sort((a, b) => timeToMinutes(a) - timeToMinutes(b));
-
-      const dayBlock = document.createElement('div');
-      dayBlock.className = 'day-block';
-
-      const title = document.createElement('div');
-      title.className = 'day-title';
-      title.textContent = dateKey === 'TBD' ? 'Date TBD' : dateKey;
-      dayBlock.appendChild(title);
-
-      const table = document.createElement('table');
-      table.className = 'schedule-table';
-
-      const thead = document.createElement('thead');
-      const hr = document.createElement('tr');
-      const thTime = document.createElement('th');
-      thTime.textContent = 'Time';
-      hr.appendChild(thTime);
-      fields.forEach(f => {
-        const th = document.createElement('th');
-        th.textContent = f || 'Field';
-        hr.appendChild(th);
-      });
-      thead.appendChild(hr);
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-
-      times.forEach(time => {
-        const tr = document.createElement('tr');
-        const tdTime = document.createElement('td');
-        tdTime.className = 'time-cell';
-        tdTime.textContent = time;
-        tr.appendChild(tdTime);
+        // Header row: "Time" + field names
+        const timeHeader = document.createElement('div');
+        timeHeader.className = 'grid-header';
+        timeHeader.textContent = 'Time';
+        grid.appendChild(timeHeader);
 
         fields.forEach(field => {
-          const td = document.createElement('td');
-
-          const match = dayGames.find(g => (g.time || 'TBD') === time && (g.field || 'TBD') === field);
-          if (match){
-            const home = getTeamById(match.homeId);
-            const away = getTeamById(match.awayId);
-
-            const cell = document.createElement('div');
-            cell.className = 'game-cell';
-
-            const main = document.createElement('div');
-            main.className = 'game-cell-main';
-
-            const labelDivision = divisionLabel(match.division);
-            const matchup = `${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}`;
-            if (match.stage === 'knockout' && match.type){
-              main.textContent = `${match.type}: ${matchup}`;
-            } else {
-              main.textContent = matchup;
-            }
-
-            const meta = document.createElement('div');
-            meta.className = 'game-meta-line';
-            const poolName = match.poolId && poolMap[match.poolId] ? poolMap[match.poolId].name : '';
-            meta.textContent = poolName ? `${labelDivision} • ${poolName}` : labelDivision;
-
-            const chips = document.createElement('div');
-            chips.className = 'chip-row';
-
-            const divChip = document.createElement('span');
-            divChip.className = 'chip chip-division';
-            divChip.textContent = labelDivision;
-            chips.appendChild(divChip);
-
-            if (poolName){
-              const pChip = document.createElement('span');
-              pChip.className = 'chip chip-pool';
-              pChip.textContent = poolName;
-              chips.appendChild(pChip);
-            }
-
-            if (match.crossPool){
-              const xChip = document.createElement('span');
-              xChip.className = 'chip chip-cross';
-              xChip.textContent = 'Cross Pool';
-              chips.appendChild(xChip);
-            }
-
-            if (match.stage === 'knockout'){
-              const kChip = document.createElement('span');
-              kChip.className = 'chip chip-knockout';
-              kChip.textContent = 'Knockout';
-              chips.appendChild(kChip);
-            }
-
-            cell.appendChild(main);
-            cell.appendChild(meta);
-            cell.appendChild(chips);
-
-            td.appendChild(cell);
-          } else {
-            td.innerHTML = '&nbsp;';
-          }
-
-          tr.appendChild(td);
+          const h = document.createElement('div');
+          h.className = 'grid-header';
+          h.textContent = field;
+          grid.appendChild(h);
         });
 
-        tbody.appendChild(tr);
+        // Rows per time
+        times.forEach(time => {
+          // Time cell
+          const timeCell = document.createElement('div');
+          timeCell.className = 'time-slot';
+          timeCell.textContent = time;
+          grid.appendChild(timeCell);
+
+          // One cell per field
+          fields.forEach(field => {
+            const cell = document.createElement('div');
+            cell.className = 'game-slot';
+
+            const cellGames = games.filter(g =>
+              (g.time || '') === time &&
+              (g.field || '') === field
+            );
+
+            if (!cellGames.length){
+              const empty = document.createElement('div');
+              empty.className = 'empty-slot';
+              empty.textContent = '—';
+              cell.appendChild(empty);
+            } else {
+              cell.classList.add('has-game');
+
+              const mainGame = cellGames[0];
+              const home = getTeamByIdAll(mainGame.homeId);
+              const away = getTeamByIdAll(mainGame.awayId);
+
+              const teamsDiv = document.createElement('div');
+              teamsDiv.className = 'game-teams';
+
+              const homeSpan = document.createElement('div');
+              homeSpan.className = 'team-name';
+              homeSpan.textContent = home ? home.teamName : 'TBD';
+
+              const vsSpan = document.createElement('div');
+              vsSpan.className = 'vs-text';
+              vsSpan.textContent = 'VS';
+
+              const awaySpan = document.createElement('div');
+              awaySpan.className = 'team-name';
+              awaySpan.textContent = away ? away.teamName : 'TBD';
+
+              teamsDiv.appendChild(homeSpan);
+              teamsDiv.appendChild(vsSpan);
+              teamsDiv.appendChild(awaySpan);
+              cell.appendChild(teamsDiv);
+
+              const info = document.createElement('div');
+              info.className = 'game-info';
+
+              const labels = [];
+              if (mainGame.stage === 'knockout' && mainGame.type){
+                labels.push(mainGame.type);
+              } else if (mainGame.poolId && poolsById[mainGame.poolId]){
+                labels.push(poolsById[mainGame.poolId].name);
+              }
+
+              if (mainGame.crossPool){
+                labels.push('Cross-pool');
+              }
+
+              if (!divisionFilter){
+                labels.push(DIVISION_LABELS[mainGame.division] || mainGame.division);
+              }
+
+              info.textContent = labels.join(' • ') || 'Game';
+              cell.appendChild(info);
+
+              if (cellGames.length > 1){
+                const extra = document.createElement('div');
+                extra.className = 'extra-note';
+                extra.textContent = `+${cellGames.length - 1} more`;
+                cell.appendChild(extra);
+              }
+            }
+
+            grid.appendChild(cell);
+          });
+        });
+
+        block.appendChild(grid);
+        scheduleContainer.appendChild(block);
+      });
+    }
+
+    // ===== TABS =====
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabButtons = Array.from(document.querySelectorAll('#divisionTabs .tab-btn'));
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const division = btn.getAttribute('data-division') || '';
+          renderSchedulesForDivision(division);
+        });
       });
 
-      table.appendChild(tbody);
-      dayBlock.appendChild(table);
-      scheduleWrapper.appendChild(dayBlock);
+      loadDataAndRender('');
     });
-  }
-
-  function renderTab(division){
-    tabs.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.div === division);
-    });
-    renderPoolsForDivision(division);
-    renderSchedule(division);
-  }
-
-  async function loadData(){
-    try{
-      const [teamsRes,stateRes] = await Promise.all([
-        fetch(API_URL),
-        fetch(API_URL+'?entity=state')
-      ]);
-      allTeams = await teamsRes.json();
-      adminState = normalizeState(await stateRes.json());
-      renderTab('ALL');
-    }catch(err){
-      console.error(err);
-      scheduleWrapper.innerHTML = '<div class="card"><div class="empty-note">Unable to load schedule.</div></div>';
-    }
-  }
-
-  tabs.forEach(btn=>{
-    btn.addEventListener('click',()=>renderTab(btn.dataset.div));
-  });
-
-  loadData();
-</script>
+  </script>
 </body>
 </html>
