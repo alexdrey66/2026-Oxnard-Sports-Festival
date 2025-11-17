@@ -13,9 +13,6 @@
       --border:#e5e7eb;
       --text:#111827;
       --muted:#6b7280;
-      --green:#16a34a;
-      --amber:#f59e0b;
-      --red:#dc2626;
     }
     *{box-sizing:border-box;}
     body{
@@ -24,33 +21,6 @@
       background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
       color:var(--text);
     }
-    .nav{
-      background:#000;
-      color:#fff;
-      padding:10px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .nav-left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:14px;
-      font-weight:600;
-    }
-    .nav-links{
-      display:flex;
-      gap:18px;
-      font-size:13px;
-    }
-    .nav-links a{
-      color:#e5e7eb;
-      text-decoration:none;
-      padding:4px 0;
-    }
-    .nav-links a:hover{color:#fff;}
-
     .page{
       max-width:1150px;
       margin:0 auto;
@@ -102,20 +72,15 @@
       color:#fff;
       border-color:#0f172a;
     }
-
-    .tab-panel{
-      display:none;
-    }
-    .tab-panel.active{
-      display:block;
-    }
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
 
     .layout-two{
       display:grid;
-      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
       gap:16px;
     }
-    @media (max-width:900px){
+    @media(max-width:900px){
       .layout-two{grid-template-columns:1fr;}
     }
 
@@ -163,10 +128,7 @@
       background:#fff;
       box-shadow:0 0 0 1px rgba(37,99,235,0.25);
     }
-    textarea{
-      resize:vertical;
-      min-height:60px;
-    }
+    textarea{resize:vertical;min-height:60px;}
 
     .row{
       display:flex;
@@ -174,7 +136,7 @@
       margin-bottom:6px;
       flex-wrap:wrap;
     }
-    .row > div{flex:1;}
+    .row>div{flex:1;}
 
     .btn{
       border-radius:999px;
@@ -202,18 +164,9 @@
       font-size:11px;
       box-shadow:none;
     }
-    .btn-approve{
-      background:#16a34a;
-      color:#fff;
-    }
-    .btn-decline{
-      background:#ef4444;
-      color:#fff;
-    }
-    .btn-pending{
-      background:#eab308;
-      color:#111827;
-    }
+    .btn-approve{background:#16a34a;color:#fff;}
+    .btn-decline{background:#ef4444;color:#fff;}
+    .btn-pending{background:#facc15;color:#111827;}
 
     .status-pill{
       display:inline-flex;
@@ -224,18 +177,9 @@
       font-size:11px;
       font-weight:600;
     }
-    .status-pending{
-      background:#fef9c3;
-      color:#854d0e;
-    }
-    .status-approved{
-      background:#dcfce7;
-      color:#166534;
-    }
-    .status-declined{
-      background:#fee2e2;
-      color:#991b1b;
-    }
+    .status-pending{background:#fef9c3;color:#854d0e;}
+    .status-approved{background:#dcfce7;color:#166534;}
+    .status-declined{background:#fee2e2;color:#991b1b;}
 
     .team-list{
       display:flex;
@@ -259,14 +203,8 @@
       gap:6px;
       margin-bottom:2px;
     }
-    .team-title{
-      font-weight:600;
-      font-size:13px;
-    }
-    .team-meta{
-      font-size:11px;
-      color:#6b7280;
-    }
+    .team-title{font-weight:600;font-size:13px;}
+    .team-meta{font-size:11px;color:#6b7280;}
     .team-row{
       display:flex;
       justify-content:space-between;
@@ -291,8 +229,7 @@
       color:#374151;
     }
     .check-row input[type="checkbox"]{
-      width:auto;
-      height:auto;
+      width:auto;height:auto;
     }
     .note-input{
       width:100%;
@@ -367,27 +304,33 @@
       opacity:1;
       transform:translateY(0);
     }
+
+    .game-card{
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      padding:6px 8px;
+      margin-bottom:6px;
+      font-size:12px;
+    }
+    .game-header{
+      display:flex;
+      justify-content:space-between;
+      gap:6px;
+      margin-bottom:2px;
+    }
+    .game-meta{
+      font-size:11px;
+      color:#6b7280;
+    }
   </style>
 </head>
 <body>
-<header class="nav">
-  <div class="nav-left">
-    <span>2026 Oxnard Sports Festival</span>
-  </div>
-  <nav class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="team-registration.html">Register Your Team</a>
-    <a href="approved-teams.html">Approved Teams</a>
-    <a href="#">Sign Up To Referee</a>
-    <a href="admin.html">Admin</a>
-  </nav>
-</header>
-
 <main class="page">
   <div class="badge">OSF 2026 • Tournament Admin</div>
   <h1>Admin Portal</h1>
   <p class="subtitle">
-    One-stop view for teams, pools, schedules, and scoring. Changes save back to your Google Sheet via Apps Script.
+    One-stop view for teams, pools, schedules, and scoring. All changes are saved to your Google Sheet via Apps Script.
   </p>
 
   <div class="tabs">
@@ -408,7 +351,7 @@
             <div>
               <label>Division</label>
               <select id="teamsDivisionFilter">
-                <option value="">All divisions</option>
+                <option value="">All</option>
                 <option value="10UB">10U Boys</option>
                 <option value="10UG">10U Girls</option>
                 <option value="12UB">12U Boys</option>
@@ -420,7 +363,7 @@
             <div>
               <label>Status</label>
               <select id="teamsStatusFilter">
-                <option value="">All statuses</option>
+                <option value="">All</option>
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
                 <option value="declined">Declined</option>
@@ -444,15 +387,13 @@
           <div class="card-sub">Counts by status (all divisions).</div>
           <div id="teamsSummary"></div>
         </div>
-
         <div class="card">
           <div class="card-header">Legend</div>
-          <div class="card-sub">How statuses and docs flow into the public views.</div>
-          <ul style="padding-left:18px; font-size:12px; margin:0;">
-            <li><strong>Pending</strong>: visible only in Admin until all documents and payment are confirmed.</li>
-            <li><strong>Approved</strong>: appears on the public <em>Approved Teams</em> list.</li>
-            <li><strong>Declined</strong>: stays in the system; can be moved back to Pending.</li>
-            <li><strong>Docs checkboxes</strong>: for your tracking only; they do not affect public visibility.</li>
+          <div class="card-sub">How this flows into the public pages.</div>
+          <ul style="padding-left:18px;font-size:12px;margin:0;">
+            <li><strong>Approved</strong> → appears on public Approved Teams.</li>
+            <li><strong>Schedule</strong> & <strong>scores</strong> → drive the public Schedule and Stats pages.</li>
+            <li>Declined teams stay in the system and can be moved back to Pending.</li>
           </ul>
         </div>
       </div>
@@ -465,7 +406,7 @@
       <div>
         <div class="card">
           <div class="card-header">Pools by Division</div>
-          <div class="card-sub">Create pools and assign approved or manual teams.</div>
+          <div class="card-sub">Create pools, edit/delete, and see which teams are assigned.</div>
           <div class="row">
             <div>
               <label>Division</label>
@@ -481,9 +422,7 @@
             <div>
               <label>New Pool Name</label>
               <div class="row" style="margin-bottom:0;">
-                <div>
-                  <input type="text" id="newPoolName" placeholder="Pool A">
-                </div>
+                <div><input type="text" id="newPoolName" placeholder="Pool A"></div>
                 <div style="flex:0 0 auto;">
                   <button class="btn btn-primary btn-small" id="addPoolBtn">Add Pool</button>
                 </div>
@@ -495,7 +434,7 @@
 
         <div class="card">
           <div class="card-header">Assign Teams to Pools</div>
-          <div class="card-sub">Includes approved teams and manual placeholders.</div>
+          <div class="card-sub">Approved teams and manual placeholders.</div>
           <div id="poolTeamsArea"></div>
         </div>
       </div>
@@ -503,9 +442,7 @@
       <div>
         <div class="card">
           <div class="card-header">Manual Teams</div>
-          <div class="card-sub">
-            Use this if you’re holding spots or need a placeholder team that isn’t in the registration list.
-          </div>
+          <div class="card-sub">Use this if you’re holding spots or need a placeholder team.</div>
           <div class="row">
             <div>
               <label>Team Name</label>
@@ -527,7 +464,6 @@
             </div>
           </div>
           <button class="btn btn-primary btn-small" id="addManualTeamBtn">Add Manual Team</button>
-
           <div id="manualTeamsList" style="margin-top:10px;"></div>
         </div>
       </div>
@@ -541,7 +477,7 @@
         <div class="card">
           <div class="card-header">Day & Field Configuration</div>
           <div class="card-sub">
-            Set up days, fields, and time slots per division. The generator uses these slots for pool-play games.
+            Configure days (Saturday/Sunday), fields, and times for pool-play games.
           </div>
           <div class="row">
             <div>
@@ -556,7 +492,6 @@
               </select>
             </div>
           </div>
-
           <div class="row">
             <div>
               <label>Date label</label>
@@ -571,19 +506,18 @@
           </div>
           <div class="row">
             <div>
-              <label>Times (comma-separated, e.g. 8:00am, 9:15am)</label>
+              <label>Times (comma-separated)</label>
               <input type="text" id="schedTimes" placeholder="8:00am, 9:15am, 10:30am">
             </div>
           </div>
           <button class="btn btn-primary btn-small" id="addDayConfigBtn">Add Day</button>
-
           <div id="dayConfigsList" style="margin-top:10px;"></div>
         </div>
 
         <div class="card">
           <div class="card-header">Generate Pool-Play Schedule</div>
           <div class="card-sub">
-            Uses current pools, teams, and day configuration. You can edit games after generation.
+            Uses pools and day configs. Tries to avoid back-to-back games and duplicate time slots.
           </div>
           <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
         </div>
@@ -592,19 +526,15 @@
       <div>
         <div class="card">
           <div class="card-header">Pool-Play Games</div>
-          <div class="card-sub">
-            All pool-play games for the selected division. Times, fields, and matchups are editable.
-          </div>
-          <div id="gamesList" style="max-height:360px; overflow:auto; padding-right:4px;"></div>
+          <div class="card-sub">Edit date, field, time, and teams if needed.</div>
+          <div id="gamesList" style="max-height:360px;overflow:auto;padding-right:4px;"></div>
         </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-header">Knockout Games (Semis, Consolation, Final)</div>
-      <div class="card-sub">
-        These feed into the public schedule. You can leave teams as TBD and fill them in later.
-      </div>
+      <div class="card-sub">These feed into the public schedule. You can leave teams as TBD.</div>
       <div id="knockoutsList"></div>
     </div>
   </section>
@@ -614,8 +544,7 @@
     <div class="card">
       <div class="card-header">Scoring & Standings</div>
       <div class="card-sub">
-        Enter scores for pool-play games. Points use: Win 6 • Tie 3 • Loss 0 • Shutout +1 • Goals +1 (max 3 per game).
-        Clearing scores resets the points for that game.
+        Enter scores for pool-play games. Clearing scores resets that game.
       </div>
       <div class="row">
         <div style="max-width:220px;">
@@ -660,12 +589,11 @@
 
   const toastEl = document.getElementById('toast');
   let toastTimer = null;
-
   function showToast(msg){
     toastEl.textContent = msg;
     toastEl.classList.add('visible');
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('visible'), 1500);
+    toastTimer = setTimeout(()=>toastEl.classList.remove('visible'),1500);
   }
 
   function normalizeState(state){
@@ -680,29 +608,30 @@
 
   async function saveStateToApi(){
     try{
-      await fetch(API_URL, {
+      await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ entity:'state', state: adminState })
+        body:JSON.stringify({entity:'state',state:adminState})
       });
-      showToast('Admin state saved');
-    }catch(err){
-      console.error(err);
+      showToast('Saved');
+    }catch(e){
+      console.error(e);
       showToast('Save failed');
     }
   }
+
   async function loadAdminData(){
     try{
-      const [teamsRes, stateRes] = await Promise.all([
+      const [teamsRes,stateRes] = await Promise.all([
         fetch(API_URL),
-        fetch(API_URL + '?entity=state')
+        fetch(API_URL+'?entity=state')
       ]);
       allTeams = await teamsRes.json();
       adminState = normalizeState(await stateRes.json());
       renderAll();
-    }catch(err){
-      console.error(err);
-      showToast('Error loading admin data');
+    }catch(e){
+      console.error(e);
+      showToast('Load error');
     }
   }
 
@@ -716,165 +645,145 @@
     renderScoringTab();
   }
 
-  /* ============== TAB HANDLING ============== */
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  /* Tabs */
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
       const tab = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      document.querySelectorAll('.tab-panel').forEach(p => {
-        p.classList.toggle('active', p.id === 'tab-' + tab);
+      document.querySelectorAll('.tab-panel').forEach(p=>{
+        p.classList.toggle('active',p.id==='tab-'+tab);
       });
     });
   });
 
-  /* ============== TEAMS TAB ============== */
-
+  /* ---- TEAMS TAB ---- */
   const teamsDivisionFilter = document.getElementById('teamsDivisionFilter');
   const teamsStatusFilter = document.getElementById('teamsStatusFilter');
   const teamsListEl = document.getElementById('teamsList');
   const teamsSummaryEl = document.getElementById('teamsSummary');
 
-  teamsDivisionFilter.addEventListener('change', renderTeamsTab);
-  teamsStatusFilter.addEventListener('change', renderTeamsTab);
+  teamsDivisionFilter.addEventListener('change',renderTeamsTab);
+  teamsStatusFilter.addEventListener('change',renderTeamsTab);
 
   function statusPill(status){
-    const span = document.createElement('span');
+    const span=document.createElement('span');
     span.classList.add('status-pill');
-    if (status === 'approved'){
-      span.classList.add('status-approved');
-      span.textContent = 'Approved';
-    }else if (status === 'declined'){
-      span.classList.add('status-declined');
-      span.textContent = 'Declined';
-    }else{
-      span.classList.add('status-pending');
-      span.textContent = 'Pending';
-    }
+    if(status==='approved'){span.classList.add('status-approved');span.textContent='Approved';}
+    else if(status==='declined'){span.classList.add('status-declined');span.textContent='Declined';}
+    else {span.classList.add('status-pending');span.textContent='Pending';}
     return span;
   }
 
   function renderTeamsTab(){
-    if (!Array.isArray(allTeams)) allTeams = [];
+    if(!Array.isArray(allTeams)) allTeams=[];
     const divFilter = teamsDivisionFilter.value;
-    const statusFilter = teamsStatusFilter.value;
+    const stFilter = teamsStatusFilter.value;
+    let list = allTeams.slice();
+    if(divFilter) list=list.filter(t=>t.division===divFilter);
+    if(stFilter) list=list.filter(t=>String(t.status).toLowerCase()===stFilter);
 
-    let teams = allTeams.slice();
-    if (divFilter){
-      teams = teams.filter(t => t.division === divFilter);
-    }
-    if (statusFilter){
-      teams = teams.filter(t => String(t.status).toLowerCase() === statusFilter);
-    }
-
-    teamsListEl.innerHTML = '';
-    if (!teams.length){
-      teamsListEl.innerHTML = '<div class="empty-note">No teams match the current filters.</div>';
+    teamsListEl.innerHTML='';
+    if(!list.length){
+      teamsListEl.innerHTML='<div class="empty-note">No teams match the current filters.</div>';
     }else{
-      teams.forEach(team => {
-        teamsListEl.appendChild(renderTeamCard(team));
-      });
+      list.forEach(team=>teamsListEl.appendChild(renderTeamCard(team)));
     }
 
-    // summary counts
-    const pending = allTeams.filter(t => String(t.status).toLowerCase() === 'pending').length;
-    const approved = allTeams.filter(t => String(t.status).toLowerCase() === 'approved').length;
-    const declined = allTeams.filter(t => String(t.status).toLowerCase() === 'declined').length;
+    const pending = allTeams.filter(t=>String(t.status).toLowerCase()==='pending').length;
+    const approved = allTeams.filter(t=>String(t.status).toLowerCase()==='approved').length;
+    const declined = allTeams.filter(t=>String(t.status).toLowerCase()==='declined').length;
 
     teamsSummaryEl.innerHTML = `
-      <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">
         <span class="pill">Pending: ${pending}</span>
-        <span class="pill" style="background:#dcfce7; color:#166534;">Approved: ${approved}</span>
-        <span class="pill" style="background:#fee2e2; color:#991b1b;">Declined: ${declined}</span>
+        <span class="pill" style="background:#dcfce7;color:#166534;">Approved: ${approved}</span>
+        <span class="pill" style="background:#fee2e2;color:#991b1b;">Declined: ${declined}</span>
       </div>
     `;
   }
 
   function renderTeamCard(team){
-    const card = document.createElement('div');
-    card.className = 'team-card';
+    const card=document.createElement('div');
+    card.className='team-card';
 
-    const header = document.createElement('div');
-    header.className = 'team-header';
+    const header=document.createElement('div');
+    header.className='team-header';
 
-    const left = document.createElement('div');
-    const title = document.createElement('div');
-    title.className = 'team-title';
-    title.textContent = team.teamName || 'Team';
-    const meta = document.createElement('div');
-    meta.className = 'team-meta';
-    const divLabel = DIVISION_LABELS[team.division] || team.division || '';
-    meta.textContent = `${divLabel} • Region ${team.regionNumber || ''} • ${team.city || ''}, ${team.state || ''}`;
-    left.appendChild(title);
-    left.appendChild(meta);
+    const left=document.createElement('div');
+    const title=document.createElement('div');
+    title.className='team-title';
+    title.textContent=team.teamName||'Team';
+    const meta=document.createElement('div');
+    meta.className='team-meta';
+    const divLabel=DIVISION_LABELS[team.division]||team.division||'';
+    meta.textContent=`${divLabel} • Region ${team.regionNumber||''} • ${team.city||''}, ${team.state||''}`;
+    left.appendChild(title);left.appendChild(meta);
 
-    const right = document.createElement('div');
+    const right=document.createElement('div');
     right.appendChild(statusPill(String(team.status).toLowerCase()));
 
-    header.appendChild(left);
-    header.appendChild(right);
+    header.appendChild(left);header.appendChild(right);
 
-    const row1 = document.createElement('div');
-    row1.className = 'team-row';
-    row1.innerHTML = `
-      <div><strong>Coach:</strong> ${team.coachName || ''}</div>
-      <div><strong>Email:</strong> ${team.coachEmail || ''}</div>
-      <div><strong>Phone:</strong> ${team.coachPhone || ''}</div>
+    const row1=document.createElement('div');
+    row1.className='team-row';
+    row1.innerHTML=`
+      <div><strong>Coach:</strong> ${team.coachName||''}</div>
+      <div><strong>Email:</strong> ${team.coachEmail||''}</div>
+      <div><strong>Phone:</strong> ${team.coachPhone||''}</div>
     `;
 
-    const checks = document.createElement('div');
-    checks.className = 'check-row';
-
-    const docs = [
-      { key:'docs_application', label:'Application' },
-      { key:'docs_roster', label:'Roster' },
-      { key:'docs_check', label:'Check' }
+    const checks=document.createElement('div');
+    checks.className='check-row';
+    const docs=[
+      {key:'docs_application',label:'Application'},
+      {key:'docs_roster',label:'Roster'},
+      {key:'docs_check',label:'Check'}
     ];
-
-    docs.forEach(d => {
-      const lbl = document.createElement('label');
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.checked = !!team[d.key];
-      cb.addEventListener('change', () => {
-        const updated = Object.assign({}, team, { [d.key]: cb.checked ? 1 : 0 });
+    docs.forEach(d=>{
+      const lbl=document.createElement('label');
+      const cb=document.createElement('input');
+      cb.type='checkbox';
+      cb.checked=!!team[d.key];
+      cb.addEventListener('change',()=>{
+        const updated=Object.assign({},team,{[d.key]:cb.checked?1:0});
         updateTeamOnServer(updated);
       });
       lbl.appendChild(cb);
-      lbl.append(' ' + d.label);
+      lbl.append(' '+d.label);
       checks.appendChild(lbl);
     });
 
-    const actions = document.createElement('div');
-    actions.className = 'team-row';
-    const leftActions = document.createElement('div');
-    const rightActions = document.createElement('div');
+    const actions=document.createElement('div');
+    actions.className='team-row';
+    const leftActions=document.createElement('div');
+    const rightActions=document.createElement('div');
 
-    const btnApprove = document.createElement('button');
-    btnApprove.className = 'btn btn-approve btn-small';
-    btnApprove.textContent = 'Approve';
-    btnApprove.addEventListener('click', () => changeTeamStatus(team, 'approved'));
+    const btnApprove=document.createElement('button');
+    btnApprove.className='btn btn-approve btn-small';
+    btnApprove.textContent='Approve';
+    btnApprove.addEventListener('click',()=>changeTeamStatus(team,'approved'));
 
-    const btnPending = document.createElement('button');
-    btnPending.className = 'btn btn-pending btn-small';
-    btnPending.textContent = 'Set Pending';
-    btnPending.addEventListener('click', () => changeTeamStatus(team, 'pending'));
+    const btnPending=document.createElement('button');
+    btnPending.className='btn btn-pending btn-small';
+    btnPending.textContent='Set Pending';
+    btnPending.addEventListener('click',()=>changeTeamStatus(team,'pending'));
 
-    const btnDecline = document.createElement('button');
-    btnDecline.className = 'btn btn-decline btn-small';
-    btnDecline.textContent = 'Decline';
-    btnDecline.addEventListener('click', () => changeTeamStatus(team, 'declined'));
+    const btnDecline=document.createElement('button');
+    btnDecline.className='btn btn-decline btn-small';
+    btnDecline.textContent='Decline';
+    btnDecline.addEventListener('click',()=>changeTeamStatus(team,'declined'));
 
     leftActions.appendChild(btnApprove);
     leftActions.appendChild(btnPending);
     leftActions.appendChild(btnDecline);
 
-    const noteInput = document.createElement('input');
-    noteInput.className = 'note-input';
-    noteInput.placeholder = 'Internal note (not shown publicly)';
-    noteInput.value = team.internalNote || '';
-    noteInput.addEventListener('change', () => {
-      const updated = Object.assign({}, team, { internalNote: noteInput.value });
+    const noteInput=document.createElement('input');
+    noteInput.className='note-input';
+    noteInput.placeholder='Internal note (not public)';
+    noteInput.value=team.internalNote||'';
+    noteInput.addEventListener('change',()=>{
+      const updated=Object.assign({},team,{internalNote:noteInput.value});
       updateTeamOnServer(updated);
     });
     rightActions.appendChild(noteInput);
@@ -886,123 +795,113 @@
     card.appendChild(row1);
     card.appendChild(checks);
     card.appendChild(actions);
-
     return card;
   }
 
   async function updateTeamOnServer(updatedTeam){
     try{
-      const res = await fetch(API_URL, {
+      const res=await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ mode:'update', team: updatedTeam })
+        body:JSON.stringify({mode:'update',team:updatedTeam})
       });
-      const data = await res.json();
-      if (!data.ok){
-        console.error('Update failed', data);
+      const data=await res.json();
+      if(!data.ok){
+        console.error('Update failed',data);
         showToast('Update failed');
         return;
       }
-      const idx = allTeams.findIndex(t => String(t.id) === String(updatedTeam.id));
-      if (idx !== -1) allTeams[idx] = updatedTeam;
+      const idx=allTeams.findIndex(t=>String(t.id)===String(updatedTeam.id));
+      if(idx!==-1) allTeams[idx]=updatedTeam;
       renderTeamsTab();
       showToast('Team updated');
-    }catch(err){
-      console.error(err);
+    }catch(e){
+      console.error(e);
       showToast('Update failed');
     }
   }
 
-  function changeTeamStatus(team, status){
-    const updated = Object.assign({}, team, { status });
+  function changeTeamStatus(team,status){
+    const updated=Object.assign({},team,{status});
     updateTeamOnServer(updated);
   }
-  /* ============== POOLS TAB LOGIC ============== */
 
-  const poolsDivisionSel = document.getElementById('poolsDivisionSelect');
-  const newPoolNameInput = document.getElementById('newPoolName');
-  const addPoolBtn = document.getElementById('addPoolBtn');
-  const poolsList = document.getElementById('poolsList');
-  const poolTeamsArea = document.getElementById('poolTeamsArea');
-  const manualTeamNameInput = document.getElementById('manualTeamName');
-  const manualTeamRegionInput = document.getElementById('manualTeamRegion');
-  const manualTeamCityInput = document.getElementById('manualTeamCity');
-  const manualTeamStateInput = document.getElementById('manualTeamState');
-  const addManualTeamBtn = document.getElementById('addManualTeamBtn');
-  const manualTeamsList = document.getElementById('manualTeamsList');
+  /* ---- POOLS TAB ---- */
+  const poolsDivisionSel=document.getElementById('poolsDivisionSelect');
+  const newPoolNameInput=document.getElementById('newPoolName');
+  const addPoolBtn=document.getElementById('addPoolBtn');
+  const poolsList=document.getElementById('poolsList');
+  const poolTeamsArea=document.getElementById('poolTeamsArea');
+  const manualTeamNameInput=document.getElementById('manualTeamName');
+  const manualTeamRegionInput=document.getElementById('manualTeamRegion');
+  const manualTeamCityInput=document.getElementById('manualTeamCity');
+  const manualTeamStateInput=document.getElementById('manualTeamState');
+  const addManualTeamBtn=document.getElementById('addManualTeamBtn');
+  const manualTeamsList=document.getElementById('manualTeamsList');
 
-  poolsDivisionSel.addEventListener('change', () => {
+  poolsDivisionSel.addEventListener('change',()=>{
     refreshPoolsUI();
     renderManualTeams();
   });
 
-  addPoolBtn.addEventListener('click', () => {
-    const name = newPoolNameInput.value.trim();
-    const division = poolsDivisionSel.value;
-    if (!name) return;
-    const pool = {
-      id: 'P_' + division + '_' + Date.now(),
-      division,
-      name,
-      teamIds:[]
-    };
+  addPoolBtn.addEventListener('click',()=>{
+    const name=newPoolNameInput.value.trim();
+    const division=poolsDivisionSel.value;
+    if(!name) return;
+    const pool={id:'P_'+division+'_'+Date.now(),division,name,teamIds:[]};
     adminState.pools.push(pool);
-    newPoolNameInput.value = '';
+    newPoolNameInput.value='';
     saveStateToApi();
     refreshPoolsUI();
   });
 
-  addManualTeamBtn.addEventListener('click', () => {
-    const division = poolsDivisionSel.value;
-    const name = manualTeamNameInput.value.trim();
-    if (!name) return;
-    const manualTeam = {
-      id: 'M_' + Date.now(),
+  addManualTeamBtn.addEventListener('click',()=>{
+    const division=poolsDivisionSel.value;
+    const name=manualTeamNameInput.value.trim();
+    if(!name) return;
+    const manualTeam={
+      id:'M_'+Date.now(),
       division,
-      teamName: name,
-      regionNumber: manualTeamRegionInput.value || '',
-      city: manualTeamCityInput.value || '',
-      state: manualTeamStateInput.value || '',
+      teamName:name,
+      regionNumber:manualTeamRegionInput.value||'',
+      city:manualTeamCityInput.value||'',
+      state:manualTeamStateInput.value||'',
       manual:true
     };
     adminState.manualTeams.push(manualTeam);
-    manualTeamNameInput.value = '';
-    manualTeamRegionInput.value = '';
-    manualTeamCityInput.value = '';
-    manualTeamStateInput.value = '';
+    manualTeamNameInput.value='';
+    manualTeamRegionInput.value='';
+    manualTeamCityInput.value='';
+    manualTeamStateInput.value='';
     saveStateToApi();
     refreshPoolsUI();
     renderManualTeams();
   });
 
   function getPoolsForDivision(division){
-    return adminState.pools.filter(p => p.division === division);
+    return adminState.pools.filter(p=>p.division===division);
   }
-
-  function getAllTeamsForDivision(division){
-    const realTeams = allTeams.filter(t => t.division === division);
-    const manual = adminState.manualTeams.filter(m => m.division === division);
-    return realTeams.concat(manual);
-  }
-
   function getAllTeams(){
-    const manual = adminState.manualTeams.map(m => Object.assign({manual:true}, m));
+    const manual = adminState.manualTeams.map(m=>Object.assign({manual:true},m));
     return allTeams.concat(manual);
   }
+  function getAllTeamsForDivision(division){
+    return getAllTeams().filter(t=>t.division===division);
+  }
 
-  function assignTeamToPool(division, teamId, poolId){
-    const teamIdStr = String(teamId);
-    adminState.pools.forEach(p => {
-      if (p.division === division){
-        p.teamIds = (p.teamIds || []).map(String).filter(id => id !== teamIdStr);
+  function assignTeamToPool(division,teamId,poolId){
+    const idStr=String(teamId);
+    adminState.pools.forEach(p=>{
+      if(p.division===division){
+        p.teamIds=(p.teamIds||[]).map(String).filter(id=>id!==idStr);
       }
     });
-    if (poolId){
-      const pool = adminState.pools.find(p => p.id === poolId);
-      if (pool){
-        pool.teamIds = pool.teamIds || [];
-        if (!pool.teamIds.map(String).includes(teamIdStr)){
-          pool.teamIds.push(teamIdStr);
+    if(poolId){
+      const pool=adminState.pools.find(p=>p.id===poolId);
+      if(pool){
+        pool.teamIds=pool.teamIds||[];
+        if(!pool.teamIds.map(String).includes(idStr)){
+          pool.teamIds.push(idStr);
         }
       }
     }
@@ -1011,119 +910,109 @@
   }
 
   function divisionLabel(code){
-    return DIVISION_LABELS[code] || code || '';
+    return DIVISION_LABELS[code]||code||'';
   }
 
   function renderManualTeams(){
-    const division = poolsDivisionSel.value;
-    const manual = adminState.manualTeams.filter(m => m.division === division);
-    manualTeamsList.innerHTML = '';
-    if (!manual.length){
-      manualTeamsList.innerHTML = '<div class="empty-note">No manual teams for this division.</div>';
+    const division=poolsDivisionSel.value;
+    const manual=adminState.manualTeams.filter(m=>m.division===division);
+    manualTeamsList.innerHTML='';
+    if(!manual.length){
+      manualTeamsList.innerHTML='<div class="empty-note">No manual teams for this division.</div>';
       return;
     }
-    manual.forEach(m => {
-      const row = document.createElement('div');
-      row.style.fontSize = '12px';
-      row.style.marginBottom = '3px';
-      row.innerHTML = `
+    manual.forEach(m=>{
+      const row=document.createElement('div');
+      row.style.fontSize='12px';
+      row.style.marginBottom='3px';
+      row.innerHTML=`
         <span class="tag">${m.teamName}</span>
-        <span class="team-meta">Region ${m.regionNumber || ''} • ${m.city || ''} ${m.state || ''}</span>
+        <span class="team-meta">Region ${m.regionNumber||''} • ${m.city||''} ${m.state||''}</span>
       `;
       manualTeamsList.appendChild(row);
     });
   }
 
   function refreshPoolsUI(){
-    const division = poolsDivisionSel.value;
-    const relevantTeams = getAllTeams().filter(t =>
-      t.division === division && (String(t.status).toLowerCase() === 'approved' || t.manual)
-    );
+    const division=poolsDivisionSel.value;
+    const relevantTeams=getAllTeamsForDivision(division)
+      .filter(t=>String(t.status).toLowerCase()==='approved' || t.manual);
 
-    // Teams assignment UI
-    poolTeamsArea.innerHTML = '';
-    if (!relevantTeams.length){
-      poolTeamsArea.innerHTML = '<span class="empty-note">No approved or manual teams yet for this division.</span>';
-    } else {
-      relevantTeams.forEach(team => {
-        const div = document.createElement('div');
-        div.className = 'pill';
-        const nameSpan = document.createElement('span');
-        nameSpan.innerHTML = `<strong>${team.teamName || 'Team'}</strong>`;
-        const sub = document.createElement('span');
-        sub.style.fontSize = '11px';
-        sub.style.color = '#6b7280';
-        sub.textContent = team.manual ? 'Manual' : `Region ${team.regionNumber || ''}`;
+    poolTeamsArea.innerHTML='';
+    if(!relevantTeams.length){
+      poolTeamsArea.innerHTML='<span class="empty-note">No approved or manual teams yet.</span>';
+    }else{
+      relevantTeams.forEach(team=>{
+        const div=document.createElement('div');
+        div.className='pill';
+        const nameSpan=document.createElement('span');
+        nameSpan.innerHTML=`<strong>${team.teamName||'Team'}</strong>`;
+        const sub=document.createElement('span');
+        sub.style.fontSize='11px';
+        sub.style.color='#6b7280';
+        sub.textContent=team.manual?'Manual':`Region ${team.regionNumber||''}`;
         div.appendChild(nameSpan);
         div.appendChild(sub);
 
-        const select = document.createElement('select');
-        select.style.marginLeft = '8px';
-        const noneOpt = document.createElement('option');
-        noneOpt.value = '';
-        noneOpt.textContent = 'No pool';
+        const select=document.createElement('select');
+        select.style.marginLeft='8px';
+        const noneOpt=document.createElement('option');
+        noneOpt.value='';noneOpt.textContent='No pool';
         select.appendChild(noneOpt);
 
-        const poolsForDiv = getPoolsForDivision(division);
-        poolsForDiv.forEach(p => {
-          const o = document.createElement('option');
-          o.value = p.id;
-          o.textContent = p.name;
-          if ((p.teamIds || []).map(String).includes(String(team.id))) o.selected = true;
+        const poolsForDiv=getPoolsForDivision(division);
+        poolsForDiv.forEach(p=>{
+          const o=document.createElement('option');
+          o.value=p.id;o.textContent=p.name;
+          if((p.teamIds||[]).map(String).includes(String(team.id))) o.selected=true;
           select.appendChild(o);
         });
-
-        select.addEventListener('change', () => {
-          assignTeamToPool(division, team.id, select.value);
-        });
-
+        select.addEventListener('change',()=>assignTeamToPool(division,team.id,select.value));
         div.appendChild(select);
         poolTeamsArea.appendChild(div);
       });
     }
 
-    // Pools list
-    poolsList.innerHTML = '';
-    const poolsForDiv = getPoolsForDivision(division);
-    if (!poolsForDiv.length){
-      poolsList.innerHTML = '<div class="empty-note">No pools created yet for this division.</div>';
+    poolsList.innerHTML='';
+    const poolsForDiv=getPoolsForDivision(division);
+    if(!poolsForDiv.length){
+      poolsList.innerHTML='<div class="empty-note">No pools created yet.</div>';
       return;
     }
+    poolsForDiv.forEach(pool=>{
+      const container=document.createElement('div');
+      container.style.marginTop='8px';
 
-    poolsForDiv.forEach(pool => {
-      const container = document.createElement('div');
-      container.style.marginTop = '8px';
+      const header=document.createElement('div');
+      header.style.display='flex';
+      header.style.alignItems='center';
+      header.style.gap='6px';
 
-      const header = document.createElement('div');
-      header.style.display = 'flex';
-      header.style.alignItems = 'center';
-      header.style.gap = '6px';
-
-      const title = document.createElement('div');
-      title.innerHTML = `<strong>${pool.name}</strong> <span style="font-size:11px;color:#6b7280;">(${divisionLabel(pool.division)})</span>`;
+      const title=document.createElement('div');
+      title.innerHTML=`<strong>${pool.name}</strong> <span style="font-size:11px;color:#6b7280;">(${divisionLabel(pool.division)})</span>`;
       header.appendChild(title);
 
-      const editBtn = document.createElement('button');
-      editBtn.className = 'btn btn-ghost btn-small';
-      editBtn.style.fontSize = '10px';
-      editBtn.textContent = 'Edit';
-      editBtn.addEventListener('click', () => {
-        const newName = prompt('New pool name:', pool.name);
-        if (newName && newName.trim()){
-          pool.name = newName.trim();
+      const editBtn=document.createElement('button');
+      editBtn.className='btn btn-ghost btn-small';
+      editBtn.style.fontSize='10px';
+      editBtn.textContent='Edit';
+      editBtn.addEventListener('click',()=>{
+        const newName=prompt('New pool name:',pool.name);
+        if(newName && newName.trim()){
+          pool.name=newName.trim();
           saveStateToApi();
           refreshPoolsUI();
           renderGamesUI();
         }
       });
 
-      const delBtn = document.createElement('button');
-      delBtn.className = 'btn btn-decline btn-small';
-      delBtn.style.fontSize = '10px';
-      delBtn.textContent = 'Delete';
-      delBtn.addEventListener('click', () => {
-        if (!confirm(`Delete ${pool.name}? Teams will be unassigned from this pool.`)) return;
-        adminState.pools = adminState.pools.filter(p => p.id !== pool.id);
+      const delBtn=document.createElement('button');
+      delBtn.className='btn btn-decline btn-small';
+      delBtn.style.fontSize='10px';
+      delBtn.textContent='Delete';
+      delBtn.addEventListener('click',()=>{
+        if(!confirm(`Delete ${pool.name}? Teams will be unassigned.`)) return;
+        adminState.pools=adminState.pools.filter(p=>p.id!==pool.id);
         saveStateToApi();
         refreshPoolsUI();
         renderGamesUI();
@@ -1132,16 +1021,16 @@
       header.appendChild(editBtn);
       header.appendChild(delBtn);
 
-      const body = document.createElement('div');
-      body.style.marginTop = '4px';
-      const members = getAllTeams().filter(t => (pool.teamIds || []).map(String).includes(String(t.id)));
-      if (!members.length){
-        body.innerHTML = '<span class="empty-note">No teams assigned yet.</span>';
-      } else {
-        members.forEach(m => {
-          const tag = document.createElement('span');
-          tag.className = 'tag';
-          tag.textContent = m.teamName || 'Team';
+      const body=document.createElement('div');
+      body.style.marginTop='4px';
+      const members=getAllTeams().filter(t=>(pool.teamIds||[]).map(String).includes(String(t.id)));
+      if(!members.length){
+        body.innerHTML='<span class="empty-note">No teams assigned yet.</span>';
+      }else{
+        members.forEach(m=>{
+          const tag=document.createElement('span');
+          tag.className='tag';
+          tag.textContent=m.teamName||'Team';
           body.appendChild(tag);
         });
       }
@@ -1152,87 +1041,79 @@
     });
   }
 
-  /* ============== SCHEDULE HELPERS ============== */
-
+  /* ---- SCHEDULE HELPERS ---- */
   function getScheduleForDivision(division){
-    let sched = adminState.schedules.find(s => s.division === division);
-    if (!sched){
-      sched = { division, games:[], knockouts:[] };
+    let sched = adminState.schedules.find(s=>s.division===division);
+    if(!sched){
+      sched={division,games:[],knockouts:[]};
       adminState.schedules.push(sched);
     }
-    sched.games = Array.isArray(sched.games) ? sched.games : [];
-    sched.knockouts = Array.isArray(sched.knockouts) ? sched.knockouts : [];
+    sched.games=Array.isArray(sched.games)?sched.games:[];
+    sched.knockouts=Array.isArray(sched.knockouts)?sched.knockouts:[];
     return sched;
   }
-
   function getDayConfigsForDivision(division){
-    adminState.dayConfigs = adminState.dayConfigs || {};
-    if (!adminState.dayConfigs[division]){
-      adminState.dayConfigs[division] = [];
-    }
+    adminState.dayConfigs=adminState.dayConfigs||{};
+    if(!adminState.dayConfigs[division]) adminState.dayConfigs[division]=[];
     return adminState.dayConfigs[division];
   }
-  /* ============== SCHEDULE TAB LOGIC ============== */
+  function getTeamByIdAll(id){
+    id=String(id);
+    return getAllTeams().find(t=>String(t.id)===id)||null;
+  }
 
-  const schedDivisionSelect = document.getElementById('schedDivisionSelect');
-  const schedDayLabelInput = document.getElementById('schedDayLabel');
-  const schedFieldsInput = document.getElementById('schedFields');
-  const schedTimesInput = document.getElementById('schedTimes');
-  const addDayConfigBtn = document.getElementById('addDayConfigBtn');
-  const dayConfigsList = document.getElementById('dayConfigsList');
-  const generateScheduleBtn = document.getElementById('generateScheduleBtn');
-  const gamesListEl = document.getElementById('gamesList');
-  const knockoutsListEl = document.getElementById('knockoutsList');
+  /* ---- SCHEDULE TAB ---- */
+  const schedDivisionSelect=document.getElementById('schedDivisionSelect');
+  const schedDayLabelInput=document.getElementById('schedDayLabel');
+  const schedFieldsInput=document.getElementById('schedFields');
+  const schedTimesInput=document.getElementById('schedTimes');
+  const addDayConfigBtn=document.getElementById('addDayConfigBtn');
+  const dayConfigsList=document.getElementById('dayConfigsList');
+  const generateScheduleBtn=document.getElementById('generateScheduleBtn');
+  const gamesListEl=document.getElementById('gamesList');
+  const knockoutsListEl=document.getElementById('knockoutsList');
 
-  schedDivisionSelect.addEventListener('change', () => {
+  schedDivisionSelect.addEventListener('change',()=>{
     renderDayConfigsUI();
     renderGamesUI();
     renderKnockoutsUI();
   });
 
-  addDayConfigBtn.addEventListener('click', () => {
-    const division = schedDivisionSelect.value;
-    const label = schedDayLabelInput.value.trim();
-    const fieldsStr = schedFieldsInput.value.trim();
-    const timesStr = schedTimesInput.value.trim();
-    if (!label || !fieldsStr || !timesStr) return;
-
-    const cfgs = getDayConfigsForDivision(division);
-    cfgs.push({
-      id:'D_'+Date.now(),
-      label,
-      fields:fieldsStr,
-      times:timesStr
-    });
-    schedDayLabelInput.value = '';
-    schedFieldsInput.value = '';
-    schedTimesInput.value = '';
+  addDayConfigBtn.addEventListener('click',()=>{
+    const division=schedDivisionSelect.value;
+    const label=schedDayLabelInput.value.trim();
+    const fieldsStr=schedFieldsInput.value.trim();
+    const timesStr=schedTimesInput.value.trim();
+    if(!label || !fieldsStr || !timesStr) return;
+    const cfgs=getDayConfigsForDivision(division);
+    cfgs.push({id:'D_'+Date.now(),label,fields:fieldsStr,times:timesStr});
+    schedDayLabelInput.value='';
+    schedFieldsInput.value='';
+    schedTimesInput.value='';
     saveStateToApi();
     renderDayConfigsUI();
   });
 
   function renderDayConfigsUI(){
-    const division = schedDivisionSelect.value;
-    const cfgs = getDayConfigsForDivision(division);
-    dayConfigsList.innerHTML = '';
-    if (!cfgs.length){
-      dayConfigsList.innerHTML = '<div class="empty-note">No day configuration yet. Add at least one day with fields and times.</div>';
+    const division=schedDivisionSelect.value;
+    const cfgs=getDayConfigsForDivision(division);
+    dayConfigsList.innerHTML='';
+    if(!cfgs.length){
+      dayConfigsList.innerHTML='<div class="empty-note">No day configuration yet.</div>';
       return;
     }
-    cfgs.forEach(cfg => {
-      const row = document.createElement('div');
-      row.style.fontSize = '12px';
-      row.style.marginBottom = '4px';
-      row.innerHTML = `
-        <strong>${cfg.label}</strong> – Fields: ${cfg.fields} • Times: ${cfg.times}
-      `;
-      const btn = document.createElement('button');
-      btn.className = 'btn btn-ghost btn-small';
-      btn.style.marginTop = '2px';
-      btn.textContent = 'Delete';
-      btn.addEventListener('click', () => {
-        const list = getDayConfigsForDivision(division);
-        adminState.dayConfigs[division] = list.filter(c => c.id !== cfg.id);
+    cfgs.forEach(cfg=>{
+      const row=document.createElement('div');
+      row.style.fontSize='12px';
+      row.style.marginBottom='4px';
+      row.innerHTML=`<strong>${cfg.label}</strong> – Fields: ${cfg.fields} • Times: ${cfg.times}`;
+      const btn=document.createElement('button');
+      btn.className='btn btn-ghost btn-small';
+      btn.style.marginTop='2px';
+      btn.textContent='Delete';
+      btn.addEventListener('click',()=>{
+        const list=getDayConfigsForDivision(division);
+        adminState.dayConfigs[division]=list.filter(c=>c.id!==cfg.id);
         saveStateToApi();
         renderDayConfigsUI();
       });
@@ -1242,14 +1123,335 @@
     });
   }
 
-  generateScheduleBtn.addEventListener('click', () => {
-    const division = schedDivisionSelect.value;
-    const pools = getPoolsForDivision(division);
-    const cfgs = getDayConfigsForDivision(division);
-    if (!pools.length){
-      alert('Create pools first.');
+  generateScheduleBtn.addEventListener('click',()=>{
+    const division=schedDivisionSelect.value;
+    const pools=getPoolsForDivision(division);
+    const cfgs=getDayConfigsForDivision(division);
+    if(!pools.length){alert('Create pools first.');return;}
+    if(!cfgs.length){alert('Add at least one day configuration first.');return;}
+
+    const slots=[];
+    cfgs.forEach(cfg=>{
+      const fields=cfg.fields.split(',').map(s=>s.trim()).filter(Boolean);
+      const times=cfg.times.split(',').map(s=>s.trim()).filter(Boolean);
+      times.forEach(time=>{
+        fields.forEach(field=>{
+          slots.push({date:cfg.label,time,field});
+        });
+      });
+    });
+    if(!slots.length){alert('No usable slots from your day configuration.');return;}
+
+    const sched=getScheduleForDivision(division);
+    sched.games=[];
+
+    const allGames=[];
+    pools.forEach(pool=>{
+      const ids=(pool.teamIds||[]).map(String);
+      for(let i=0;i<ids.length;i++){
+        for(let j=i+1;j<ids.length;j++){
+          allGames.push({
+            id:'G_'+division+'_'+Date.now()+'_'+i+'_'+j,
+            division,
+            poolId:pool.id,
+            homeId:ids[i],
+            awayId:ids[j]
+          });
+        }
+      }
+    });
+
+    const gamesPerTeam={};
+    function canScheduleGame(game,slot){
+      const t1=game.homeId,t2=game.awayId;
+      const alreadyAtTime=sched.games.some(g=>g.date===slot.date && g.time===slot.time && (g.homeId===t1||g.awayId===t1||g.homeId===t2||g.awayId===t2));
+      if(alreadyAtTime) return false;
+      const g1=gamesPerTeam[t1]||0,g2=gamesPerTeam[t2]||0;
+      if(g1>=3 || g2>=3) return false;
+      const prevSlot=sched.games.find(g=>g.time===slot.time && g.date===slot.date);
+      return true;
+    }
+
+    let slotIdx=0;
+    allGames.forEach(game=>{
+      let placed=false;
+      let tries=0;
+      while(!placed && tries<slots.length){
+        const slot=slots[slotIdx%slots.length];
+        if(canScheduleGame(game,slot)){
+          const g=Object.assign({},game,{
+            stage:'pool',
+            date:slot.date,
+            time:slot.time,
+            field:slot.field
+          });
+          sched.games.push(g);
+          gamesPerTeam[game.homeId]=(gamesPerTeam[game.homeId]||0)+1;
+          gamesPerTeam[game.awayId]=(gamesPerTeam[game.awayId]||0)+1;
+          placed=true;
+        }
+        slotIdx++;tries++;
+      }
+    });
+
+    saveStateToApi();
+    renderGamesUI();
+    showToast('Schedule generated');
+  });
+
+  function renderGamesUI(){
+    const division=schedDivisionSelect.value;
+    const sched=getScheduleForDivision(division);
+    const games=sched.games||[];
+    gamesListEl.innerHTML='';
+    if(!games.length){
+      gamesListEl.innerHTML='<div class="empty-note">No games for this division yet.</div>';
       return;
     }
-    if (!cfgs.length){
-      alert('Add at least one day configuration first.');
-      return
+    games.forEach(g=>{
+      const card=document.createElement('div');
+      card.className='game-card';
+
+      const header=document.createElement('div');
+      header.className='game-header';
+      const teamsSpan=document.createElement('div');
+      const home=getTeamByIdAll(g.homeId);
+      const away=getTeamByIdAll(g.awayId);
+      teamsSpan.textContent=`${home?home.teamName:'TBD'} vs ${away?away.teamName:'TBD'}`;
+
+      const meta=document.createElement('div');
+      meta.className='game-meta';
+      meta.textContent=`${g.date||''} • ${g.time||''} • ${g.field||''}`;
+      header.appendChild(teamsSpan);
+      header.appendChild(meta);
+
+      const row=document.createElement('div');
+      row.className='row';
+      const d1=document.createElement('div');
+      d1.innerHTML='<label>Date</label>';
+      const dateInput=document.createElement('input');
+      dateInput.value=g.date||'';
+      dateInput.addEventListener('change',()=>{g.date=dateInput.value;saveStateToApi();renderScoringTab();});
+      d1.appendChild(dateInput);
+
+      const d2=document.createElement('div');
+      d2.innerHTML='<label>Time</label>';
+      const timeInput=document.createElement('input');
+      timeInput.value=g.time||'';
+      timeInput.addEventListener('change',()=>{g.time=timeInput.value;saveStateToApi();renderScoringTab();});
+      d2.appendChild(timeInput);
+
+      const d3=document.createElement('div');
+      d3.innerHTML='<label>Field</label>';
+      const fieldInput=document.createElement('input');
+      fieldInput.value=g.field||'';
+      fieldInput.addEventListener('change',()=>{g.field=fieldInput.value;saveStateToApi();});
+      d3.appendChild(fieldInput);
+
+      row.appendChild(d1);row.appendChild(d2);row.appendChild(d3);
+
+      card.appendChild(header);
+      card.appendChild(row);
+      gamesListEl.appendChild(card);
+    });
+  }
+
+  function renderKnockoutsUI(){
+    const division=schedDivisionSelect.value;
+    const sched=getScheduleForDivision(division);
+    const allDivTeams=getAllTeamsForDivision(division);
+
+    if(!sched.knockouts.length){
+      sched.knockouts=[
+        {id:'KO_'+division+'_S1',division,type:'Semi 1',date:'',time:'',field:'',homeId:null,awayId:null},
+        {id:'KO_'+division+'_S2',division,type:'Semi 2',date:'',time:'',field:'',homeId:null,awayId:null},
+        {id:'KO_'+division+'_C',division,type:'Consolation',date:'',time:'',field:'',homeId:null,awayId:null},
+        {id:'KO_'+division+'_F',division,type:'Final',date:'',time:'',field:'',homeId:null,awayId:null}
+      ];
+    }
+
+    knockoutsListEl.innerHTML='';
+    sched.knockouts.forEach(k=>{
+      const card=document.createElement('div');
+      card.className='game-card';
+      const header=document.createElement('div');
+      header.className='game-header';
+      const title=document.createElement('div');
+      title.textContent=k.type;
+      const meta=document.createElement('div');
+      meta.className='game-meta';
+      meta.textContent=`${k.date||''} • ${k.time||''} • ${k.field||''}`;
+      header.appendChild(title);header.appendChild(meta);
+
+      const row1=document.createElement('div');
+      row1.className='row';
+      const d1=document.createElement('div');
+      d1.innerHTML='<label>Date</label>';
+      const dateInput=document.createElement('input');
+      dateInput.value=k.date||'';
+      dateInput.addEventListener('change',()=>{k.date=dateInput.value;saveStateToApi();});
+      d1.appendChild(dateInput);
+
+      const d2=document.createElement('div');
+      d2.innerHTML='<label>Time</label>';
+      const timeInput=document.createElement('input');
+      timeInput.value=k.time||'';
+      timeInput.addEventListener('change',()=>{k.time=timeInput.value;saveStateToApi();});
+      d2.appendChild(timeInput);
+
+      const d3=document.createElement('div');
+      d3.innerHTML='<label>Field</label>';
+      const fieldInput=document.createElement('input');
+      fieldInput.value=k.field||'';
+      fieldInput.addEventListener('change',()=>{k.field=fieldInput.value;saveStateToApi();});
+      d3.appendChild(fieldInput);
+
+      row1.appendChild(d1);row1.appendChild(d2);row1.appendChild(d3);
+
+      const row2=document.createElement('div');
+      row2.className='row';
+      const h1=document.createElement('div');
+      h1.innerHTML='<label>Home</label>';
+      const homeSel=document.createElement('select');
+      const optHNone=document.createElement('option');
+      optHNone.value='';optHNone.textContent='TBD';
+      homeSel.appendChild(optHNone);
+      allDivTeams.forEach(t=>{
+        const o=document.createElement('option');
+        o.value=t.id;o.textContent=t.teamName;
+        if(String(k.homeId)===String(t.id)) o.selected=true;
+        homeSel.appendChild(o);
+      });
+      homeSel.addEventListener('change',()=>{k.homeId=homeSel.value||null;saveStateToApi();});
+      h1.appendChild(homeSel);
+
+      const h2=document.createElement('div');
+      h2.innerHTML='<label>Away</label>';
+      const awaySel=document.createElement('select');
+      const optANone=document.createElement('option');
+      optANone.value='';optANone.textContent='TBD';
+      awaySel.appendChild(optANone);
+      allDivTeams.forEach(t=>{
+        const o=document.createElement('option');
+        o.value=t.id;o.textContent=t.teamName;
+        if(String(k.awayId)===String(t.id)) o.selected=true;
+        awaySel.appendChild(o);
+      });
+      awaySel.addEventListener('change',()=>{k.awayId=awaySel.value||null;saveStateToApi();});
+      h2.appendChild(awaySel);
+
+      row2.appendChild(h1);row2.appendChild(h2);
+
+      card.appendChild(header);
+      card.appendChild(row1);
+      card.appendChild(row2);
+      knockoutsListEl.appendChild(card);
+    });
+  }
+
+  /* ---- SCORING ---- */
+  const scoreDivisionSelect=document.getElementById('scoreDivisionSelect');
+  const scoringContent=document.getElementById('scoringContent');
+
+  scoreDivisionSelect.addEventListener('change',renderScoringTab);
+
+  function renderScoringTab(){
+    const division=scoreDivisionSelect.value;
+    const sched=getScheduleForDivision(division);
+    const games=(sched.games||[]).filter(g=>g.stage==='pool');
+    scoringContent.innerHTML='';
+    if(!games.length){
+      scoringContent.innerHTML='<div class="empty-note">No pool-play games yet for this division.</div>';
+      return;
+    }
+
+    const poolsById={};
+    adminState.pools.forEach(p=>{poolsById[p.id]=p;});
+
+    const byPool={};
+    games.forEach(g=>{
+      const poolName=poolsById[g.poolId]?.name || 'Unassigned';
+      if(!byPool[poolName]) byPool[poolName]=[];
+      byPool[poolName].push(g);
+    });
+
+    Object.keys(byPool).forEach(poolName=>{
+      const section=document.createElement('div');
+      const title=document.createElement('div');
+      title.className='card-header';
+      title.textContent='Pool '+poolName;
+      section.appendChild(title);
+
+      byPool[poolName].forEach(g=>{
+        const row=document.createElement('div');
+        row.className='game-card';
+        const header=document.createElement('div');
+        header.className='game-header';
+        const home=getTeamByIdAll(g.homeId);
+        const away=getTeamByIdAll(g.awayId);
+        const label=document.createElement('div');
+        label.textContent=`${home?home.teamName:'TBD'} vs ${away?away.teamName:'TBD'}`;
+        const meta=document.createElement('div');
+        meta.className='game-meta';
+        meta.textContent=`${g.date||''} • ${g.time||''} • ${g.field||''}`;
+        header.appendChild(label);header.appendChild(meta);
+
+        const scoreRow=document.createElement('div');
+        scoreRow.className='row';
+        const s1=document.createElement('div');
+        s1.innerHTML='<label>Home</label>';
+        const homeInput=document.createElement('input');
+        homeInput.type='number';
+        homeInput.min='0';
+        const sData=adminState.scores[g.id]||{};
+        homeInput.value=(sData.home!=null)?sData.home:'';
+        homeInput.addEventListener('change',()=>{
+          const val=homeInput.value===''?null:Number(homeInput.value);
+          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
+          adminState.scores[g.id].home=val;
+          saveStateToApi();
+        });
+        s1.appendChild(homeInput);
+
+        const s2=document.createElement('div');
+        s2.innerHTML='<label>Away</label>';
+        const awayInput=document.createElement('input');
+        awayInput.type='number';
+        awayInput.min='0';
+        awayInput.value=(sData.away!=null)?sData.away:'';
+        awayInput.addEventListener('change',()=>{
+          const val=awayInput.value===''?null:Number(awayInput.value);
+          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
+          adminState.scores[g.id].away=val;
+          saveStateToApi();
+        });
+        s2.appendChild(awayInput);
+
+        const s3=document.createElement('div');
+        s3.innerHTML='<label>&nbsp;</label>';
+        const clearBtn=document.createElement('button');
+        clearBtn.className='btn btn-ghost btn-small';
+        clearBtn.textContent='Clear';
+        clearBtn.addEventListener('click',()=>{
+          delete adminState.scores[g.id];
+          homeInput.value='';
+          awayInput.value='';
+          saveStateToApi();
+        });
+        s3.appendChild(clearBtn);
+
+        scoreRow.appendChild(s1);scoreRow.appendChild(s2);scoreRow.appendChild(s3);
+
+        row.appendChild(header);
+        row.appendChild(scoreRow);
+        section.appendChild(row);
+      });
+
+      scoringContent.appendChild(section);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded',loadAdminData);
+</script>
+</body>
+</html>
