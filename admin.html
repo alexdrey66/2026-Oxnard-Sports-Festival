@@ -1275,6 +1275,32 @@ async function updateTeamOnServer(updatedTeam) {
   const generateScheduleBtn=document.getElementById('generateScheduleBtn');
   const gamesListEl=document.getElementById('gamesList');
   const knockoutsListEl=document.getElementById('knockoutsList');
+const allowCrossPoolCheckbox = document.getElementById('allowCrossPool');
+
+function pairKey(a,b){
+  a = String(a); b = String(b);
+  return (a < b) ? `${a}_${b}` : `${b}_${a}`;
+}
+
+function canPlaceGameInSlot(game, slot, sched, gamesPerTeam){
+  const t1 = String(game.homeId);
+  const t2 = String(game.awayId);
+
+  // Team already playing at this time?
+  const clash = (sched.games||[]).some(g =>
+    g.date === slot.date &&
+    g.time === slot.time &&
+    (g.homeId === t1 || g.awayId === t1 || g.homeId === t2 || g.awayId === t2)
+  );
+  if (clash) return false;
+
+  // Hard cap 3 pool-play games / team
+  const g1 = gamesPerTeam[t1] || 0;
+  const g2 = gamesPerTeam[t2] || 0;
+  if (g1 >= 3 || g2 >= 3) return false;
+
+  return true;
+}
 
   schedDivisionSelect.addEventListener('change',()=>{
     renderDayConfigsUI();
