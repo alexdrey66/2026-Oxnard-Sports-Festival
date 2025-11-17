@@ -2,256 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register Your Team – OSF 2026</title>
+  <title>OSF 2026 – Team Registration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary:#004b8d;
-      --primary-soft:#e0f2fe;
-      --accent:#d62828;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --border:#e5e7eb;
-      --text:#111827;
-      --muted:#6b7280;
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-      background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
-      color:var(--text);
-    }
-    .nav{
-      background:#000;
-      color:#fff;
-      padding:10px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .nav-left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:14px;
-      font-weight:600;
-    }
-    .nav-links{
-      display:flex;
-      gap:18px;
-      font-size:13px;
-    }
-    .nav-links a{
-      color:#e5e7eb;
-      text-decoration:none;
-      padding:4px 0;
-    }
-    .nav-links a:hover{
-      color:#fff;
+      --primary: #004b8d;
+      --accent: #d62828;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
     }
 
-    .page{
-      max-width:960px;
-      margin:0 auto;
-      padding:28px 16px 40px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:4px 10px;
-      border-radius:999px;
-      background:rgba(37,99,235,0.07);
-      color:#1d4ed8;
-      font-size:12px;
-      font-weight:600;
-      margin-bottom:6px;
-    }
-    h1{
-      margin:0 0 4px;
-      font-size:26px;
-      letter-spacing:0.03em;
-    }
-    .subtitle{
-      margin:0 0 18px;
-      font-size:14px;
-      color:var(--muted);
-    }
-    .layout{
-      display:grid;
-      grid-template-columns: minmax(0,1.3fr) minmax(0,1fr);
-      gap:24px;
-    }
-    @media (max-width: 900px){
-      .layout{grid-template-columns:1fr;}
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e0f2fe 0, #f9fafb 45%, #e5e7eb 100%);
+      color: var(--text);
     }
 
-    .card{
-      background:var(--card);
-      border-radius:16px;
-      box-shadow:0 16px 36px rgba(15,23,42,0.18);
-      border:1px solid rgba(148,163,184,0.4);
-      padding:18px 16px 20px;
-    }
-    .card-header{
-      font-size:15px;
-      font-weight:600;
-      margin-bottom:8px;
-    }
-    .hint{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.5;
-      margin-bottom:8px;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      padding:4px 10px;
-      border-radius:999px;
-      background:var(--primary-soft);
-      color:#1d4ed8;
-      font-size:11px;
-      font-weight:600;
-      margin-right:6px;
-      margin-bottom:6px;
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 12px 32px;
     }
 
-    form{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px 14px;
-      margin-top:10px;
-    }
-    @media (max-width: 720px){
-      form{grid-template-columns:1fr;}
-    }
-    .field-full{grid-column:1 / -1;}
-
-    label{
-      display:block;
-      font-size:12px;
-      font-weight:600;
-      margin-bottom:4px;
-      color:#374151;
-    }
-    label span.req{
-      color:#d62828;
-      margin-left:2px;
-    }
-    input, select, textarea{
-      width:100%;
-      border-radius:9px;
-      border:1px solid var(--border);
-      padding:7px 9px;
-      font-size:13px;
-      font-family:inherit;
-      outline:none;
-      background:#f9fafb;
-      transition:border-color .15s, box-shadow .15s, background .15s;
-    }
-    input:focus, select:focus, textarea:focus{
-      border-color:#2563eb;
-      background:#fff;
-      box-shadow:0 0 0 1px rgba(37,99,235,0.25);
-    }
-    textarea{
-      min-height:70px;
-      resize:vertical;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.08);
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
     }
 
-    .btn-primary{
-      display:inline-flex;
-      justify-content:center;
-      align-items:center;
-      padding:9px 18px;
-      border-radius:999px;
-      background:linear-gradient(135deg,#2563eb,#1d4ed8);
-      color:#fff;
-      border:none;
-      font-size:13px;
-      font-weight:600;
-      cursor:pointer;
-      box-shadow:0 12px 24px rgba(37,99,235,0.45);
-    }
-    .btn-primary:hover{
-      filter:brightness(1.08);
+    h1 {
+      margin: 0 0 4px;
+      font-size: 24px;
+      letter-spacing: 0.04em;
     }
 
-    .message{
-      margin-top:10px;
-      padding:8px 10px;
-      border-radius:10px;
-      font-size:12px;
-      display:none;
-    }
-    .message.visible{display:block;}
-    .message.error{
-      background:#fef2f2;
-      color:#991b1b;
-      border:1px solid #fecaca;
-    }
-    .message.success{
-      background:#ecfdf3;
-      color:#166534;
-      border:1px solid #bbf7d0;
+    .subtitle {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    .callout{
-      background:rgba(255,255,255,0.85);
-      border-radius:14px;
-      border:1px dashed rgba(148,163,184,0.8);
-      padding:12px 12px;
-      font-size:12px;
-      line-height:1.6;
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 16px 14px 16px;
     }
-    .callout strong{
-      display:block;
-      font-size:13px;
-      margin-bottom:6px;
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 10px 0 4px;
     }
-    .callout ul{
-      padding-left:18px;
-      margin:4px 0 0;
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 8px;
     }
-    .callout li{
-      margin-bottom:2px;
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+      color: #6b7280;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      padding: 7px 8px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      background: #f9fafb;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #2563eb;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .row > div {
+      flex: 1 1 160px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      display: none;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    .message.success {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .required-tag {
+      color: #ef4444;
+      margin-left: 2px;
     }
   </style>
 </head>
 <body>
-<header class="nav">
-  <div class="nav-left">
-    <span>2026 Oxnard Sports Festival</span>
-  </div>
-  <nav class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="team-registration.html">Register Your Team</a>
-    <a href="approved-teams.html">Approved Teams</a>
-    <a href="#">Sign Up To Referee</a>
-    <a href="admin.html">Admin</a>
-  </nav>
-</header>
-
-<main class="page">
-  <div class="badge">OSF 2026 • Team Registration</div>
-  <h1>Register Your Team</h1>
+<div class="page">
+  <div class="badge">OSF 2026 • Oxnard Sports Festival</div>
+  <h1>Team Pre-Registration</h1>
   <p class="subtitle">
-    This form starts your registration. Your team is officially entered only after your application PDF, official roster,
-    and region check are received and verified.
+    Complete this form to pre-register your team. Your spot is not confirmed until the Tournament
+    Committee receives your PDF application, official roster, and region check.
   </p>
 
-  <div class="layout">
-    <section class="card">
-      <div class="card-header">Team Details</div>
-      <p class="hint">
-        Please complete all required fields. You’ll receive confirmation on this page when your pre-registration is submitted.
-      </p>
+  <div class="card">
+    <form id="registrationForm" novalidate>
+      <div class="section-title">Team Information</div>
+      <div class="section-sub">Division and basic details.</div>
 
-      <form id="registrationForm">
+      <div class="row">
         <div>
-          <label for="division">Division <span class="req">*</span></label>
+          <label>Division<span class="required-tag">*</span></label>
           <select id="division" required>
             <option value="">Select division</option>
             <option value="10UB">10U Boys</option>
@@ -262,86 +208,97 @@
             <option value="14UG">14U Girls</option>
           </select>
         </div>
-
         <div>
-          <label for="regionNumber">Region # <span class="req">*</span></label>
-          <input type="number" id="regionNumber" min="1" required>
+          <label>Region #<span class="required-tag">*</span></label>
+          <input type="number" id="regionNumber" placeholder="304" required>
         </div>
+      </div>
 
-        <div class="field-full">
-          <label for="teamName">Team Name <span class="req">*</span></label>
-          <input type="text" id="teamName" required>
-        </div>
-
+      <div class="row">
         <div>
-          <label for="city">City <span class="req">*</span></label>
-          <input type="text" id="city" required>
+          <label>Team Name<span class="required-tag">*</span></label>
+          <input type="text" id="teamName" placeholder="Falcons" required>
         </div>
+      </div>
 
+      <div class="row">
         <div>
-          <label for="state">State <span class="req">*</span></label>
-          <input type="text" id="state" maxlength="2" placeholder="CA" required>
+          <label>City<span class="required-tag">*</span></label>
+          <input type="text" id="city" placeholder="Oxnard" required>
         </div>
-
-        <div class="field-full">
-          <label for="coachName">Head Coach Name <span class="req">*</span></label>
-          <input type="text" id="coachName" required>
-        </div>
-
         <div>
-          <label for="coachEmail">Head Coach Email <span class="req">*</span></label>
-          <input type="email" id="coachEmail" required>
+          <label>State<span class="required-tag">*</span></label>
+          <input type="text" id="state" placeholder="CA" maxlength="2" required>
         </div>
+      </div>
 
+      <div class="section-title" style="margin-top:12px;">Coaching Staff</div>
+      <div class="section-sub">Primary contact details for communication.</div>
+
+      <div class="row">
         <div>
-          <label for="coachPhone">Head Coach Phone <span class="req">*</span></label>
-          <input type="tel" id="coachPhone" required>
+          <label>Head Coach Name<span class="required-tag">*</span></label>
+          <input type="text" id="coachName" placeholder="First Last" required>
         </div>
+      </div>
 
-        <div class="field-full">
-          <label for="assistantCoach">Assistant Coach (optional)</label>
-          <input type="text" id="assistantCoach">
+      <div class="row">
+        <div>
+          <label>Head Coach Email<span class="required-tag">*</span></label>
+          <input type="email" id="coachEmail" placeholder="name@example.com" required>
         </div>
+        <div>
+          <label>Head Coach Phone<span class="required-tag">*</span></label>
+          <input type="tel" id="coachPhone" placeholder="805-555-1234" required>
+        </div>
+      </div>
 
-        <div class="field-full">
-          <label for="notes">Notes</label>
-          <textarea id="notes" placeholder="Anything important we should know about this team?"></textarea>
+      <div class="row">
+        <div>
+          <label>Assistant Coach (optional)</label>
+          <input type="text" id="assistantCoach" placeholder="Name">
         </div>
+      </div>
 
-        <div class="field-full">
-          <button type="submit" class="btn-primary">Submit Pre-Registration</button>
+      <div class="section-title" style="margin-top:12px;">Notes</div>
+      <div class="section-sub">Optional notes for the Tournament Committee.</div>
+
+      <div class="row">
+        <div>
+          <label>Notes</label>
+          <textarea id="notes" placeholder="Scheduling notes, conflict info, etc."></textarea>
         </div>
-      </form>
+      </div>
+
+      <p class="helper-text">
+        After submitting this form, please send your
+        <strong>PDF application, official roster, and region check</strong> as instructed
+        in the tournament information packet. Your team will remain in “Pending” status
+        until all items are received and verified.
+      </p>
+
+      <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          Submit Pre-Registration
+        </button>
+      </div>
 
       <div id="formMessage" class="message"></div>
-    </section>
-
-    <aside class="card">
-      <div class="card-header">What happens next?</div>
-      <div class="callout">
-        <strong>To be officially accepted into the tournament, you must send:</strong>
-        <ul>
-          <li>AYSO Tournament Application (PDF for 2026 OSF)</li>
-          <li>Official team roster</li>
-          <li>Region-issued check for the full tournament fee</li>
-        </ul>
-        <p style="margin-top:8px;">
-          Your team will show as <strong>Pending</strong> to the Tournament Committee until all documents
-          and payment are received and verified.
-        </p>
-        <p style="margin-top:4px;">
-          Once approved, your team will appear on the <strong>Approved Teams</strong> list.
-        </p>
-      </div>
-    </aside>
+    </form>
   </div>
-</main>
+</div>
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
   const registrationForm = document.getElementById('registrationForm');
   const formMessage = document.getElementById('formMessage');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function showFormMessage(text, type) {
+    formMessage.textContent = text;
+    formMessage.className = 'message visible ' + (type === 'error' ? 'error' : 'success');
+  }
 
   registrationForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -357,8 +314,9 @@
     const assistantCoach = document.getElementById('assistantCoach').value.trim();
     const notes = document.getElementById('notes').value.trim();
 
-    if (!division || !regionNumber || !teamName || !city || !state || !coachName || !coachEmail || !coachPhone) {
-      showFormMessage('Please fill in all required fields.', 'error');
+    if (!division || !regionNumber || !teamName || !city || !state ||
+        !coachName || !coachEmail || !coachPhone) {
+      showFormMessage('Please complete all required fields before submitting.', 'error');
       return;
     }
 
@@ -380,10 +338,13 @@
       internalNote: ''
     };
 
+    submitBtn.disabled = true;
+    showFormMessage('Submitting your pre-registration…', 'success');
+
     try {
-      // IMPORTANT: no Content-Type header, so no CORS preflight
       const res = await fetch(API_URL, {
         method: 'POST',
+        // No custom headers to avoid CORS preflight; Apps Script will still get JSON
         body: JSON.stringify({ mode: 'create', team })
       });
 
@@ -393,13 +354,15 @@
         data = JSON.parse(text);
       } catch (err) {
         console.error('Non-JSON response from Apps Script:', text);
-        showFormMessage('Server error. Please contact the tournament director.', 'error');
+        showFormMessage('There was a problem submitting your registration. Please try again.', 'error');
+        submitBtn.disabled = false;
         return;
       }
 
       if (!data.ok) {
-        console.error('Create error:', data.error);
+        console.error('Apps Script error:', data.error);
         showFormMessage('There was a problem submitting your registration. Please try again.', 'error');
+        submitBtn.disabled = false;
         return;
       }
 
@@ -411,13 +374,10 @@
     } catch (err) {
       console.error('Fetch error:', err);
       showFormMessage('Network error. Please check your connection and try again.', 'error');
+    } finally {
+      submitBtn.disabled = false;
     }
   });
-
-  function showFormMessage(text, type) {
-    formMessage.textContent = text;
-    formMessage.className = 'message visible ' + (type === 'error' ? 'error' : 'success');
-  }
 </script>
 </body>
 </html>
