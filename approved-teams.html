@@ -1,519 +1,320 @@
 <!doctype html>
 <html lang="en">
-<head>
+ <head>
   <meta charset="UTF-8">
-  <title>OSF 2026 – Approved Teams</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Approved Teams</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <style>
-    :root {
-      --navy: #124175;
-      --navy-dark: #0b2545;
-      --gold: #faca3d;
-      --bg: #0b1727;
-      --card: #0f223a;
-      --card-soft: #132949;
-      --border: rgba(250, 202, 61, 0.35);
-      --text: #e5f0ff;
-      --muted: #9ca3af;
-      --chip-bg: rgba(15,23,42,0.7);
-    }
-
-    * { box-sizing: border-box; }
-
-    html, body {
+    body {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: radial-gradient(circle at top, #1e40af 0%, #020617 45%, #020617 100%);
-      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
+      min-height: 100%;
+      color: #ffffff;
     }
 
-    body {
-      display: flex;
-      justify-content: center;
+    html {
+      height: 100%;
     }
 
     .page {
-      max-width: 1100px;
-      width: 100%;
-      padding: 24px 12px 36px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      min-height: 100%;
     }
 
-    .header-card {
-      border-radius: 18px;
-      border: 2px solid rgba(250,202,61,0.4);
-      background: radial-gradient(circle at top left, rgba(250,202,61,0.14), rgba(15,23,42,0.95));
-      box-shadow:
-        0 20px 45px rgba(15,23,42,0.75),
-        0 0 0 1px rgba(15,23,42,0.7);
-      padding: 18px 18px 16px;
-      margin-bottom: 18px;
+    .header-section {
+      background: transparent;
+      border-radius: 16px;
+      padding: 3rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
       position: relative;
-      overflow: hidden;
     }
 
-    .header-card::before {
-      content: "";
+    .header-section::before {
+      content: '';
       position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 0 0, rgba(250,202,61,0.12) 0, transparent 55%),
-        radial-gradient(circle at 100% 0, rgba(56,189,248,0.12) 0, transparent 55%);
-      opacity: 0.8;
-      pointer-events: none;
-    }
-
-    .header-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .header-main {
-      max-width: 420px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.7);
-      border: 1px solid rgba(148,163,184,0.6);
-      color: #bfdbfe;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34,197,94,0.35);
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
+      border-radius: 19px;
+      z-index: -1;
+      opacity: 0.1;
     }
 
     h1 {
-      margin: 0 0 4px;
-      font-size: 24px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 10rem;
+      font-weight: 900;
+      text-align: center;
+      margin: 0 0 1rem 0;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .subtitle {
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
+      text-align: center;
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin: 0 0 2rem 0;
+      line-height: 1.6;
+      opacity: 0.9;
+      font-style: italic;
     }
 
-    .header-meta {
-      font-size: 12px;
-      color: #e5e7eb;
-      margin-top: 8px;
+    #summaryCounts {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 0;
     }
 
-    .meta-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 9px;
+    .pill {
+      padding: 0.75rem 1.5rem;
       border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.4);
-      font-size: 11px;
-    }
-
-    .meta-chip span {
+      border: 2px solid #faca3d;
+      background: rgba(250, 202, 61, 0.1);
+      color: #ffffff;
+      font-size: 1rem;
       font-weight: 600;
-      color: #e5e7eb;
+      backdrop-filter: blur(10px);
     }
 
-    .summary-block {
-      font-size: 12px;
-      color: #e5e7eb;
-      text-align: right;
-      max-width: 260px;
+    .controls-section {
+      background: #124175;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
+      box-shadow: 
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
     }
 
-    .summary-counts {
-      margin-top: 6px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
-    }
-
-    .summary-pill {
-      border-radius: 999px;
-      padding: 3px 8px;
-      background: rgba(15,23,42,0.8);
-      border: 1px solid rgba(148,163,184,0.6);
-      font-size: 11px;
-      color: #e5e7eb;
-    }
-
-    .summary-pill span {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* Filters */
     .filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    .filter-label {
-      font-size: 11px;
-      color: var(--muted);
-      margin-right: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .filter-label::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--gold);
+      gap: 0.75rem;
+      justify-content: center;
     }
 
     .filter-pill {
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
-      padding: 4px 10px;
-      font-size: 11px;
-      color: #cbd5f5;
-      background: rgba(15,23,42,0.8);
+      border: 2px solid #e5e7eb;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: white;
+      color: #124175;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
     }
 
-    .filter-pill span {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #9ca3af;
+    .filter-pill:hover {
+      border-color: #faca3d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
     }
 
     .filter-pill.active {
-      background: linear-gradient(135deg, var(--gold), #f59e0b);
-      color: #1f2937;
-      border-color: rgba(250,202,61,0.9);
+      background: #faca3d;
+      color: #124175;
+      border-color: #124175;
+      box-shadow: 0 4px 14px rgba(250, 202, 61, 0.4);
     }
 
-    .filter-pill.active span {
-      color: #1f2937;
-    }
-
-    /* Content layout */
-    .content {
-      display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .content {
-        grid-template-columns: 1fr;
-      }
-      .summary-block {
-        text-align: left;
-        max-width: 100%;
-      }
-      .summary-counts {
-        justify-content: flex-start;
-      }
-    }
-
-    /* Division sections + cards */
-    .division-section {
-      background: rgba(15,23,42,0.7);
-      border-radius: 16px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 10px 10px 8px;
-      margin-bottom: 12px;
-      box-shadow: 0 14px 30px rgba(15,23,42,0.6);
-    }
-
-    .division-header {
+    #teamsContainer {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 8px;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .division-block {
+      background: #124175;
+      border: 3px solid #faca3d;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .division-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
+    }
+
+    .division-block::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
+      pointer-events: none;
     }
 
     .division-title {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #e5e7eb;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 1.5rem 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    .division-subtitle {
-      font-size: 11px;
-      color: var(--muted);
+    .division-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: #faca3d;
+      border-radius: 2px;
     }
 
     .teams-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
     .team-card {
-      position: relative;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #e5e7eb;
       border-radius: 12px;
-      border: 1px solid rgba(148,163,184,0.45);
-      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), rgba(15,23,42,1));
-      padding: 8px 10px;
-      font-size: 12px;
-      overflow: hidden;
-    }
-
-    .team-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(250,202,61,0.12), transparent 55%);
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .team-main {
+      padding: 1.5rem;
+      color: #124175;
+      transition: all 0.2s ease;
       position: relative;
-      z-index: 1;
+      backdrop-filter: blur(10px);
     }
 
-    .team-name-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 2px;
+    .team-card:hover {
+      border-color: #faca3d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(250, 202, 61, 0.3);
     }
 
     .team-name {
       font-weight: 700;
-      color: #f9fafb;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: #124175;
     }
 
-    .team-region {
-      font-size: 11px;
-      color: #e5e7eb;
-      white-space: nowrap;
-    }
-
-    .team-location {
-      font-size: 11px;
-      color: #cbd5f5;
-      margin-bottom: 2px;
-    }
-
-    .team-coach {
-      font-size: 11px;
-      color: #e5e7eb;
-    }
-
-    .team-chip-row {
+    .team-meta {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 4px;
-      font-size: 10px;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .team-chip {
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(148,163,184,0.5);
-      color: #cbd5f5;
+    .team-meta:last-child {
+      margin-bottom: 0;
     }
 
-    /* Empty state + sidebar */
-    .empty-state {
-      font-size: 13px;
-      color: var(--muted);
-      padding: 14px 12px;
-      border-radius: 12px;
-      border: 1px dashed rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.75);
+    .team-meta::before {
+      content: '•';
+      color: #faca3d;
+      font-weight: bold;
     }
 
-    .side-panel {
-      background: rgba(15,23,42,0.75);
-      border-radius: 16px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 12px 11px 10px;
-      box-shadow: 0 14px 30px rgba(15,23,42,0.65);
-    }
-
-    .side-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin: 0 0 4px;
-    }
-
-    .side-sub {
-      margin: 0 0 10px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .side-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 12px;
+    .empty-note {
+      font-size: 0.95rem;
       color: #e5e7eb;
+      opacity: 0.85;
+      text-align: center;
+      margin-top: 1rem;
     }
 
-    .side-list li {
-      margin-bottom: 6px;
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
+    @media (max-width: 768px) {
+      .page {
+        padding: 1rem;
+      }
+
+      .header-section, .controls-section {
+        padding: 2rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .teams-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        justify-content: flex-start;
+      }
+
+      .filter-pill {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
     }
 
-    .side-bullet {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--gold);
-      margin-top: 5px;
-    }
+    @media (max-width: 480px) {
+      .header-section, .controls-section, .division-block {
+        padding: 1.5rem 1rem;
+      }
 
-    .side-text-strong {
-      font-weight: 600;
-      color: #f9fafb;
-    }
-
-    .small-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 8px;
+      h1 {
+        font-size: 1.75rem;
+      }
     }
   </style>
-</head>
-<body>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
   <div class="page">
-    <!-- Header -->
-    <section class="header-card">
-      <div class="header-inner">
-        <div class="header-main">
-          <div class="badge">
-            <span class="badge-dot"></span>
-            OSF 2026 • Approved Teams
-          </div>
-          <h1>Accepted Teams List</h1>
-          <p class="subtitle">
-            Teams listed here are officially accepted into the Oxnard Sports Festival once all fees and documents are confirmed by the Tournament Committee.
-          </p>
-          <div class="header-meta">
-            <div class="meta-chip">
-              <span>Divisions</span> 10U • 12U • 14U • Boys & Girls
-            </div>
-            <div class="meta-chip">
-              <span>Note</span> Pool placement and schedules will be posted separately.
-            </div>
-          </div>
-        </div>
-
-        <div class="summary-block">
-          <div>Live view of teams marked <strong>Approved</strong> in the admin portal.</div>
-          <div class="summary-counts" id="summaryCounts">
-            <!-- Filled by JS -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Filters -->
-    <section class="filters">
-      <div class="filter-label">View by division</div>
-      <button class="filter-pill active" data-division="">
-        All Divisions <span>ALL</span>
-      </button>
-      <button class="filter-pill" data-division="10UB">
-        10U Boys <span>10UB</span>
-      </button>
-      <button class="filter-pill" data-division="10UG">
-        10U Girls <span>10UG</span>
-      </button>
-      <button class="filter-pill" data-division="12UB">
-        12U Boys <span>12UB</span>
-      </button>
-      <button class="filter-pill" data-division="12UG">
-        12U Girls <span>12UG</span>
-      </button>
-      <button class="filter-pill" data-division="14UB">
-        14U Boys <span>14UB</span>
-      </button>
-      <button class="filter-pill" data-division="14UG">
-        14U Girls <span>14UG</span>
-      </button>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div id="teamsContainer">
-        <!-- Division sections injected here -->
-      </div>
-
-      <aside class="side-panel">
-        <h2 class="side-title">How this list works</h2>
-        <p class="side-sub">
-          This page is powered directly by the tournament admin portal and updates as soon as teams are marked <strong>Approved</strong>.
-        </p>
-        <ul class="side-list">
-          <li>
-            <div class="side-bullet"></div>
-            <div>
-              <span class="side-text-strong">Pending teams</span> will not appear here until paperwork and payments are verified.
-            </div>
-          </li>
-          <li>
-            <div class="side-bullet"></div>
-            <div>
-              <span class="side-text-strong">Divisions & pools</span> are managed by the tournament staff and may change until schedules are finalized.
-            </div>
-          </li>
-          <li>
-            <div class="side-bullet"></div>
-            <div>
-              <span class="side-text-strong">Questions?</span> Please contact the Tournament Director listed on the official application form.
-            </div>
-          </li>
-        </ul>
-        <p class="small-note">
-          For game times and field locations, please refer to the published Game Schedule page once available.
-        </p>
-      </aside>
-    </section>
+   <div class="header-section">
+    <h1>Approved Teams</h1>
+    <p class="subtitle">Teams listed here are fully accepted into the tournament.</p>
+    <div id="summaryCounts">
+      <span class="pill">Total: 0</span>
+    </div>
+   </div>
+   <div class="controls-section">
+    <div class="filters">
+      <button class="filter-pill active" data-division="">All</button>
+      <button class="filter-pill" data-division="10UB">10U Boys</button>
+      <button class="filter-pill" data-division="10UG">10U Girls</button>
+      <button class="filter-pill" data-division="12UB">12U Boys</button>
+      <button class="filter-pill" data-division="12UG">12U Girls</button>
+      <button class="filter-pill" data-division="14UB">14U Boys</button>
+      <button class="filter-pill" data-division="14UG">14U Girls</button>
+    </div>
+   </div>
+   <div id="teamsContainer">
+     <!-- Will be replaced by live data -->
+   </div>
   </div>
 
   <script>
+    // === CONFIG ===
     const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
     const DIVISION_LABELS = {
@@ -525,178 +326,128 @@
       '14UG': '14U Girls'
     };
 
-    const teamsContainer = document.getElementById('teamsContainer');
-    const summaryCounts = document.getElementById('summaryCounts');
-    const filterButtons = document.querySelectorAll('.filter-pill');
+    let allTeams = [];
+    let currentDivisionFilter = '';
 
-    let approvedTeams = [];
-
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const divCode = btn.getAttribute('data-division') || '';
-        renderTeams(divCode);
-      });
-    });
-
-    async function loadTeams() {
+    async function loadApprovedTeams() {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
-        if (!Array.isArray(data)) {
-          console.error('Unexpected data from API', data);
-          teamsContainer.innerHTML = '<div class="empty-state">Unable to load teams. Please try again later.</div>';
-          return;
-        }
-
-        approvedTeams = data.filter(t => String(t.status).toLowerCase() === 'approved');
-        renderSummary();
-        renderTeams(''); // default: All divisions
-      } catch (err) {
-        console.error(err);
-        teamsContainer.innerHTML = '<div class="empty-state">Network error loading teams. Please refresh the page.</div>';
+        allTeams = Array.isArray(data) ? data : [];
+        renderApprovedTeams();
+      } catch (e) {
+        console.error('Error loading teams', e);
+        const container = document.getElementById('teamsContainer');
+        container.innerHTML = '<p class="empty-note">Unable to load approved teams right now.</p>';
       }
     }
 
-    function renderSummary() {
-      const total = approvedTeams.length;
-      const byDivision = {
-        '10UB': 0, '10UG': 0,
-        '12UB': 0, '12UG': 0,
-        '14UB': 0, '14UG': 0
-      };
-      approvedTeams.forEach(t => {
-        if (byDivision.hasOwnProperty(t.division)) {
-          byDivision[t.division]++;
-        }
+    function renderApprovedTeams() {
+      const container = document.getElementById('teamsContainer');
+      const summaryEl = document.getElementById('summaryCounts');
+
+      const approved = allTeams.filter(t => String(t.status).toLowerCase() === 'approved');
+
+      // Summary
+      const total = approved.length;
+      const countsByDiv = {};
+      approved.forEach(t => {
+        const d = t.division || 'Other';
+        countsByDiv[d] = (countsByDiv[d] || 0) + 1;
       });
 
-      summaryCounts.innerHTML = `
-        <div class="summary-pill">Total Approved: <span>${total}</span></div>
-        <div class="summary-pill">10U: <span>${byDivision['10UB'] + byDivision['10UG']}</span></div>
-        <div class="summary-pill">12U: <span>${byDivision['12UB'] + byDivision['12UG']}</span></div>
-        <div class="summary-pill">14U: <span>${byDivision['14UB'] + byDivision['14UG']}</span></div>
-      `;
-    }
+      let summaryHtml = `<span class="pill">Total: ${total}</span>`;
+      Object.keys(DIVISION_LABELS).forEach(code => {
+        const count = countsByDiv[code] || 0;
+        summaryHtml += `<span class="pill">${DIVISION_LABELS[code]}: ${count}</span>`;
+      });
+      summaryEl.innerHTML = summaryHtml;
 
-    function renderTeams(filterDivision) {
-      teamsContainer.innerHTML = '';
+      // Group by division with filter
+      const grouped = {};
+      approved.forEach(t => {
+        if (currentDivisionFilter && t.division !== currentDivisionFilter) return;
+        const key = t.division || 'Other';
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(t);
+      });
 
-      if (!approvedTeams.length) {
-        teamsContainer.innerHTML = `
-          <div class="empty-state">
-            No teams are currently marked <strong>Approved</strong>. Once teams are accepted in the admin portal, they will appear here automatically.
-          </div>
-        `;
+      container.innerHTML = '';
+
+      const divisionOrder = Object.keys(DIVISION_LABELS);
+      const orderedKeys = [
+        ...divisionOrder.filter(k => grouped[k]),
+        ...Object.keys(grouped).filter(k => !divisionOrder.includes(k))
+      ];
+
+      if (!orderedKeys.length) {
+        container.innerHTML = '<p class="empty-note">No approved teams for this filter yet.</p>';
         return;
       }
 
-      const divisionsOrder = ['10UB','10UG','12UB','12UG','14UB','14UG'];
+      orderedKeys.forEach(divCode => {
+        const teams = grouped[divCode].slice().sort((a, b) => {
+          const an = (a.teamName || '').toLowerCase();
+          const bn = (b.teamName || '').toLowerCase();
+          return an.localeCompare(bn);
+        });
 
-      const divisionsToRender = filterDivision
-        ? [filterDivision]
-        : divisionsOrder;
-
-      let anyOutput = false;
-
-      divisionsToRender.forEach(code => {
-        const teamsForDiv = approvedTeams.filter(t => t.division === code);
-        if (!teamsForDiv.length) return;
-
-        anyOutput = true;
-
-        const section = document.createElement('section');
-        section.className = 'division-section';
-
-        const header = document.createElement('div');
-        header.className = 'division-header';
+        const divBlock = document.createElement('div');
+        divBlock.className = 'division-block';
 
         const title = document.createElement('div');
         title.className = 'division-title';
-        title.textContent = DIVISION_LABELS[code] || code;
-
-        const subtitle = document.createElement('div');
-        subtitle.className = 'division-subtitle';
-        subtitle.textContent = `${teamsForDiv.length} approved team${teamsForDiv.length !== 1 ? 's' : ''}`;
-
-        header.appendChild(title);
-        header.appendChild(subtitle);
+        title.textContent = DIVISION_LABELS[divCode] || divCode;
+        divBlock.appendChild(title);
 
         const grid = document.createElement('div');
         grid.className = 'teams-grid';
 
-        teamsForDiv.forEach(team => {
-          const card = document.createElement('article');
+        teams.forEach(team => {
+          const card = document.createElement('div');
           card.className = 'team-card';
-
-          const main = document.createElement('div');
-          main.className = 'team-main';
-
-          const nameRow = document.createElement('div');
-          nameRow.className = 'team-name-row';
 
           const name = document.createElement('div');
           name.className = 'team-name';
           name.textContent = team.teamName || 'Team';
+          card.appendChild(name);
 
-          const region = document.createElement('div');
-          region.className = 'team-region';
-          region.textContent = team.regionNumber ? `Region ${team.regionNumber}` : '';
-
-          nameRow.appendChild(name);
-          nameRow.appendChild(region);
-
-          const location = document.createElement('div');
-          location.className = 'team-location';
+          const line1 = document.createElement('div');
+          line1.className = 'team-meta';
           const city = team.city || '';
           const state = team.state || '';
-          location.textContent = city || state ? `${city}${city && state ? ', ' : ''}${state}` : '';
+          line1.textContent = `Region ${team.regionNumber || ''} • ${city}${city && state ? ', ' : ''}${state}`;
+          card.appendChild(line1);
 
-          const coach = document.createElement('div');
-          coach.className = 'team-coach';
-          coach.textContent = team.coachName ? `Coach: ${team.coachName}` : '';
+          const line2 = document.createElement('div');
+          line2.className = 'team-meta';
+          line2.textContent = `Coach: ${team.coachName || ''}`;
+          card.appendChild(line2);
 
-          const chipRow = document.createElement('div');
-          chipRow.className = 'team-chip-row';
-
-          const chipDiv = document.createElement('span');
-          chipDiv.className = 'team-chip';
-          chipDiv.textContent = DIVISION_LABELS[team.division] || team.division || 'Division';
-
-          if (team.coachEmail) {
-            const chipEmail = document.createElement('span');
-            chipEmail.className = 'team-chip';
-            chipEmail.textContent = team.coachEmail;
-            chipRow.appendChild(chipEmail);
-          }
-
-          chipRow.appendChild(chipDiv);
-
-          main.appendChild(nameRow);
-          if (location.textContent) main.appendChild(location);
-          if (coach.textContent) main.appendChild(coach);
-          main.appendChild(chipRow);
-
-          card.appendChild(main);
           grid.appendChild(card);
         });
 
-        section.appendChild(header);
-        section.appendChild(grid);
-        teamsContainer.appendChild(section);
+        divBlock.appendChild(grid);
+        container.appendChild(divBlock);
       });
-
-      if (!anyOutput) {
-        teamsContainer.innerHTML = `
-          <div class="empty-state">
-            No approved teams found for this division yet. Try switching to <strong>All Divisions</strong> or check back once the tournament committee has accepted more teams.
-          </div>
-        `;
-      }
     }
 
-    document.addEventListener('DOMContentLoaded', loadTeams);
+    function setupFilters() {
+      const pills = document.querySelectorAll('.filter-pill');
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentDivisionFilter = pill.getAttribute('data-division') || '';
+          renderApprovedTeams();
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupFilters();
+      loadApprovedTeams();
+    });
   </script>
 </body>
 </html>
