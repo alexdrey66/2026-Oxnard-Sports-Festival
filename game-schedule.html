@@ -680,6 +680,28 @@
 
       return all;
     }
+function getDateSortValue(dateStr) {
+  if (!dateStr) return 0;
+
+  // First try native Date parsing (works for things like "November 2, 2026")
+  const d = new Date(dateStr);
+  if (!isNaN(d.getTime())) {
+    return d.getTime();
+  }
+
+  // Fallback for formats like "11/2/2026" or "11/2/26"
+  const m = String(dateStr).match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if (m) {
+    const month = parseInt(m[1], 10) - 1; // 0-based
+    const day = parseInt(m[2], 10);
+    let year = parseInt(m[3], 10);
+    if (year < 100) year += 2000; // handle 2-digit years
+    return new Date(year, month, day).getTime();
+  }
+
+  // If all else fails, just shove it to the end
+  return Number.MAX_SAFE_INTEGER;
+}
 
     function renderSchedule(divisionFilter) {
       const games = collectGames(divisionFilter);
@@ -724,10 +746,21 @@
         if (g.time) groups[key].times.add(g.time);
       });
 
-      const groupKeys = Object.keys(groups).sort((a, b) => {
-        const da = groups[a].date || '';
-        const db = groups[b].date || '';
-        return da.localeCompare(db);
+const groupKeys = Object.keys(groups).sort((a, b) => {
+  const da = groups[a].date || '';
+  const db = groups[b].date || '';
+
+  const va = getDateSortValue(da);
+  const vb = getDateSortValue(db);
+
+  if (va !== vb) {
+    return va - vb; // sort by actual chronological value
+  }
+
+  // Tie-breaker: fall back to string compare if needed
+  return da.localeCompare(db);
+});
+
       });
 
       groupKeys.forEach(key => {
