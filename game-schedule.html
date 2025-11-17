@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
- <head>
+<head>
   <meta charset="UTF-8">
   <title>Game Schedules</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
   <style>
     body {
       box-sizing: border-box;
@@ -49,7 +50,7 @@
     }
 
     h1 {
-      font-size: 10rem;
+      font-size: 2.4rem;
       font-weight: 900;
       text-align: center;
       margin: 0 0 1rem 0;
@@ -59,7 +60,7 @@
 
     .subtitle {
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: #ffffff;
       margin: 0;
       line-height: 1.6;
@@ -73,7 +74,7 @@
       padding: 2rem;
       border: 3px solid #faca3d;
       margin-bottom: 2rem;
-      box-shadow: 
+      box-shadow:
         0 15px 40px rgba(18, 65, 117, 0.4),
         0 8px 20px rgba(0, 0, 0, 0.3),
         0 3px 15px rgba(250, 202, 61, 0.2);
@@ -123,7 +124,7 @@
       border: 3px solid #faca3d;
       border-radius: 16px;
       padding: 2rem;
-      box-shadow: 
+      box-shadow:
         0 15px 40px rgba(18, 65, 117, 0.4),
         0 8px 20px rgba(0, 0, 0, 0.3),
         0 3px 15px rgba(250, 202, 61, 0.2);
@@ -153,11 +154,12 @@
     }
 
     .sched-title {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       margin: 0 0 1.5rem 0;
       color: #ffffff;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 0.75rem;
     }
@@ -172,14 +174,13 @@
 
     .schedule-grid {
       display: grid;
-      grid-template-columns: 120px repeat(6, 1fr);
       gap: 4px;
       background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
       border-radius: 20px;
       overflow: hidden;
       padding: 4px;
       position: relative;
-      box-shadow: 
+      box-shadow:
         0 25px 60px rgba(18, 65, 117, 0.6),
         0 15px 35px rgba(0, 0, 0, 0.5),
         0 5px 15px rgba(250, 202, 61, 0.4),
@@ -209,15 +210,15 @@
     .grid-header {
       background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
       color: #124175;
-      padding: 1.5rem 1rem;
+      padding: 1.1rem 0.75rem;
       font-weight: 900;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       position: relative;
       border-radius: 12px 12px 0 0;
-      box-shadow: 
+      box-shadow:
         0 6px 20px rgba(250, 202, 61, 0.4),
         0 3px 10px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4),
@@ -239,10 +240,10 @@
     .time-slot {
       background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
       color: #124175;
-      padding: 1.5rem 1rem;
+      padding: 1.1rem 0.75rem;
       font-weight: 900;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -250,12 +251,11 @@
       letter-spacing: 1px;
       position: relative;
       border-radius: 0 12px 12px 0;
-      box-shadow: 
+      box-shadow:
         0 6px 20px rgba(250, 202, 61, 0.4),
         0 3px 10px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4),
         inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
       white-space: nowrap;
     }
 
@@ -272,101 +272,28 @@
 
     .game-slot {
       background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
-      padding: 1rem;
-      height: 100px;
+      padding: 0.75rem;
+      min-height: 90px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
       border-radius: 12px;
       border: 2px solid rgba(250, 202, 61, 0.1);
-      box-shadow: 
+      box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.08),
         0 2px 6px rgba(0, 0, 0, 0.04),
         inset 0 1px 0 rgba(255, 255, 255, 0.9),
         inset 0 -1px 0 rgba(0, 0, 0, 0.02);
     }
 
-    .game-slot::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(135deg, rgba(250, 202, 61, 0.3) 0%, rgba(18, 65, 117, 0.1) 50%, rgba(250, 202, 61, 0.3) 100%);
-      border-radius: 14px;
-      opacity: 0;
-      transition: all 0.4s ease;
-      z-index: -1;
-    }
-
-    .game-slot::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, transparent 0%, rgba(250, 202, 61, 0.03) 50%, transparent 100%);
-      border-radius: 12px;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .game-slot:hover::before {
-      opacity: 1;
-      transform: scale(1.02);
-    }
-
-    .game-slot:hover::after {
-      opacity: 1;
-    }
-
-    .game-slot:hover {
-      transform: translateY(-6px) scale(1.03);
-      border-color: rgba(250, 202, 61, 0.4);
-      box-shadow: 
-        0 20px 40px rgba(250, 202, 61, 0.3),
-        0 10px 25px rgba(0, 0, 0, 0.15),
-        0 5px 15px rgba(250, 202, 61, 0.2),
-        inset 0 2px 0 rgba(255, 255, 255, 1),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-    }
-
-    .game-slot.has-game {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
-      border: 2px solid transparent;
-      background-clip: padding-box;
-      position: relative;
-    }
-
-    .game-slot.has-game::after {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(135deg, rgba(250, 202, 61, 0.3) 0%, rgba(18, 65, 117, 0.2) 100%);
-      border-radius: 10px;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .game-slot.has-game:hover::after {
-      opacity: 1;
-    }
-
     .game-slot.has-game:hover {
-      border-color: #faca3d;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(250, 202, 61, 0.05) 100%);
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 
+      transform: translateY(-4px) scale(1.02);
+      border-color: rgba(250, 202, 61, 0.4);
+      box-shadow:
         0 15px 40px rgba(250, 202, 61, 0.5),
         0 8px 20px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 1);
@@ -377,11 +304,9 @@
       color: #124175;
       font-size: 0.8rem;
       line-height: 1.2;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      position: relative;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -402,48 +327,49 @@
     }
 
     .game-info {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #374151;
       line-height: 1;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 0.3rem 0.8rem;
+      padding: 0.25rem 0.7rem;
       background: linear-gradient(135deg, rgba(250, 202, 61, 0.15) 0%, rgba(250, 202, 61, 0.25) 100%);
       border-radius: 12px;
       border: 2px solid rgba(250, 202, 61, 0.4);
-      position: relative;
-      box-shadow: 
-        0 2px 8px rgba(250, 202, 61, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
       white-space: nowrap;
       min-width: 60px;
       text-align: center;
     }
 
-    .game-info::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
-      border-radius: 14px;
-    }
-
-    .extra-note {
-      margin-top: 4px;
-      font-size: 0.7rem;
-      color: #6b7280;
-    }
-
     .empty-slot {
       color: #9ca3af;
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-weight: 200;
       opacity: 0.3;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .no-games {
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 900px) {
+      .schedule-grid {
+        font-size: 0.8rem;
+      }
+
+      .grid-header,
+      .time-slot {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .game-slot {
+        min-height: 70px;
+        padding: 0.6rem 0.4rem;
+      }
     }
 
     @media (max-width: 768px) {
@@ -451,35 +377,13 @@
         padding: 1rem;
       }
 
-      .header-section, .controls-section {
+      .header-section,
+      .controls-section {
         padding: 2rem 1.5rem;
       }
 
       h1 {
         font-size: 2rem;
-      }
-
-      .schedule-grid {
-        grid-template-columns: 80px repeat(3, 1fr);
-        font-size: 0.8rem;
-      }
-
-      .grid-header, .time-slot {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.8rem;
-      }
-
-      .game-slot {
-        padding: 0.75rem 0.5rem;
-        min-height: 70px;
-      }
-
-      .game-teams {
-        font-size: 0.75rem;
-      }
-
-      .game-info {
-        font-size: 0.7rem;
       }
 
       #divisionTabs {
@@ -493,7 +397,9 @@
     }
 
     @media (max-width: 480px) {
-      .header-section, .controls-section, .sched-block {
+      .header-section,
+      .controls-section,
+      .sched-block {
         padding: 1.5rem 1rem;
       }
 
@@ -502,307 +408,318 @@
       }
     }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
- </head>
- <body>
+</head>
+<body>
   <div class="page">
-   <div class="header-section">
-    <h1>Game Schedule</h1>
-    <p class="subtitle">Schedules auto-update as scores and brackets are entered.</p>
-   </div>
-   <div class="controls-section">
-    <div id="divisionTabs">
-      <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
-      <button class="tab-btn" data-division="10UB">10U Boys</button>
-      <button class="tab-btn" data-division="10UG">10U Girls</button>
-      <button class="tab-btn" data-division="12UB">12U Boys</button>
-      <button class="tab-btn" data-division="12UG">12U Girls</button>
-      <button class="tab-btn" data-division="14UB">14U Boys</button>
-      <button class="tab-btn" data-division="14UG">14U Girls</button>
+    <div class="header-section">
+      <h1>Game Schedule</h1>
+      <p class="subtitle">Schedules update as scores and brackets are entered.</p>
     </div>
-   </div>
 
-   <!-- LIVE SCHEDULES WILL BE INJECTED HERE -->
-   <div id="scheduleContainer"></div>
+    <div class="controls-section">
+      <div id="divisionTabs">
+        <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
+        <button class="tab-btn" data-division="10UB">10U Boys</button>
+        <button class="tab-btn" data-division="10UG">10U Girls</button>
+        <button class="tab-btn" data-division="12UB">12U Boys</button>
+        <button class="tab-btn" data-division="12UG">12U Girls</button>
+        <button class="tab-btn" data-division="14UB">14U Boys</button>
+        <button class="tab-btn" data-division="14UG">14U Girls</button>
+      </div>
+    </div>
+
+    <div id="scheduleContainer"></div>
   </div>
 
   <script>
-    // ===== CONFIG =====
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
+    // Storage key used by admin page
+    const STORAGE_KEY = 'osf2026_tournament_state';
 
-    const DIVISION_LABELS = {
-      '10UB':'10U Boys',
-      '10UG':'10U Girls',
-      '12UB':'12U Boys',
-      '12UG':'12U Girls',
-      '14UB':'14U Boys',
-      '14UG':'14U Girls'
-    };
-
-    let allTeams = [];
-    let adminState = {
-      manualTeams: [],
-      pools: [],
-      schedules: [],
-      scores: {},
-      dayConfigs: {}
-    };
-
-    const scheduleContainer = document.getElementById('scheduleContainer');
-
-    // ===== HELPERS =====
-    function normalizeState(state){
-      if (!state || typeof state !== 'object') state = {};
-      state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
-      state.pools = Array.isArray(state.pools) ? state.pools : [];
-      state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
-      state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
-      state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
-      return state;
-    }
-
-    function getAllTeamsCombined(){
-      const manual = (adminState.manualTeams || []).map(m => Object.assign({manual:true}, m));
-      return (Array.isArray(allTeams) ? allTeams : []).concat(manual);
-    }
-
-    function getTeamByIdAll(id){
-      if (id == null) return null;
-      id = String(id);
-      return getAllTeamsCombined().find(t => String(t.id) === id) || null;
-    }
-
-    function parseTimeToMinutes(str){
-      if (!str) return 0;
-      let s = String(str).trim().toUpperCase();
-      let ampm = null;
-      if (s.endsWith('AM') || s.endsWith('PM')) {
-        ampm = s.slice(-2);
-        s = s.slice(0, -2).trim();
-      }
-      s = s.replace(/\s+/g,'');
-      const parts = s.split(':');
-      let h = parseInt(parts[0],10);
-      let m = parts[1] ? parseInt(parts[1],10) : 0;
-      if (Number.isNaN(h) || Number.isNaN(m)) return 0;
-      if (ampm === 'PM' && h !== 12) h += 12;
-      if (ampm === 'AM' && h === 12) h = 0;
-      return h * 60 + m;
-    }
-
-    // ===== LOAD DATA =====
-    async function loadDataAndRender(initialDivision = ''){
+    function loadState() {
       try {
-        const [teamsRes, stateRes] = await Promise.all([
-          fetch(API_URL),
-          fetch(API_URL + '?entity=state')
-        ]);
-        allTeams = await teamsRes.json();
-        adminState = normalizeState(await stateRes.json());
-        renderSchedulesForDivision(initialDivision);
-      } catch (e){
-        console.error('Load error', e);
-        scheduleContainer.innerHTML = '<p style="text-align:center;opacity:.8;">Unable to load schedules right now.</p>';
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { games: [] };
+        const parsed = JSON.parse(raw);
+        if (!parsed.games || !Array.isArray(parsed.games)) {
+          return { games: [] };
+        }
+        return parsed;
+      } catch (e) {
+        console.error('Error loading state', e);
+        return { games: [] };
       }
     }
 
-    // ===== RENDERING =====
-    function renderSchedulesForDivision(divisionFilter){
-      scheduleContainer.innerHTML = '';
+    function normalizeFieldLabel(field) {
+      if (!field) return '';
+      const trimmed = String(field).trim();
+      if (/^field/i.test(trimmed)) return trimmed;
+      return 'Field ' + trimmed;
+    }
 
-      const schedules = adminState.schedules || [];
-      const gamesByDate = {};
-      const poolsById = {};
-      (adminState.pools || []).forEach(p => { poolsById[p.id] = p; });
+    function parseTimeToSortableNumber(timeStr) {
+      if (!timeStr) return 0;
+      const s = timeStr.toString().trim().toUpperCase();
 
-      // Pool-play & knockout games
-      schedules.forEach(sched => {
-        const divCode = sched.division;
-        if (divisionFilter && divCode !== divisionFilter) return;
+      // 12-hour like "8:00 AM"
+      const match12 = s.match(/^(\d{1,2}):?(\d{2})?\s*(AM|PM)$/);
+      if (match12) {
+        let h = parseInt(match12[1], 10);
+        const m = match12[2] ? parseInt(match12[2], 10) : 0;
+        const ampm = match12[3];
+        if (ampm === 'PM' && h !== 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return h * 60 + m;
+      }
 
-        const games = Array.isArray(sched.games) ? sched.games : [];
-        games.forEach(g => {
-          if (!g.date || !g.time || !g.field) return;
-          const key = String(g.date);
-          if (!gamesByDate[key]) gamesByDate[key] = [];
-          gamesByDate[key].push(Object.assign({}, g, {
-            division: divCode,
-            stage: g.stage || 'pool'
-          }));
+      // 24-hour like "08:00"
+      const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+      if (match24) {
+        const h = parseInt(match24[1], 10);
+        const m = parseInt(match24[2], 10);
+        return h * 60 + m;
+      }
+
+      // Fallback: try Date
+      const d = new Date('1970-01-01 ' + s);
+      if (!isNaN(d.getTime())) {
+        return d.getHours() * 60 + d.getMinutes();
+      }
+
+      return 0;
+    }
+
+    function formatTimeDisplay(timeStr) {
+      if (!timeStr) return '';
+      const s = timeStr.toString().trim();
+      // If it already has AM/PM, just return
+      if (/am|pm/i.test(s)) return s.toUpperCase();
+      // Try format from 24-hour
+      const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+      if (match24) {
+        let h = parseInt(match24[1], 10);
+        const m = match24[2];
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        if (h === 0) h = 12;
+        else if (h > 12) h -= 12;
+        return `${h}:${m}${ampm}`;
+      }
+      return s;
+    }
+
+    function formatDateHeading(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric'
         });
+      }
+      // Fallback: just show raw text
+      return dateStr;
+    }
 
-        const ko = Array.isArray(sched.knockouts) ? sched.knockouts : [];
-        ko.forEach(k => {
-          if (!k.date || !k.time || !k.field) return;
-          const key = String(k.date);
-          if (!gamesByDate[key]) gamesByDate[key] = [];
-          gamesByDate[key].push({
-            id: k.id,
-            division: divCode,
-            date: k.date,
-            time: k.time,
-            field: k.field,
-            homeId: k.homeId,
-            awayId: k.awayId,
-            poolId: null,
-            type: k.type || 'Knockout',
-            stage: 'knockout'
-          });
+    function groupByDate(games) {
+      const map = new Map();
+      for (const g of games) {
+        const key = g.date || '';
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(g);
+      }
+      return map;
+    }
+
+    function renderScheduleBlock(container, dateKey, gamesForDate, divisionFilter) {
+      if (!gamesForDate.length) return;
+
+      // Gather unique fields and times
+      const fieldSet = new Set();
+      const timeSet = new Set();
+
+      gamesForDate.forEach(g => {
+        if (g.field) fieldSet.add(normalizeFieldLabel(g.field));
+        if (g.time) timeSet.add(g.time);
+      });
+
+      const fields = Array.from(fieldSet);
+      fields.sort((a, b) => {
+        const na = parseInt(a.replace(/\D/g, ''), 10);
+        const nb = parseInt(b.replace(/\D/g, ''), 10);
+        if (!isNaN(na) && !isNaN(nb)) return na - nb;
+        return a.localeCompare(b);
+      });
+
+      const times = Array.from(timeSet);
+      times.sort((a, b) => parseTimeToSortableNumber(a) - parseTimeToSortableNumber(b));
+
+      if (!fields.length || !times.length) return;
+
+      const block = document.createElement('div');
+      block.className = 'sched-block';
+
+      const title = document.createElement('div');
+      title.className = 'sched-title';
+
+      const dateLabel = formatDateHeading(dateKey || 'Date TBD');
+      const divLabel = divisionFilter ? `• ${divisionFilterLabel(divisionFilter)}` : '• All Divisions';
+      title.textContent = `${dateLabel} ${divLabel}`;
+      block.appendChild(title);
+
+      const grid = document.createElement('div');
+      grid.className = 'schedule-grid';
+      grid.style.gridTemplateColumns = `120px repeat(${fields.length}, minmax(0, 1fr))`;
+
+      // Header row
+      const timeHeader = document.createElement('div');
+      timeHeader.className = 'grid-header';
+      timeHeader.textContent = 'Time';
+      grid.appendChild(timeHeader);
+
+      fields.forEach(field => {
+        const h = document.createElement('div');
+        h.className = 'grid-header';
+        h.textContent = field.toUpperCase();
+        grid.appendChild(h);
+      });
+
+      // Data rows
+      times.forEach(timeStr => {
+        const timeCell = document.createElement('div');
+        timeCell.className = 'time-slot';
+        timeCell.textContent = formatTimeDisplay(timeStr);
+        grid.appendChild(timeCell);
+
+        fields.forEach(field => {
+          const game = gamesForDate.find(g =>
+            normalizeFieldLabel(g.field) === field &&
+            (g.time || '').toString() === timeStr.toString()
+          );
+
+          const cell = document.createElement('div');
+          cell.className = 'game-slot';
+
+          if (game) {
+            cell.classList.add('has-game');
+
+            const teams = document.createElement('div');
+            teams.className = 'game-teams';
+
+            const home = document.createElement('div');
+            home.className = 'team-name';
+            home.textContent = game.homeTeam || 'TBD';
+
+            const vs = document.createElement('div');
+            vs.className = 'vs-text';
+            vs.textContent = 'VS';
+
+            const away = document.createElement('div');
+            away.className = 'team-name';
+            away.textContent = game.awayTeam || 'TBD';
+
+            teams.appendChild(home);
+            teams.appendChild(vs);
+            teams.appendChild(away);
+
+            const info = document.createElement('div');
+            info.className = 'game-info';
+
+            // Label: pool, or phase, or both
+            const poolLabel = game.pool ? game.pool : '';
+            const phaseLabel = game.phase && game.phase !== 'pool'
+              ? game.phase
+              : '';
+
+            info.textContent = poolLabel && phaseLabel
+              ? `${poolLabel} • ${phaseLabel}`
+              : (poolLabel || phaseLabel || '');
+
+            cell.appendChild(teams);
+            if (info.textContent) cell.appendChild(info);
+          } else {
+            const empty = document.createElement('div');
+            empty.className = 'empty-slot';
+            empty.textContent = '—';
+            cell.appendChild(empty);
+          }
+
+          grid.appendChild(cell);
         });
       });
 
-      const dateKeys = Object.keys(gamesByDate);
-      if (!dateKeys.length){
-        scheduleContainer.innerHTML = '<p style="text-align:center;opacity:.8;">No games scheduled yet.</p>';
+      block.appendChild(grid);
+      container.appendChild(block);
+    }
+
+    function divisionFilterLabel(code) {
+      switch (code) {
+        case '10UB': return '10U Boys';
+        case '10UG': return '10U Girls';
+        case '12UB': return '12U Boys';
+        case '12UG': return '12U Girls';
+        case '14UB': return '14U Boys';
+        case '14UG': return '14U Girls';
+        default: return code || 'All Divisions';
+      }
+    }
+
+    function renderSchedules(activeDivision, allGames) {
+      const container = document.getElementById('scheduleContainer');
+      container.innerHTML = '';
+
+      const gamesForView = activeDivision
+        ? allGames.filter(g => g.division === activeDivision)
+        : allGames.slice();
+
+      if (!gamesForView.length) {
+        const msg = document.createElement('p');
+        msg.className = 'no-games';
+        msg.textContent = 'No games scheduled yet for this view.';
+        container.appendChild(msg);
         return;
       }
 
-      // Sort date labels alphabetically (you can tweak if you use real date strings)
-      dateKeys.sort((a,b) => a.localeCompare(b));
+      const byDate = groupByDate(gamesForView);
+      const sortedDates = Array.from(byDate.keys()).sort((a, b) => {
+        const da = new Date(a);
+        const db = new Date(b);
+        if (!isNaN(da) && !isNaN(db)) return da - db;
+        return a.localeCompare(b);
+      });
 
-      dateKeys.forEach(dateKey => {
-        const games = gamesByDate[dateKey];
-
-        // Unique fields and times for this date
-        const fields = Array.from(new Set(games.map(g => g.field || 'Field'))).sort();
-        const times = Array.from(new Set(games.map(g => g.time || ''))).sort(
-          (a,b) => parseTimeToMinutes(a) - parseTimeToMinutes(b)
-        );
-
-        const block = document.createElement('div');
-        block.className = 'sched-block';
-
-        const title = document.createElement('div');
-        title.className = 'sched-title';
-        if (divisionFilter){
-          title.textContent = dateKey + ' • ' + (DIVISION_LABELS[divisionFilter] || divisionFilter);
-        } else {
-          title.textContent = dateKey;
-        }
-        block.appendChild(title);
-
-        const grid = document.createElement('div');
-        grid.className = 'schedule-grid';
-
-        // Header row: "Time" + field names
-        const timeHeader = document.createElement('div');
-        timeHeader.className = 'grid-header';
-        timeHeader.textContent = 'Time';
-        grid.appendChild(timeHeader);
-
-        fields.forEach(field => {
-          const h = document.createElement('div');
-          h.className = 'grid-header';
-          h.textContent = field;
-          grid.appendChild(h);
-        });
-
-        // Rows per time
-        times.forEach(time => {
-          // Time cell
-          const timeCell = document.createElement('div');
-          timeCell.className = 'time-slot';
-          timeCell.textContent = time;
-          grid.appendChild(timeCell);
-
-          // One cell per field
-          fields.forEach(field => {
-            const cell = document.createElement('div');
-            cell.className = 'game-slot';
-
-            const cellGames = games.filter(g =>
-              (g.time || '') === time &&
-              (g.field || '') === field
-            );
-
-            if (!cellGames.length){
-              const empty = document.createElement('div');
-              empty.className = 'empty-slot';
-              empty.textContent = '—';
-              cell.appendChild(empty);
-            } else {
-              cell.classList.add('has-game');
-
-              const mainGame = cellGames[0];
-              const home = getTeamByIdAll(mainGame.homeId);
-              const away = getTeamByIdAll(mainGame.awayId);
-
-              const teamsDiv = document.createElement('div');
-              teamsDiv.className = 'game-teams';
-
-              const homeSpan = document.createElement('div');
-              homeSpan.className = 'team-name';
-              homeSpan.textContent = home ? home.teamName : 'TBD';
-
-              const vsSpan = document.createElement('div');
-              vsSpan.className = 'vs-text';
-              vsSpan.textContent = 'VS';
-
-              const awaySpan = document.createElement('div');
-              awaySpan.className = 'team-name';
-              awaySpan.textContent = away ? away.teamName : 'TBD';
-
-              teamsDiv.appendChild(homeSpan);
-              teamsDiv.appendChild(vsSpan);
-              teamsDiv.appendChild(awaySpan);
-              cell.appendChild(teamsDiv);
-
-              const info = document.createElement('div');
-              info.className = 'game-info';
-
-              const labels = [];
-              if (mainGame.stage === 'knockout' && mainGame.type){
-                labels.push(mainGame.type);
-              } else if (mainGame.poolId && poolsById[mainGame.poolId]){
-                labels.push(poolsById[mainGame.poolId].name);
-              }
-
-              if (mainGame.crossPool){
-                labels.push('Cross-pool');
-              }
-
-              if (!divisionFilter){
-                labels.push(DIVISION_LABELS[mainGame.division] || mainGame.division);
-              }
-
-              info.textContent = labels.join(' • ') || 'Game';
-              cell.appendChild(info);
-
-              if (cellGames.length > 1){
-                const extra = document.createElement('div');
-                extra.className = 'extra-note';
-                extra.textContent = `+${cellGames.length - 1} more`;
-                cell.appendChild(extra);
-              }
-            }
-
-            grid.appendChild(cell);
-          });
-        });
-
-        block.appendChild(grid);
-        scheduleContainer.appendChild(block);
+      sortedDates.forEach(dateKey => {
+        const gamesForDate = byDate.get(dateKey);
+        renderScheduleBlock(container, dateKey, gamesForDate, activeDivision);
       });
     }
 
-    // ===== TABS =====
     document.addEventListener('DOMContentLoaded', () => {
-      const tabButtons = Array.from(document.querySelectorAll('#divisionTabs .tab-btn'));
+      const state = loadState();
+      const allGames = Array.isArray(state.games) ? state.games : [];
+
+      const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+      let activeDivision = '';
+
+      function setActiveTab(division) {
+        activeDivision = division || '';
+        tabButtons.forEach(btn => {
+          if ((btn.dataset.division || '') === activeDivision) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+        renderSchedules(activeDivision, allGames);
+      }
 
       tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          tabButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          const division = btn.getAttribute('data-division') || '';
-          renderSchedulesForDivision(division);
+          setActiveTab(btn.dataset.division || '');
         });
       });
 
-      loadDataAndRender('');
+      setActiveTab('');
     });
   </script>
 </body>
