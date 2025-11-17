@@ -1352,81 +1352,155 @@ function canPlaceGameInSlot(game, slot, sched, gamesPerTeam){
     });
   }
 
-  generateScheduleBtn.addEventListener('click',()=>{
-    const division=schedDivisionSelect.value;
-    const pools=getPoolsForDivision(division);
-    const cfgs=getDayConfigsForDivision(division);
-    if(!pools.length){alert('Create pools first.');return;}
-    if(!cfgs.length){alert('Add at least one day configuration first.');return;}
+generateScheduleBtn.addEventListener('click', ()=>{
+  const division = schedDivisionSelect.value;
+  const pools = getPoolsForDivision(division);
+  const cfgs = getDayConfigsForDivision(division);
+  const allowCross = allowCrossPoolCheckbox.checked;
 
-    const slots=[];
-    cfgs.forEach(cfg=>{
-      const fields=cfg.fields.split(',').map(s=>s.trim()).filter(Boolean);
-      const times=cfg.times.split(',').map(s=>s.trim()).filter(Boolean);
-      times.forEach(time=>{
-        fields.forEach(field=>{
-          slots.push({date:cfg.label,time,field});
-        });
+  if (!pools.length){
+    alert('Create pools first.');
+    return;
+  }
+  if (!cfgs.length){
+    alert('Add at least one day configuration first.');
+    return;
+  }
+
+  // Build all field/time slots from your day configs
+  const slots = [];
+  cfgs.forEach(cfg=>{
+    const fields = cfg.fields.split(',').map(s=>s.trim()).filter(Boolean);
+    const times  = cfg.times.split(',').map(s=>s.trim()).filter(Boolean);
+    times.forEach(time=>{
+      fields.forEach(field=>{
+        slots.push({date:cfg.label,time,field});
       });
     });
-    if(!slots.length){alert('No usable slots from your day configuration.');return;}
-
-    const sched=getScheduleForDivision(division);
-    sched.games=[];
-
-    const allGames=[];
-    pools.forEach(pool=>{
-      const ids=(pool.teamIds||[]).map(String);
-      for(let i=0;i<ids.length;i++){
-        for(let j=i+1;j<ids.length;j++){
-          allGames.push({
-            id:'G_'+division+'_'+Date.now()+'_'+i+'_'+j,
-            division,
-            poolId:pool.id,
-            homeId:ids[i],
-            awayId:ids[j],
-            stage:'pool'
-          });
-        }
-      }
-    });
-
-    const gamesPerTeam={};
-    function canScheduleGame(game,slot){
-      const t1=game.homeId,t2=game.awayId;
-      const alreadyAtTime=sched.games.some(g=>g.date===slot.date && g.time===slot.time && (g.homeId===t1||g.awayId===t1||g.homeId===t2||g.awayId===t2));
-      if(alreadyAtTime) return false;
-      const g1=gamesPerTeam[t1]||0,g2=gamesPerTeam[t2]||0;
-      if(g1>=3 || g2>=3) return false;
-      return true;
-    }
-
-    let slotIdx=0;
-    allGames.forEach(game=>{
-      let placed=false;
-      let tries=0;
-      while(!placed && tries<slots.length){
-        const slot=slots[slotIdx%slots.length];
-        if(canScheduleGame(game,slot)){
-          const g=Object.assign({},game,{
-            date:slot.date,
-            time:slot.time,
-            field:slot.field
-          });
-          sched.games.push(g);
-          gamesPerTeam[game.homeId]=(gamesPerTeam[game.homeId]||0)+1;
-          gamesPerTeam[game.awayId]=(gamesPerTeam[game.awayId]||0)+1;
-          placed=true;
-        }
-        slotIdx++;tries++;
-      }
-    });
-
-    saveStateToApi(false);
-    renderGamesUI();
-    renderScoringTab();  // make sure games appear on scoring tab right away
-    showToast('Schedule generated');
   });
+  if (!slots.length){
+    alert('No usable slots from your day configuration.');
+    return;
+  }
+
+  const sched = getScheduleForDivision(division);
+  sched.games = [];          // reset pool-play games for this division only
+
+  const gamesPerTeam = {};
+  const usedPairs    = new Set();
+
+  // Map team -> pool (for cross-pool logic)
+  const teamPool = {};
+  pools.forEach(p=>{
+    (p.teamIds || []).forEach(id=>{
+      teamPool[String(id)] = p.id;
+    });
+  });
+
+  // 1) Create all within-pool pairings (no duplicates)
+  const internalGames = [];
+  pools.forEach(pool=>{
+    const ids = (pool.teamIds || []).map(String);
+    for (let i=0;i<ids.length;i++){
+      for (let j=i+1;j<ids.length;j++){
+        const pk = pairKey(ids[i], ids[j]);
+        internalGames.push({
+          id: 'G_'+division+'_'+pk+'_'+Date.now(),
+          division,
+          poolId: pool.id,
+          homeId: ids[i],
+          awayId: ids[j],
+          stage: 'pool',
+          crossPool: false
+        });
+      }
+    }
+  });
+
+  // Helper to actually drop a game into the next available slot
+  function scheduleGame(game){
+    let placed = false;
+    let tries = 0;
+    let slotIdx = 0;
+
+    while (!placed && tries < slots.length){
+      const slot = slots[slotIdx % slots.length];
+      if (canPlaceGameInSlot(game, slot, sched, gamesPerTeam)){
+        game.date  = slot.date;
+        game.time  = slot.time;
+        game.field = slot.field;
+
+        sched.games.push(game);
+        const t1 = String(game.homeId);
+        const t2 = String(game.awayId);
+        gamesPerTeam[t1] = (gamesPerTeam[t1] || 0) + 1;
+        gamesPerTeam[t2] = (gamesPerTeam[t2] || 0) + 1;
+        usedPairs.add(pairKey(t1,t2));
+        placed = true;
+      }
+      slotIdx++;
+      tries++;
+    }
+    return placed;
+  }
+
+  // 2) First, schedule as many within-pool games as we can under the constraints
+  internalGames.forEach(game=>{
+    scheduleGame(game);
+  });
+
+  // 3) Optionally create cross-pool games to get everyone up to 3 matches
+  if (allowCross){
+    const allTeamIds = Object.keys(teamPool);  // only teams that are in pools
+
+    let progress = true;
+    while (progress){
+      progress = false;
+
+      // who still needs games?
+      const need = allTeamIds.filter(id => (gamesPerTeam[id] || 0) < 3);
+      if (need.length < 2) break;
+
+      outer:
+      for (let i=0;i<need.length;i++){
+        for (let j=i+1;j<need.length;j++){
+          const a = need[i], b = need[j];
+          const poolA = teamPool[a];
+          const poolB = teamPool[b];
+
+          // must be different pools & not already paired
+          if (!poolA || !poolB || poolA === poolB) continue;
+          if (usedPairs.has(pairKey(a,b))) continue;
+
+          // try to drop this cross-pool game into a slot
+          const game = {
+            id: 'X_'+division+'_'+pairKey(a,b)+'_'+Date.now(),
+            division,
+            // anchor to the home team's pool for scoring; still marked as crossPool
+            poolId: poolA,
+            homeId: a,
+            awayId: b,
+            stage: 'pool',
+            crossPool: true
+          };
+
+          if (scheduleGame(game)){
+            progress = true;
+            break outer;
+          }
+        }
+      }
+
+      // if we couldn’t place any new cross-pool game in the last pass, stop
+    }
+  }
+
+  saveStateToApi(false);
+  renderGamesUI();
+  renderScoringTab();   // make sure scoring sees new games too
+  showToast('Schedule generated');
+});
+
 
   function renderGamesUI(){
     const division=schedDivisionSelect.value;
