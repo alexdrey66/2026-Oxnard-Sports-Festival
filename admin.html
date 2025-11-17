@@ -44,9 +44,22 @@
       letter-spacing:0.03em;
     }
     .subtitle{
-      margin:0 0 16px;
+      margin:0 0 8px;
       font-size:13px;
       color:var(--muted);
+    }
+
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:14px;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .top-bar-note{
+      font-size:12px;
+      color:#6b7280;
     }
 
     .tabs{
@@ -318,6 +331,7 @@
       justify-content:space-between;
       gap:6px;
       margin-bottom:2px;
+      flex-wrap:wrap;
     }
     .game-meta{
       font-size:11px;
@@ -330,8 +344,15 @@
   <div class="badge">OSF 2026 • Tournament Admin</div>
   <h1>Admin Portal</h1>
   <p class="subtitle">
-    One-stop view for teams, pools, schedules, and scoring. All changes are saved to your Google Sheet via Apps Script.
+    One-stop view for teams, pools, schedules, and scoring.
   </p>
+
+  <div class="top-bar">
+    <div class="top-bar-note">
+      Changes are saved to your <strong>OSF 2026 Tournament Teams</strong> spreadsheet (Teams + AdminState).
+    </div>
+    <button id="saveStateBtn" class="btn btn-primary btn-small">Save / Publish</button>
+  </div>
 
   <div class="tabs">
     <button class="tab-btn active" data-tab="teams">Teams</button>
@@ -392,7 +413,7 @@
           <div class="card-sub">How this flows into the public pages.</div>
           <ul style="padding-left:18px;font-size:12px;margin:0;">
             <li><strong>Approved</strong> → appears on public Approved Teams.</li>
-            <li><strong>Schedule</strong> & <strong>scores</strong> → drive the public Schedule and Stats pages.</li>
+            <li>Schedules + scores → drive the public Schedule and Stats pages.</li>
             <li>Declined teams stay in the system and can be moved back to Pending.</li>
           </ul>
         </div>
@@ -526,7 +547,7 @@
       <div>
         <div class="card">
           <div class="card-header">Pool-Play Games</div>
-          <div class="card-sub">Edit date, field, time, and teams if needed.</div>
+          <div class="card-sub">Edit date, field, time, and teams if needed. You can also delete games.</div>
           <div id="gamesList" style="max-height:360px;overflow:auto;padding-right:4px;"></div>
         </div>
       </div>
@@ -588,7 +609,9 @@
   };
 
   const toastEl = document.getElementById('toast');
+  const saveStateBtn = document.getElementById('saveStateBtn');
   let toastTimer = null;
+
   function showToast(msg){
     toastEl.textContent = msg;
     toastEl.classList.add('visible');
@@ -606,19 +629,32 @@
     return state;
   }
 
-  async function saveStateToApi(){
+  async function saveStateToApi(showMessage = true){
     try{
-      await fetch(API_URL,{
+      const res = await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({entity:'state',state:adminState})
       });
-      showToast('Saved');
+      let data = {};
+      try { data = await res.json(); } catch(e){}
+      if (!res.ok || (data && data.ok === false)){
+        console.error('Save error', data);
+        if (showMessage) showToast('Save failed');
+        return false;
+      }
+      if (showMessage) showToast('Saved');
+      return true;
     }catch(e){
       console.error(e);
-      showToast('Save failed');
+      if (showMessage) showToast('Save failed');
+      return false;
     }
   }
+
+  saveStateBtn.addEventListener('click', () => {
+    saveStateToApi(true);
+  });
 
   async function loadAdminData(){
     try{
@@ -851,7 +887,7 @@
     const pool={id:'P_'+division+'_'+Date.now(),division,name,teamIds:[]};
     adminState.pools.push(pool);
     newPoolNameInput.value='';
-    saveStateToApi();
+    saveStateToApi(false);
     refreshPoolsUI();
   });
 
@@ -873,7 +909,7 @@
     manualTeamRegionInput.value='';
     manualTeamCityInput.value='';
     manualTeamStateInput.value='';
-    saveStateToApi();
+    saveStateToApi(false);
     refreshPoolsUI();
     renderManualTeams();
   });
@@ -905,7 +941,7 @@
         }
       }
     }
-    saveStateToApi();
+    saveStateToApi(false);
     refreshPoolsUI();
   }
 
@@ -987,6 +1023,7 @@
       header.style.display='flex';
       header.style.alignItems='center';
       header.style.gap='6px';
+      header.style.flexWrap='wrap';
 
       const title=document.createElement('div');
       title.innerHTML=`<strong>${pool.name}</strong> <span style="font-size:11px;color:#6b7280;">(${divisionLabel(pool.division)})</span>`;
@@ -1000,7 +1037,7 @@
         const newName=prompt('New pool name:',pool.name);
         if(newName && newName.trim()){
           pool.name=newName.trim();
-          saveStateToApi();
+          saveStateToApi(false);
           refreshPoolsUI();
           renderGamesUI();
         }
@@ -1013,7 +1050,7 @@
       delBtn.addEventListener('click',()=>{
         if(!confirm(`Delete ${pool.name}? Teams will be unassigned.`)) return;
         adminState.pools=adminState.pools.filter(p=>p.id!==pool.id);
-        saveStateToApi();
+        saveStateToApi(false);
         refreshPoolsUI();
         renderGamesUI();
       });
@@ -1090,7 +1127,7 @@
     schedDayLabelInput.value='';
     schedFieldsInput.value='';
     schedTimesInput.value='';
-    saveStateToApi();
+    saveStateToApi(false);
     renderDayConfigsUI();
   });
 
@@ -1114,7 +1151,7 @@
       btn.addEventListener('click',()=>{
         const list=getDayConfigsForDivision(division);
         adminState.dayConfigs[division]=list.filter(c=>c.id!==cfg.id);
-        saveStateToApi();
+        saveStateToApi(false);
         renderDayConfigsUI();
       });
       row.appendChild(document.createElement('br'));
@@ -1155,7 +1192,8 @@
             division,
             poolId:pool.id,
             homeId:ids[i],
-            awayId:ids[j]
+            awayId:ids[j],
+            stage:'pool'
           });
         }
       }
@@ -1168,7 +1206,6 @@
       if(alreadyAtTime) return false;
       const g1=gamesPerTeam[t1]||0,g2=gamesPerTeam[t2]||0;
       if(g1>=3 || g2>=3) return false;
-      const prevSlot=sched.games.find(g=>g.time===slot.time && g.date===slot.date);
       return true;
     }
 
@@ -1180,7 +1217,6 @@
         const slot=slots[slotIdx%slots.length];
         if(canScheduleGame(game,slot)){
           const g=Object.assign({},game,{
-            stage:'pool',
             date:slot.date,
             time:slot.time,
             field:slot.field
@@ -1194,7 +1230,7 @@
       }
     });
 
-    saveStateToApi();
+    saveStateToApi(false);
     renderGamesUI();
     showToast('Schedule generated');
   });
@@ -1219,11 +1255,32 @@
       const away=getTeamByIdAll(g.awayId);
       teamsSpan.textContent=`${home?home.teamName:'TBD'} vs ${away?away.teamName:'TBD'}`;
 
+      const rightWrap=document.createElement('div');
+      rightWrap.style.display='flex';
+      rightWrap.style.gap='6px';
+      rightWrap.style.alignItems='center';
+      rightWrap.style.flexWrap='wrap';
+
       const meta=document.createElement('div');
       meta.className='game-meta';
       meta.textContent=`${g.date||''} • ${g.time||''} • ${g.field||''}`;
+
+      const delBtn=document.createElement('button');
+      delBtn.className='btn btn-decline btn-small';
+      delBtn.textContent='Delete';
+      delBtn.addEventListener('click',()=>{
+        const schedDiv=getScheduleForDivision(division);
+        schedDiv.games = (schedDiv.games||[]).filter(game=>game.id!==g.id);
+        saveStateToApi(false);
+        renderGamesUI();
+        renderScoringTab();
+      });
+
+      rightWrap.appendChild(meta);
+      rightWrap.appendChild(delBtn);
+
       header.appendChild(teamsSpan);
-      header.appendChild(meta);
+      header.appendChild(rightWrap);
 
       const row=document.createElement('div');
       row.className='row';
@@ -1231,21 +1288,21 @@
       d1.innerHTML='<label>Date</label>';
       const dateInput=document.createElement('input');
       dateInput.value=g.date||'';
-      dateInput.addEventListener('change',()=>{g.date=dateInput.value;saveStateToApi();renderScoringTab();});
+      dateInput.addEventListener('change',()=>{g.date=dateInput.value;saveStateToApi(false);renderScoringTab();});
       d1.appendChild(dateInput);
 
       const d2=document.createElement('div');
       d2.innerHTML='<label>Time</label>';
       const timeInput=document.createElement('input');
       timeInput.value=g.time||'';
-      timeInput.addEventListener('change',()=>{g.time=timeInput.value;saveStateToApi();renderScoringTab();});
+      timeInput.addEventListener('change',()=>{g.time=timeInput.value;saveStateToApi(false);renderScoringTab();});
       d2.appendChild(timeInput);
 
       const d3=document.createElement('div');
       d3.innerHTML='<label>Field</label>';
       const fieldInput=document.createElement('input');
       fieldInput.value=g.field||'';
-      fieldInput.addEventListener('change',()=>{g.field=fieldInput.value;saveStateToApi();});
+      fieldInput.addEventListener('change',()=>{g.field=fieldInput.value;saveStateToApi(false);});
       d3.appendChild(fieldInput);
 
       row.appendChild(d1);row.appendChild(d2);row.appendChild(d3);
@@ -1289,21 +1346,21 @@
       d1.innerHTML='<label>Date</label>';
       const dateInput=document.createElement('input');
       dateInput.value=k.date||'';
-      dateInput.addEventListener('change',()=>{k.date=dateInput.value;saveStateToApi();});
+      dateInput.addEventListener('change',()=>{k.date=dateInput.value;saveStateToApi(false);});
       d1.appendChild(dateInput);
 
       const d2=document.createElement('div');
       d2.innerHTML='<label>Time</label>';
       const timeInput=document.createElement('input');
       timeInput.value=k.time||'';
-      timeInput.addEventListener('change',()=>{k.time=timeInput.value;saveStateToApi();});
+      timeInput.addEventListener('change',()=>{k.time=timeInput.value;saveStateToApi(false);});
       d2.appendChild(timeInput);
 
       const d3=document.createElement('div');
       d3.innerHTML='<label>Field</label>';
       const fieldInput=document.createElement('input');
       fieldInput.value=k.field||'';
-      fieldInput.addEventListener('change',()=>{k.field=fieldInput.value;saveStateToApi();});
+      fieldInput.addEventListener('change',()=>{k.field=fieldInput.value;saveStateToApi(false);});
       d3.appendChild(fieldInput);
 
       row1.appendChild(d1);row1.appendChild(d2);row1.appendChild(d3);
@@ -1322,7 +1379,7 @@
         if(String(k.homeId)===String(t.id)) o.selected=true;
         homeSel.appendChild(o);
       });
-      homeSel.addEventListener('change',()=>{k.homeId=homeSel.value||null;saveStateToApi();});
+      homeSel.addEventListener('change',()=>{k.homeId=homeSel.value||null;saveStateToApi(false);});
       h1.appendChild(homeSel);
 
       const h2=document.createElement('div');
@@ -1337,7 +1394,7 @@
         if(String(k.awayId)===String(t.id)) o.selected=true;
         awaySel.appendChild(o);
       });
-      awaySel.addEventListener('change',()=>{k.awayId=awaySel.value||null;saveStateToApi();});
+      awaySel.addEventListener('change',()=>{k.awayId=awaySel.value||null;saveStateToApi(false);});
       h2.appendChild(awaySel);
 
       row2.appendChild(h1);row2.appendChild(h2);
@@ -1409,7 +1466,7 @@
           const val=homeInput.value===''?null:Number(homeInput.value);
           if(!adminState.scores[g.id]) adminState.scores[g.id]={};
           adminState.scores[g.id].home=val;
-          saveStateToApi();
+          saveStateToApi(false);
         });
         s1.appendChild(homeInput);
 
@@ -1423,7 +1480,7 @@
           const val=awayInput.value===''?null:Number(awayInput.value);
           if(!adminState.scores[g.id]) adminState.scores[g.id]={};
           adminState.scores[g.id].away=val;
-          saveStateToApi();
+          saveStateToApi(false);
         });
         s2.appendChild(awayInput);
 
@@ -1436,7 +1493,7 @@
           delete adminState.scores[g.id];
           homeInput.value='';
           awayInput.value='';
-          saveStateToApi();
+          saveStateToApi(false);
         });
         s3.appendChild(clearBtn);
 
