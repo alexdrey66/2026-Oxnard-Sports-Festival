@@ -4,29 +4,79 @@
   <meta charset="UTF-8">
   <title>OSF 2026 – Approved Teams</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     :root {
-      --primary: #004b8d;
-      --accent: #d62828;
-      --bg: #f3f4f6;
-      --card: #ffffff;
-      --border: #e5e7eb;
-      --text: #111827;
-      --muted: #6b7280;
+      --navy: #124175;
+      --navy-dark: #0b2545;
+      --gold: #faca3d;
+      --bg: #0b1727;
+      --card: #0f223a;
+      --card-soft: #132949;
+      --border: rgba(250, 202, 61, 0.35);
+      --text: #e5f0ff;
+      --muted: #9ca3af;
+      --chip-bg: rgba(15,23,42,0.7);
     }
+
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #e0f2fe 0, #f9fafb 45%, #e5e7eb 100%);
+      padding: 0;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e40af 0%, #020617 45%, #020617 100%);
       color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
     }
 
     .page {
       max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 12px 40px;
+      width: 100%;
+      padding: 24px 12px 36px;
+    }
+
+    .header-card {
+      border-radius: 18px;
+      border: 2px solid rgba(250,202,61,0.4);
+      background: radial-gradient(circle at top left, rgba(250,202,61,0.14), rgba(15,23,42,0.95));
+      box-shadow:
+        0 20px 45px rgba(15,23,42,0.75),
+        0 0 0 1px rgba(15,23,42,0.7);
+      padding: 18px 18px 16px;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(250,202,61,0.12) 0, transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(56,189,248,0.12) 0, transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .header-main {
+      max-width: 420px;
     }
 
     .badge {
@@ -35,314 +85,618 @@
       gap: 6px;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(37, 99, 235, 0.08);
-      color: #1d4ed8;
-      font-size: 12px;
+      background: rgba(15,23,42,0.7);
+      border: 1px solid rgba(148,163,184,0.6);
+      color: #bfdbfe;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       font-weight: 600;
       margin-bottom: 6px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.35);
     }
 
     h1 {
       margin: 0 0 4px;
       font-size: 24px;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .subtitle {
-      margin: 0 0 12px;
+      margin: 0;
       font-size: 13px;
       color: var(--muted);
     }
 
-    .tabs {
+    .header-meta {
+      font-size: 12px;
+      color: #e5e7eb;
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 11px;
+    }
+
+    .meta-chip span {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .summary-block {
+      font-size: 12px;
+      color: #e5e7eb;
+      text-align: right;
+      max-width: 260px;
+    }
+
+    .summary-counts {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .summary-pill {
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 11px;
+      color: #e5e7eb;
+    }
+
+    .summary-pill span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Filters */
+    .filters {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 14px;
     }
 
-    .tab-btn {
+    .filter-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-right: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-label::before {
+      content: "";
+      width: 6px;
+      height: 6px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.8);
-      background: rgba(15,23,42,0.02);
-      padding: 7px 13px;
-      font-size: 12px;
+      background: var(--gold);
+    }
+
+    .filter-pill {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #cbd5f5;
+      background: rgba(15,23,42,0.8);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #374151;
     }
 
-    .tab-btn.active {
-      background: #111827;
-      color: #ffffff;
-      border-color: #0f172a;
+    .filter-pill span {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
     }
 
-    .card {
-      background: var(--card);
+    .filter-pill.active {
+      background: linear-gradient(135deg, var(--gold), #f59e0b);
+      color: #1f2937;
+      border-color: rgba(250,202,61,0.9);
+    }
+
+    .filter-pill.active span {
+      color: #1f2937;
+    }
+
+    /* Content layout */
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      .summary-block {
+        text-align: left;
+        max-width: 100%;
+      }
+      .summary-counts {
+        justify-content: flex-start;
+      }
+    }
+
+    /* Division sections + cards */
+    .division-section {
+      background: rgba(15,23,42,0.7);
       border-radius: 16px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 14px 12px 16px;
-      margin-bottom: 16px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 10px 10px 8px;
+      margin-bottom: 12px;
+      box-shadow: 0 14px 30px rgba(15,23,42,0.6);
     }
 
-    .card-header {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .card-sub {
-      font-size: 12px;
-      color: var(--muted);
+    .division-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
       margin-bottom: 8px;
     }
 
     .division-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      margin: 6px 0 4px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-    }
-
-    th, td {
-      padding: 6px 8px;
-      border: 1px solid #e5e7eb;
-      text-align: left;
-    }
-
-    th {
-      background: #f3f4f6;
-      font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6b7280;
+      color: #e5e7eb;
     }
 
-    .team-name-cell {
-      display: flex;
-      flex-direction: column;
+    .division-subtitle {
+      font-size: 11px;
+      color: var(--muted);
     }
 
-    .team-sub {
-      font-size: 10px;
-      color: #6b7280;
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 8px;
     }
 
-    .empty-note {
+    .team-card {
+      position: relative;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), rgba(15,23,42,1));
+      padding: 8px 10px;
       font-size: 12px;
-      color: #9ca3af;
-      padding: 6px 2px;
+      overflow: hidden;
+    }
+
+    .team-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(250,202,61,0.12), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .team-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .team-name-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .team-name {
+      font-weight: 700;
+      color: #f9fafb;
+    }
+
+    .team-region {
+      font-size: 11px;
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+
+    .team-location {
+      font-size: 11px;
+      color: #cbd5f5;
+      margin-bottom: 2px;
+    }
+
+    .team-coach {
+      font-size: 11px;
+      color: #e5e7eb;
+    }
+
+    .team-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+      font-size: 10px;
+    }
+
+    .team-chip {
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.5);
+      color: #cbd5f5;
+    }
+
+    /* Empty state + sidebar */
+    .empty-state {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 14px 12px;
+      border-radius: 12px;
+      border: 1px dashed rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.75);
+    }
+
+    .side-panel {
+      background: rgba(15,23,42,0.75);
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 12px 11px 10px;
+      box-shadow: 0 14px 30px rgba(15,23,42,0.65);
+    }
+
+    .side-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .side-sub {
+      margin: 0 0 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .side-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .side-list li {
+      margin-bottom: 6px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .side-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--gold);
+      margin-top: 5px;
+    }
+
+    .side-text-strong {
+      font-weight: 600;
+      color: #f9fafb;
+    }
+
+    .small-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
     }
   </style>
 </head>
 <body>
-<div class="page">
-  <div class="badge">OSF 2026 • Oxnard Sports Festival</div>
-  <h1>Approved Teams</h1>
-  <p class="subtitle">
-    Teams listed below have been approved by the Tournament Committee. Final brackets and schedules
-    will be posted separately.
-  </p>
+  <div class="page">
+    <!-- Header -->
+    <section class="header-card">
+      <div class="header-inner">
+        <div class="header-main">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            OSF 2026 • Approved Teams
+          </div>
+          <h1>Accepted Teams List</h1>
+          <p class="subtitle">
+            Teams listed here are officially accepted into the Oxnard Sports Festival once all fees and documents are confirmed by the Tournament Committee.
+          </p>
+          <div class="header-meta">
+            <div class="meta-chip">
+              <span>Divisions</span> 10U • 12U • 14U • Boys & Girls
+            </div>
+            <div class="meta-chip">
+              <span>Note</span> Pool placement and schedules will be posted separately.
+            </div>
+          </div>
+        </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" data-div="ALL">All Divisions</button>
-    <button class="tab-btn" data-div="10UB">10U Boys</button>
-    <button class="tab-btn" data-div="10UG">10U Girls</button>
-    <button class="tab-btn" data-div="12UB">12U Boys</button>
-    <button class="tab-btn" data-div="12UG">12U Girls</button>
-    <button class="tab-btn" data-div="14UB">14U Boys</button>
-    <button class="tab-btn" data-div="14UG">14U Girls</button>
+        <div class="summary-block">
+          <div>Live view of teams marked <strong>Approved</strong> in the admin portal.</div>
+          <div class="summary-counts" id="summaryCounts">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+      <div class="filter-label">View by division</div>
+      <button class="filter-pill active" data-division="">
+        All Divisions <span>ALL</span>
+      </button>
+      <button class="filter-pill" data-division="10UB">
+        10U Boys <span>10UB</span>
+      </button>
+      <button class="filter-pill" data-division="10UG">
+        10U Girls <span>10UG</span>
+      </button>
+      <button class="filter-pill" data-division="12UB">
+        12U Boys <span>12UB</span>
+      </button>
+      <button class="filter-pill" data-division="12UG">
+        12U Girls <span>12UG</span>
+      </button>
+      <button class="filter-pill" data-division="14UB">
+        14U Boys <span>14UB</span>
+      </button>
+      <button class="filter-pill" data-division="14UG">
+        14U Girls <span>14UG</span>
+      </button>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div id="teamsContainer">
+        <!-- Division sections injected here -->
+      </div>
+
+      <aside class="side-panel">
+        <h2 class="side-title">How this list works</h2>
+        <p class="side-sub">
+          This page is powered directly by the tournament admin portal and updates as soon as teams are marked <strong>Approved</strong>.
+        </p>
+        <ul class="side-list">
+          <li>
+            <div class="side-bullet"></div>
+            <div>
+              <span class="side-text-strong">Pending teams</span> will not appear here until paperwork and payments are verified.
+            </div>
+          </li>
+          <li>
+            <div class="side-bullet"></div>
+            <div>
+              <span class="side-text-strong">Divisions & pools</span> are managed by the tournament staff and may change until schedules are finalized.
+            </div>
+          </li>
+          <li>
+            <div class="side-bullet"></div>
+            <div>
+              <span class="side-text-strong">Questions?</span> Please contact the Tournament Director listed on the official application form.
+            </div>
+          </li>
+        </ul>
+        <p class="small-note">
+          For game times and field locations, please refer to the published Game Schedule page once available.
+        </p>
+      </aside>
+    </section>
   </div>
 
-  <div id="approvedWrapper"></div>
-</div>
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
-<script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
+    const DIVISION_LABELS = {
+      '10UB': '10U Boys',
+      '10UG': '10U Girls',
+      '12UB': '12U Boys',
+      '12UG': '12U Girls',
+      '14UB': '14U Boys',
+      '14UG': '14U Girls'
+    };
 
-  const DIVISION_LABELS = {
-    '10UB':'10U Boys',
-    '10UG':'10U Girls',
-    '12UB':'12U Boys',
-    '12UG':'12U Girls',
-    '14UB':'14U Boys',
-    '14UG':'14U Girls'
-  };
+    const teamsContainer = document.getElementById('teamsContainer');
+    const summaryCounts = document.getElementById('summaryCounts');
+    const filterButtons = document.querySelectorAll('.filter-pill');
 
-  const tabs = document.querySelectorAll('.tab-btn');
-  const approvedWrapper = document.getElementById('approvedWrapper');
+    let approvedTeams = [];
 
-  let allTeams = [];
-
-  function divisionLabel(code) {
-    return DIVISION_LABELS[code] || code || '';
-  }
-
-  function renderDivision(div) {
-    approvedWrapper.innerHTML = '';
-
-    let divisionsToShow;
-    if (div === 'ALL') {
-      const unique = new Set(
-        allTeams
-          .filter(t => String(t.status).toLowerCase() === 'approved')
-          .map(t => t.division)
-          .filter(Boolean)
-      );
-      divisionsToShow = Array.from(unique);
-    } else {
-      divisionsToShow = [div];
-    }
-
-    if (!divisionsToShow.length) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      const empty = document.createElement('div');
-      empty.className = 'empty-note';
-      empty.textContent = 'No approved teams are currently listed.';
-      card.appendChild(empty);
-      approvedWrapper.appendChild(card);
-      return;
-    }
-
-    divisionsToShow.forEach(d => {
-      const teams = allTeams.filter(t =>
-        String(t.status).toLowerCase() === 'approved' &&
-        String(t.division) === String(d)
-      );
-
-      if (!teams.length) return;
-
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      const header = document.createElement('div');
-      header.className = 'card-header';
-      header.textContent = divisionLabel(d);
-      card.appendChild(header);
-
-      const sub = document.createElement('div');
-      sub.className = 'card-sub';
-      sub.textContent = `${teams.length} approved team${teams.length === 1 ? '' : 's'}.`;
-      card.appendChild(sub);
-
-      const table = document.createElement('table');
-
-      const thead = document.createElement('thead');
-      const hr = document.createElement('tr');
-      ['Team', 'Region', 'Coach', 'City / State'].forEach(h => {
-        const th = document.createElement('th');
-        th.textContent = h;
-        hr.appendChild(th);
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const divCode = btn.getAttribute('data-division') || '';
+        renderTeams(divCode);
       });
-      thead.appendChild(hr);
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-
-      // Sort by region then team name for readability
-      teams.sort((a, b) => {
-        const ra = (a.regionNumber || '').toString();
-        const rb = (b.regionNumber || '').toString();
-        if (ra && rb && ra !== rb) return ra.localeCompare(rb, 'en', {numeric:true});
-        const ta = (a.teamName || '').toString();
-        const tb = (b.teamName || '').toString();
-        return ta.localeCompare(tb);
-      });
-
-      teams.forEach(t => {
-        const tr = document.createElement('tr');
-
-        // Team cell
-        const tdTeam = document.createElement('td');
-        const wrap = document.createElement('div');
-        wrap.className = 'team-name-cell';
-        const strong = document.createElement('span');
-        strong.textContent = t.teamName || 'Team';
-        const subTxt = document.createElement('span');
-        subTxt.className = 'team-sub';
-        subTxt.textContent = t.assistantCoach
-          ? `Assistant: ${t.assistantCoach}`
-          : '';
-        wrap.appendChild(strong);
-        if (subTxt.textContent) wrap.appendChild(subTxt);
-        tdTeam.appendChild(wrap);
-        tr.appendChild(tdTeam);
-
-        // Region
-        const tdRegion = document.createElement('td');
-        tdRegion.textContent = t.regionNumber ? `Region ${t.regionNumber}` : '—';
-        tr.appendChild(tdRegion);
-
-        // Coach
-        const tdCoach = document.createElement('td');
-        tdCoach.textContent = t.coachName || 'TBD';
-        tr.appendChild(tdCoach);
-
-        // City / State
-        const tdLoc = document.createElement('td');
-        const city = t.city || '';
-        const state = t.state || '';
-        tdLoc.textContent = city && state ? `${city}, ${state}` : (city || state || '—');
-        tr.appendChild(tdLoc);
-
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(tbody);
-      card.appendChild(table);
-      approvedWrapper.appendChild(card);
     });
 
-    if (!approvedWrapper.children.length) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      const empty = document.createElement('div');
-      empty.className = 'empty-note';
-      empty.textContent = 'No approved teams are currently listed for this division.';
-      card.appendChild(empty);
-      approvedWrapper.appendChild(card);
+    async function loadTeams() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        if (!Array.isArray(data)) {
+          console.error('Unexpected data from API', data);
+          teamsContainer.innerHTML = '<div class="empty-state">Unable to load teams. Please try again later.</div>';
+          return;
+        }
+
+        approvedTeams = data.filter(t => String(t.status).toLowerCase() === 'approved');
+        renderSummary();
+        renderTeams(''); // default: All divisions
+      } catch (err) {
+        console.error(err);
+        teamsContainer.innerHTML = '<div class="empty-state">Network error loading teams. Please refresh the page.</div>';
+      }
     }
-  }
 
-  function setActiveTab(div) {
-    tabs.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.div === div);
-    });
-    renderDivision(div);
-  }
+    function renderSummary() {
+      const total = approvedTeams.length;
+      const byDivision = {
+        '10UB': 0, '10UG': 0,
+        '12UB': 0, '12UG': 0,
+        '14UB': 0, '14UG': 0
+      };
+      approvedTeams.forEach(t => {
+        if (byDivision.hasOwnProperty(t.division)) {
+          byDivision[t.division]++;
+        }
+      });
 
-  tabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      setActiveTab(btn.dataset.div);
-    });
-  });
-
-  async function loadTeams() {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      allTeams = Array.isArray(data) ? data : [];
-      setActiveTab('ALL');
-    } catch (err) {
-      console.error(err);
-      approvedWrapper.innerHTML = '<div class="card"><div class="empty-note">Unable to load approved teams.</div></div>';
+      summaryCounts.innerHTML = `
+        <div class="summary-pill">Total Approved: <span>${total}</span></div>
+        <div class="summary-pill">10U: <span>${byDivision['10UB'] + byDivision['10UG']}</span></div>
+        <div class="summary-pill">12U: <span>${byDivision['12UB'] + byDivision['12UG']}</span></div>
+        <div class="summary-pill">14U: <span>${byDivision['14UB'] + byDivision['14UG']}</span></div>
+      `;
     }
-  }
 
-  loadTeams();
-</script>
+    function renderTeams(filterDivision) {
+      teamsContainer.innerHTML = '';
+
+      if (!approvedTeams.length) {
+        teamsContainer.innerHTML = `
+          <div class="empty-state">
+            No teams are currently marked <strong>Approved</strong>. Once teams are accepted in the admin portal, they will appear here automatically.
+          </div>
+        `;
+        return;
+      }
+
+      const divisionsOrder = ['10UB','10UG','12UB','12UG','14UB','14UG'];
+
+      const divisionsToRender = filterDivision
+        ? [filterDivision]
+        : divisionsOrder;
+
+      let anyOutput = false;
+
+      divisionsToRender.forEach(code => {
+        const teamsForDiv = approvedTeams.filter(t => t.division === code);
+        if (!teamsForDiv.length) return;
+
+        anyOutput = true;
+
+        const section = document.createElement('section');
+        section.className = 'division-section';
+
+        const header = document.createElement('div');
+        header.className = 'division-header';
+
+        const title = document.createElement('div');
+        title.className = 'division-title';
+        title.textContent = DIVISION_LABELS[code] || code;
+
+        const subtitle = document.createElement('div');
+        subtitle.className = 'division-subtitle';
+        subtitle.textContent = `${teamsForDiv.length} approved team${teamsForDiv.length !== 1 ? 's' : ''}`;
+
+        header.appendChild(title);
+        header.appendChild(subtitle);
+
+        const grid = document.createElement('div');
+        grid.className = 'teams-grid';
+
+        teamsForDiv.forEach(team => {
+          const card = document.createElement('article');
+          card.className = 'team-card';
+
+          const main = document.createElement('div');
+          main.className = 'team-main';
+
+          const nameRow = document.createElement('div');
+          nameRow.className = 'team-name-row';
+
+          const name = document.createElement('div');
+          name.className = 'team-name';
+          name.textContent = team.teamName || 'Team';
+
+          const region = document.createElement('div');
+          region.className = 'team-region';
+          region.textContent = team.regionNumber ? `Region ${team.regionNumber}` : '';
+
+          nameRow.appendChild(name);
+          nameRow.appendChild(region);
+
+          const location = document.createElement('div');
+          location.className = 'team-location';
+          const city = team.city || '';
+          const state = team.state || '';
+          location.textContent = city || state ? `${city}${city && state ? ', ' : ''}${state}` : '';
+
+          const coach = document.createElement('div');
+          coach.className = 'team-coach';
+          coach.textContent = team.coachName ? `Coach: ${team.coachName}` : '';
+
+          const chipRow = document.createElement('div');
+          chipRow.className = 'team-chip-row';
+
+          const chipDiv = document.createElement('span');
+          chipDiv.className = 'team-chip';
+          chipDiv.textContent = DIVISION_LABELS[team.division] || team.division || 'Division';
+
+          if (team.coachEmail) {
+            const chipEmail = document.createElement('span');
+            chipEmail.className = 'team-chip';
+            chipEmail.textContent = team.coachEmail;
+            chipRow.appendChild(chipEmail);
+          }
+
+          chipRow.appendChild(chipDiv);
+
+          main.appendChild(nameRow);
+          if (location.textContent) main.appendChild(location);
+          if (coach.textContent) main.appendChild(coach);
+          main.appendChild(chipRow);
+
+          card.appendChild(main);
+          grid.appendChild(card);
+        });
+
+        section.appendChild(header);
+        section.appendChild(grid);
+        teamsContainer.appendChild(section);
+      });
+
+      if (!anyOutput) {
+        teamsContainer.innerHTML = `
+          <div class="empty-state">
+            No approved teams found for this division yet. Try switching to <strong>All Divisions</strong> or check back once the tournament committee has accepted more teams.
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTeams);
+  </script>
 </body>
 </html>
