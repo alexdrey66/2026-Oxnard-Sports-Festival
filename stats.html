@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OSF 2026 – Standings & Stats</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary:#004b8d;
+      --accent:#d62828;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
+      color:var(--text);
+    }
+    .page{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+    h1{
+      margin:0 0 4px;
+      font-size:24px;
+      letter-spacing:0.03em;
+    }
+    .subtitle{
+      margin:0 0 12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(37,99,235,0.07);
+      color:#1d4ed8;
+      font-size:12px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      box-shadow:0 16px 36px rgba(15,23,42,0.15);
+      border:1px solid rgba(148,163,184,0.35);
+      padding:14px 12px 14px;
+      margin-bottom:18px;
+    }
+    .division-title{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+      margin-top:4px;
+    }
+    th,td{
+      border:1px solid #e5e7eb;
+      padding:5px 6px;
+      text-align:center;
+    }
+    th{
+      background:#f3f4f6;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:#6b7280;
+    }
+    td:first-child{text-align:left;}
+    .pool-title{
+      margin:8px 0 4px;
+      font-size:13px;
+      font-weight:600;
+    }
+    .empty{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="badge">OSF 2026 • Live Standings</div>
+  <h1>Standings & Stats</h1>
+  <p class="subtitle">Points: Win 6 • Tie 3 • Loss 0 • Shutout +1 • Goals +1 (max 3 per game).</p>
+
+  <div id="statsRoot"></div>
+  <div id="error" class="empty" style="display:none;"></div>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
+
+  const statsRoot = document.getElementById('statsRoot');
+  const errorBox = document.getElementById('error');
+
+  function divisionLabel(code){
+    return {
+      '10UB':'10U Boys','10UG':'10U Girls',
+      '12UB':'12U Boys','12UG':'12U Girls',
+      '14UB':'14U Boys','14UG':'14U Girls'
+    }[code] || code || '';
+  }
+
+  function getTeamById(teams, id){
+    id = String(id);
+    return teams.find(t => String(t.id) === id) || null;
+  }
+
+  function getPoolForTeam(pools, division, teamId){
+    teamId = String(teamId);
+    return pools.find(p => p.division === division && (p.teamIds || []).map(String).includes(teamId)) || null;
+  }
+
+  async function loadData(){
+    try{
+      const [teamsRes, stateRes] = await Promise.all([
+        fetch(API_URL),
+        fetch(API_URL + '?entity=state')
+      ]);
+
+      const teams = await teamsRes.json();
+      const state = await stateRes.json();
+
+      renderStats(teams, state);
+    }catch(err){
+      console.error(err);
+      errorBox.textContent = 'Unable to load standings at the moment. Please try again later.';
+      errorBox.style.display = 'block';
+    }
+  }
+
+  function renderStats(teams, state){
+    statsRoot.innerHTML = '';
+    if (!state || !Array.isArray(state.schedules) || !state.schedules.length){
+      statsRoot.innerHTML = '<div class="empty">Standings will appear once games and scores are entered.</div>';
+      return;
+    }
+
+    const schedules = state.schedules;
+    const pools = state.pools || [];
+    const scores = state.scores || {};
+
+    schedules.forEach(sched => {
+      const division = sched.division;
+      const games = (sched.games || []).filter(g => g.stage === 'pool');
+
+      if (!games.length){
+        return;
+      }
+
+      const card = document.createElement('section');
+      card.className = 'card';
+
+      const h = document.createElement('h2');
+      h.className = 'division-title';
+      h.textContent = divisionLabel(division);
+      card.appendChild(h);
+
+      // build stats
+      const stats = {};
+
+      function ensureTeam(id){
+        id = String(id);
+        if (!stats[id]){
+          const t = getTeamById(teams, id) || {};
+          stats[id] = {
+            id,
+            name:t.teamName || 'Team',
+            played:0,w:0,d:0,l:0,gf:0,ga:0,pts:0
+          };
+        }
+        return stats[id];
+      }
+
+      games.forEach(g => {
+        const r = scores[g.id];
+        if (!r) return;
+        const hs = Number(r.home);
+        const as = Number(r.away);
+        if (isNaN(hs) || isNaN(as)) return;
+
+        const home = ensureTeam(g.homeId);
+        const away = ensureTeam(g.awayId);
+
+        home.played++; away.played++;
+        home.gf += hs; home.ga += as;
+        away.gf += as; away.ga += hs;
+
+        if (hs > as){ home.w++; away.l++; home.pts += 6; }
+        else if (hs < as){ away.w++; home.l++; away.pts += 6; }
+        else { home.d++; away.d++; home.pts += 3; away.pts += 3; }
+
+        if (as === 0 && hs > 0) home.pts += 1;
+        if (hs === 0 && as > 0) away.pts += 1;
+
+        home.pts += Math.min(hs,3);
+        away.pts += Math.min(as,3);
+      });
+
+      const rows = Object.values(stats);
+      if (!rows.length){
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'No scores entered yet.';
+        card.appendChild(empty);
+        statsRoot.appendChild(card);
+        return;
+      }
+
+      const byPool = {};
+      rows.forEach(r => {
+        const pool = getPoolForTeam(pools, division, r.id);
+        const key = pool ? pool.name : 'Unassigned';
+        if (!byPool[key]) byPool[key] = [];
+        byPool[key].push(r);
+      });
+
+      Object.keys(byPool).forEach(poolName => {
+        const list = byPool[poolName].slice().sort((a,b) =>
+          b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga)
+        );
+
+        const pt = document.createElement('div');
+        pt.className = 'pool-title';
+        pt.textContent = `Pool ${poolName}`;
+        card.appendChild(pt);
+
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>GP</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GF</th>
+              <th>GA</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+        `;
+        const tbody = document.createElement('tbody');
+
+        list.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${r.name}</td>
+            <td>${r.played}</td>
+            <td>${r.w}</td>
+            <td>${r.d}</td>
+            <td>${r.l}</td>
+            <td>${r.gf}</td>
+            <td>${r.ga}</td>
+            <td>${r.pts}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        card.appendChild(table);
+      });
+
+      statsRoot.appendChild(card);
+    });
+  }
+
+  loadData();
+</script>
+</body>
+</html>
