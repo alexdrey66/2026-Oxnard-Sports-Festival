@@ -751,30 +751,35 @@
       });
     }
 
-    async function loadData() {
-      try {
-        const [teamsRes, stateRes] = await Promise.all([
-          fetch(API_URL),
-          fetch(API_URL + '?entity=state')
-        ]);
+    
+async function loadData() {
+  try {
+    // cache-buster so we always get fresh data
+    const ts = Date.now();
 
-        allTeams = await teamsRes.json();
-        const stateJson = await stateRes.json();
-        adminState = normalizeState(stateJson);
+    const [teamsRes, stateRes] = await Promise.all([
+      fetch(API_URL + '?t=' + ts, { cache: 'no-store' }),
+      fetch(API_URL + '?entity=state&t=' + ts, { cache: 'no-store' })
+    ]);
 
-        renderStandings('');
-      } catch (err) {
-        console.error(err);
-        statsContainer.innerHTML = `
-          <div class="block">
-            <h2>Unable to load standings</h2>
-            <p class="empty-message">
-              Please refresh the page. If this continues, ask tournament staff to verify the admin portal and spreadsheet.
-            </p>
-          </div>
-        `;
-      }
-    }
+    allTeams = await teamsRes.json();
+    const stateJson = await stateRes.json();
+    adminState = normalizeState(stateJson);
+
+    renderStandings('');
+  } catch (err) {
+    console.error(err);
+    statsContainer.innerHTML = `
+      <div class="block">
+        <h2>Unable to load standings</h2>
+        <p class="empty-message">
+          Please refresh the page. If this continues, ask tournament staff to verify the admin portal and spreadsheet.
+        </p>
+      </div>
+    `;
+  }
+}
+
 
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
