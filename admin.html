@@ -713,6 +713,9 @@
   const toastEl = document.getElementById('toast');
   const saveStateBtn = document.getElementById('saveStateBtn');
   let toastTimer = null;
+saveStateBtn.addEventListener('click', () => {
+  saveStateToApi(true);
+});
 
   const authGate = document.getElementById('authGate');
   const adminMain = document.getElementById('adminMain');
@@ -1760,12 +1763,13 @@ meta.textContent = metaText;
         homeInput.min='0';
         const sData=adminState.scores[g.id]||{};
         homeInput.value=(sData.home!=null)?sData.home:'';
-        homeInput.addEventListener('change',()=>{
-          const val=homeInput.value===''?null:Number(homeInput.value);
-          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
-          adminState.scores[g.id].home=val;
-          saveStateToApi(false);
-        });
+      homeInput.addEventListener('change',()=>{
+  const val=homeInput.value===''?null:Number(homeInput.value);
+  if(!adminState.scores[g.id]) adminState.scores[g.id]={};
+  adminState.scores[g.id].home=val;
+  saveScoresOnly();
+});
+
         s1.appendChild(homeInput);
 
         const s2=document.createElement('div');
@@ -1774,12 +1778,12 @@ meta.textContent = metaText;
         awayInput.type='number';
         awayInput.min='0';
         awayInput.value=(sData.away!=null)?sData.away:'';
-        awayInput.addEventListener('change',()=>{
-          const val=awayInput.value===''?null:Number(awayInput.value);
-          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
-          adminState.scores[g.id].away=val;
-          saveStateToApi(false);
-        });
+awayInput.addEventListener('change',()=>{
+  const val=awayInput.value===''?null:Number(awayInput.value);
+  if(!adminState.scores[g.id]) adminState.scores[g.id]={};
+  adminState.scores[g.id].away=val;
+  saveScoresOnly();
+});
         s2.appendChild(awayInput);
 
         const s3=document.createElement('div');
@@ -1787,12 +1791,13 @@ meta.textContent = metaText;
         const clearBtn=document.createElement('button');
         clearBtn.className='btn btn-ghost btn-small';
         clearBtn.textContent='Clear';
-        clearBtn.addEventListener('click',()=>{
-          delete adminState.scores[g.id];
-          homeInput.value='';
-          awayInput.value='';
-          saveStateToApi(false);
-        });
+clearBtn.addEventListener('click',()=>{
+  delete adminState.scores[g.id];
+  homeInput.value='';
+  awayInput.value='';
+  saveScoresOnly();
+});
+
         s3.appendChild(clearBtn);
 
         scoreRow.appendChild(s1);scoreRow.appendChild(s2);scoreRow.appendChild(s3);
