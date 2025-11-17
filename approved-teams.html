@@ -1,303 +1,247 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>OSF 2026 – Approved Teams</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Approved Teams – OSF 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root {
-      --primary: #004b8d;
-      --accent:  #d62828;
-      --bg:      #f3f4f6;
-      --card-bg: #ffffff;
-      --text:    #111827;
-      --muted:   #6b7280;
-      --border:  #e5e7eb;
-      --radius-lg: 16px;
-      --radius-md: 999px;
+    :root{
+      --primary:#004b8d;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, #dbeafe 0, #f9fafb 40%, #e5e7eb 100%);
-      color: var(--text);
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
+      color:var(--text);
     }
-
-    .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
+    .nav{
+      background:#000;
+      color:#fff;
+      padding:10px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
     }
-
-    .header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 18px;
+    .nav-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      font-weight:600;
     }
-
-    .title-block { max-width: 640px; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(37, 99, 235, 0.07);
-      color: #1d4ed8;
-      font-size: 12px;
-      font-weight: 600;
-      gap: 6px;
-      margin-bottom: 8px;
+    .nav-links{
+      display:flex;
+      gap:18px;
+      font-size:13px;
     }
-
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.28);
+    .nav-links a{
+      color:#e5e7eb;
+      text-decoration:none;
+      padding:4px 0;
     }
+    .nav-links a:hover{color:#fff;}
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-      letter-spacing: 0.03em;
+    .page{
+      max-width:960px;
+      margin:0 auto;
+      padding:28px 16px 40px;
     }
-
-    .subtitle {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 18px 18px 14px;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .pill-filter {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      padding: 5px 11px;
-      font-size: 12px;
-      background: #f9fafb;
-      color: #374151;
-      cursor: pointer;
-    }
-
-    .pill-filter.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-top: 4px;
-    }
-
-    thead {
-      background: #f3f4f6;
-    }
-
-    th, td {
-      padding: 8px 10px;
-      text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-      vertical-align: middle;
-    }
-
-    th {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #6b7280;
-    }
-
-    tbody tr:hover {
-      background: #f9fafb;
-    }
-
-    .tag-division {
-      display:inline-block;
-      border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 11px;
-      background: rgba(37,99,235,0.08);
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(37,99,235,0.07);
       color:#1d4ed8;
-      font-weight: 600;
+      font-size:12px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    h1{
+      margin:0 0 4px;
+      font-size:26px;
+      letter-spacing:0.03em;
+    }
+    .subtitle{
+      margin:0 0 18px;
+      font-size:14px;
+      color:var(--muted);
     }
 
-    #approvedEmptyNote {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
+    .division-card{
+      background:var(--card);
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.5);
+      box-shadow:0 16px 36px rgba(15,23,42,0.18);
+      padding:14px 14px 12px;
+      margin-bottom:18px;
     }
-
-    @media (max-width: 640px) {
-      .card { padding: 14px 10px 10px; }
-      th:nth-child(5), td:nth-child(5) { display:none; }
+    .division-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:6px;
     }
+    .division-title h2{
+      margin:0;
+      font-size:18px;
+    }
+    .count-badge{
+      font-size:11px;
+      background:#eff6ff;
+      color:#1d4ed8;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid #bfdbfe;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      margin-top:6px;
+    }
+    th,td{
+      padding:6px 8px;
+      border-bottom:1px solid #e5e7eb;
+      text-align:left;
+    }
+    th{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      color:#6b7280;
+      background:#f9fafb;
+    }
+    tr:last-child td{border-bottom:none;}
+    .muted{color:var(--muted); font-size:13px; margin-top:10px;}
   </style>
 </head>
 <body>
-<div class="page">
-  <header class="header">
-    <div class="title-block">
-      <div class="badge">
-        <span class="badge-dot"></span>
-        AYSO 46th Annual Oxnard Sports Festival
-        <span>• Approved Teams</span>
-      </div>
-      <h1>Approved Tournament Teams</h1>
-      <p class="subtitle">
-        Teams listed here have been fully accepted by the Tournament Committee and cleared for the 2026 Oxnard Sports Festival.
-      </p>
-    </div>
-  </header>
+<header class="nav">
+  <div class="nav-left">
+    <span>2026 Oxnard Sports Festival</span>
+  </div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="team-registration.html">Register Your Team</a>
+    <a href="approved-teams.html">Approved Teams</a>
+    <a href="#">Sign Up To Referee</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
 
-  <section class="card">
-    <div class="filters" id="divisionFilters">
-      <button class="pill-filter active" data-div="ALL">All Divisions</button>
-      <button class="pill-filter" data-div="10UB">10U Boys</button>
-      <button class="pill-filter" data-div="10UG">10U Girls</button>
-      <button class="pill-filter" data-div="12UB">12U Boys</button>
-      <button class="pill-filter" data-div="12UG">12U Girls</button>
-      <button class="pill-filter" data-div="14UB">14U Boys</button>
-      <button class="pill-filter" data-div="14UG">14U Girls</button>
-    </div>
+<main class="page">
+  <div class="badge">OSF 2026 • Accepted Teams</div>
+  <h1>Approved Teams</h1>
+  <p class="subtitle">
+    Teams listed here have been fully accepted into the tournament. Pending teams will appear once all paperwork and fees are verified.
+  </p>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Division</th>
-        <th>Region</th>
-        <th>Team</th>
-        <th>Coach</th>
-        <th>City / State</th>
-      </tr>
-      </thead>
-      <tbody id="approvedTeamsBody"></tbody>
-    </table>
-
-    <div id="approvedEmptyNote">Loading approved teams…</div>
-  </section>
-</div>
+  <div id="approvedRoot"></div>
+  <div id="loading" class="muted">Loading approved teams…</div>
+  <div id="error" class="muted" style="display:none;"></div>
+</main>
 
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
-  let teams = [];
-  let approvedFilterDivision = 'ALL';
+  const approvedRoot = document.getElementById('approvedRoot');
+  const loadingEl = document.getElementById('loading');
+  const errorEl = document.getElementById('error');
 
-  function divisionLabel(code) {
-    return {
-      '10UB': '10U Boys', '10UG': '10U Girls',
-      '12UB': '12U Boys', '12UG': '12U Girls',
-      '14UB': '14U Boys', '14UG': '14U Girls'
-    }[code] || code || '';
+  const DIVISIONS = ['10UB','10UG','12UB','12UG','14UB','14UG'];
+  const DIVISION_LABELS = {
+    '10UB':'10U Boys',
+    '10UG':'10U Girls',
+    '12UB':'12U Boys',
+    '12UG':'12U Girls',
+    '14UB':'14U Boys',
+    '14UG':'14U Girls'
+  };
+
+  async function loadApprovedTeams(){
+    try{
+      const res = await fetch(API_URL);
+      const teams = await res.json();
+
+      loadingEl.style.display = 'none';
+      renderApproved(teams);
+    }catch(err){
+      console.error(err);
+      loadingEl.style.display = 'none';
+      errorEl.textContent = 'Unable to load teams right now. Please try again later.';
+      errorEl.style.display = 'block';
+    }
   }
 
-  const approvedBody = document.getElementById('approvedTeamsBody');
-  const approvedEmptyNote = document.getElementById('approvedEmptyNote');
-  const divisionFiltersContainer = document.getElementById('divisionFilters');
+  function renderApproved(teams){
+    approvedRoot.innerHTML = '';
+    const approved = teams.filter(t => String(t.status).toLowerCase() === 'approved');
 
-  divisionFiltersContainer.addEventListener('click', (e) => {
-    const btn = e.target.closest('.pill-filter');
-    if (!btn) return;
-    approvedFilterDivision = btn.dataset.div;
-    divisionFiltersContainer.querySelectorAll('.pill-filter').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderApprovedTeams();
-  });
-
-  function renderApprovedTeams() {
-    approvedBody.innerHTML = '';
-
-    const approvedTeams = teams
-      .filter(t => t.status === 'approved')
-      .filter(t => approvedFilterDivision === 'ALL' || t.division === approvedFilterDivision)
-      .sort((a, b) => {
-        if (a.division === b.division) {
-          return (a.teamName || '').localeCompare(b.teamName || '');
-        }
-        return (a.division || '').localeCompare(b.division || '');
-      });
-
-    if (approvedTeams.length === 0) {
-      approvedEmptyNote.style.display = 'block';
-      approvedEmptyNote.textContent = 'No approved teams to display yet.';
+    if (!approved.length){
+      approvedRoot.innerHTML = '<p class="muted">No approved teams are listed yet. Please check back soon.</p>';
       return;
-    } else {
-      approvedEmptyNote.style.display = 'none';
     }
 
-    approvedTeams.forEach(team => {
-      const tr = document.createElement('tr');
+    DIVISIONS.forEach(div => {
+      const list = approved.filter(t => t.division === div);
+      if (!list.length) return;
 
-      const tdDiv = document.createElement('td');
-      const divTag = document.createElement('span');
-      divTag.className = 'tag-division';
-      divTag.textContent = divisionLabel(team.division);
-      tdDiv.appendChild(divTag);
+      const card = document.createElement('section');
+      card.className = 'division-card';
 
-      const tdRegion = document.createElement('td');
-      tdRegion.textContent = team.regionNumber || '';
+      const header = document.createElement('div');
+      header.className = 'division-title';
 
-      const tdTeam = document.createElement('td');
-      tdTeam.textContent = team.teamName || '';
+      const title = document.createElement('h2');
+      title.textContent = DIVISION_LABELS[div] || div;
 
-      const tdCoach = document.createElement('td');
-      tdCoach.textContent = team.coachName || '';
+      const count = document.createElement('span');
+      count.className = 'count-badge';
+      count.textContent = `${list.length} team${list.length === 1 ? '' : 's'}`;
 
-      const tdCity = document.createElement('td');
-      const city = team.city || '';
-      const state = team.state || '';
-      tdCity.textContent = city && state ? `${city}, ${state}` : city || state || '';
+      header.appendChild(title);
+      header.appendChild(count);
+      card.appendChild(header);
 
-      tr.appendChild(tdDiv);
-      tr.appendChild(tdRegion);
-      tr.appendChild(tdTeam);
-      tr.appendChild(tdCoach);
-      tr.appendChild(tdCity);
+      const table = document.createElement('table');
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>Region</th>
+            <th>City</th>
+            <th>Coach</th>
+          </tr>
+        </thead>
+      `;
+      const tbody = document.createElement('tbody');
 
-      approvedBody.appendChild(tr);
+      list.sort((a,b) => String(a.teamName).localeCompare(String(b.teamName))).forEach(team => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${team.teamName || ''}</td>
+          <td>${team.regionNumber || ''}</td>
+          <td>${team.city || ''}, ${team.state || ''}</td>
+          <td>${team.coachName || ''}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      card.appendChild(table);
+      approvedRoot.appendChild(card);
     });
   }
 
-  async function loadTeamsFromApi() {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      teams = Array.isArray(data) ? data : [];
-      renderApprovedTeams();
-    } catch (err) {
-      console.error(err);
-      approvedEmptyNote.style.display = 'block';
-      approvedEmptyNote.textContent = 'Unable to load teams. Please try again later.';
-    }
-  }
-
-  loadTeamsFromApi();
+  loadApprovedTeams();
 </script>
 </body>
 </html>
