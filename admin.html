@@ -629,13 +629,20 @@
           <div id="dayConfigsList" style="margin-top:10px;"></div>
         </div>
 
-        <div class="card">
-          <div class="card-header">Generate Pool-Play Schedule</div>
-          <div class="card-sub">
-            Uses pools and day configs. Tries to avoid back-to-back games and duplicate time slots.
-          </div>
-          <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
-        </div>
+<div class="card">
+  <div class="card-header">Generate Pool-Play Schedule</div>
+  <div class="card-sub">
+    Uses pools and day configs. Tries to avoid back-to-back games and duplicate time slots.
+  </div>
+
+  <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px;">
+    <input type="checkbox" id="allowCrossPool" style="width:auto;height:auto;">
+    Allow <strong>cross-pool</strong> games when needed so each team reaches 3 matches
+  </label>
+
+  <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
+</div>
+
       </div>
 
       <div>
