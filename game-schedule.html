@@ -13,6 +13,7 @@
       --border:#e5e7eb;
       --text:#111827;
       --muted:#6b7280;
+      --grid-border:#111827;
     }
     *{box-sizing:border-box;}
     body{
@@ -92,80 +93,101 @@
       justify-content:space-between;
       align-items:baseline;
       gap:8px;
-      margin-bottom:8px;
+      margin-bottom:10px;
       flex-wrap:wrap;
     }
     .section-title{
-      font-size:15px;
-      font-weight:600;
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
     }
     .section-sub{
       font-size:12px;
       color:var(--muted);
     }
 
-    .day-block{
-      margin-bottom:14px;
-      border-radius:10px;
-      border:1px solid #e5e7eb;
-      background:#f9fafb;
-      overflow:hidden;
-    }
-    .day-header{
-      padding:6px 8px;
-      background:#e5f0ff;
-      border-bottom:1px solid #d1d5db;
-      font-size:13px;
-      font-weight:600;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .day-header span.sub{
+    .summary-tag{
       font-size:11px;
-      color:#4b5563;
-      font-weight:400;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-    }
-    th,td{
-      padding:5px 6px;
-      text-align:left;
-      border-bottom:1px solid #e5e7eb;
-    }
-    th{
-      background:#f3f4f6;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.06em;
       color:#6b7280;
     }
-    tr:nth-child(even) td{
-      background:#f9fafb;
+
+    .grid-block{
+      border:3px solid var(--grid-border);
+      border-radius:6px;
+      margin-bottom:16px;
+      background:#fff;
+      overflow:hidden;
     }
 
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      padding:2px 7px;
-      border-radius:999px;
-      background:#e5e7eb;
+    .grid-header-main{
+      padding:6px 10px;
+      border-bottom:3px solid var(--grid-border);
+      text-align:center;
+      font-size:18px;
+      font-weight:700;
+      text-transform:uppercase;
+    }
+
+    .grid-sub-row{
+      display:flex;
+      border-bottom:2px solid var(--grid-border);
+      font-size:13px;
+      font-weight:600;
+      text-align:center;
+    }
+    .grid-sub-cell{
+      flex:1;
+      padding:4px 6px;
+      border-right:2px solid var(--grid-border);
+    }
+    .grid-sub-cell:last-child{
+      border-right:none;
+    }
+
+    .day-label{
+      font-weight:700;
+    }
+
+    .time-field-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+    }
+    .time-field-table th,
+    .time-field-table td{
+      border:2px solid var(--grid-border);
+      padding:4px 6px;
+      text-align:center;
+    }
+    .time-field-table th{
+      background:#f3f4f6;
       font-size:11px;
-      margin-right:4px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
     }
-    .tag.blue{
-      background:#dbeafe;
-      color:#1d4ed8;
+    .time-col{
+      width:72px;
+      font-weight:600;
     }
-    .tag.red{
-      background:#fee2e2;
-      color:#b91c1c;
+
+    .slot{
+      font-weight:600;
+    }
+    .slot small{
+      display:block;
+      font-size:10px;
+      font-weight:500;
+      color:#4b5563;
+      margin-top:2px;
+    }
+
+    .row-alt td{
+      background:#e5e7eb;
+    }
+    .highlight td{
+      background:#fff9c2;
     }
 
     .empty{
@@ -173,31 +195,53 @@
       color:#9ca3af;
       padding:4px 2px;
     }
-
     .loading{
       font-size:13px;
       color:#6b7280;
     }
-
     .error{
       font-size:13px;
       color:#b91c1c;
+    }
+
+    .pool-summary{
+      margin-bottom:10px;
+      font-size:12px;
+    }
+    .pool-table{
+      border-collapse:collapse;
+      width:100%;
+      margin-top:4px;
+      font-size:12px;
+    }
+    .pool-table th,
+    .pool-table td{
+      border:1px solid #d1d5db;
+      padding:3px 4px;
+      text-align:left;
+    }
+    .pool-table th{
+      background:#f3f4f6;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:#6b7280;
     }
   </style>
 </head>
 <body>
 <div class="page">
   <div class="badge">OSF 2026 • Game Schedule</div>
-  <h1>Field Schedule</h1>
+  <h1>Game Schedule</h1>
   <p class="subtitle">
-    View by division or see all games across all fields and divisions.
+    View by division in a field/time grid, or see all divisions combined.
   </p>
 
   <!-- Division Tabs -->
   <div class="tabs" id="divisionTabs">
     <button class="tab-btn active" data-div="all">
       All Divisions
-      <span class="small">By field &amp; time</span>
+      <span class="small">Field &amp; time</span>
     </button>
     <button class="tab-btn" data-div="10UB">10U Boys</button>
     <button class="tab-btn" data-div="10UG">10U Girls</button>
@@ -207,19 +251,19 @@
     <button class="tab-btn" data-div="14UG">14U Girls</button>
   </div>
 
-  <div class="card" id="scheduleCard">
+  <div class="card">
     <div class="section-header">
       <div>
-        <div class="section-title" id="viewTitle">All Divisions • By Field & Time</div>
-        <div class="section-sub" id="viewSubtitle">
-          Includes pool-play and knockout games for every division.
+        <div id="viewTitle" class="section-title">All Divisions</div>
+        <div id="viewSubtitle" class="section-sub">
+          All pool play & knockout games, grouped by day with a field/time grid.
         </div>
       </div>
-      <div id="summaryTag" style="font-size:11px;color:#6b7280;"></div>
+      <div id="summaryTag" class="summary-tag"></div>
     </div>
 
-    <div id="scheduleContent" class="schedule-content">
-      <div class="loading">Loading schedule...</div>
+    <div id="scheduleContent">
+      <div class="loading">Loading schedule…</div>
     </div>
   </div>
 </div>
@@ -237,7 +281,7 @@
   };
 
   let teams = [];
-  let adminState = { pools: [], schedules: [] };
+  let adminState = { pools: [], schedules: [], manualTeams: [] };
   let dayOrder = [];
   let activeDivision = 'all';
 
@@ -246,24 +290,25 @@
   const viewSubtitle = document.getElementById('viewSubtitle');
   const summaryTag = document.getElementById('summaryTag');
 
-  /* ===== Helpers ===== */
+  /* ========== Helpers ========== */
 
-  function normalizeState(state) {
-    if (!state || typeof state !== 'object') state = {};
+  function normalizeState(state){
+    if(!state || typeof state !== 'object') state = {};
     state.pools = Array.isArray(state.pools) ? state.pools : [];
     state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
+    state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
     return state;
   }
 
-  function buildDayOrder() {
+  function buildDayOrder(){
     const seen = new Set();
     const order = [];
-    adminState.schedules.forEach(s => {
-      const allGames = []
+    adminState.schedules.forEach(s=>{
+      const games = []
         .concat(s.games || [])
         .concat(s.knockouts || []);
-      allGames.forEach(g => {
-        if (g.date && !seen.has(g.date)) {
+      games.forEach(g=>{
+        if(g.date && !seen.has(g.date)){
           seen.add(g.date);
           order.push(g.date);
         }
@@ -271,360 +316,346 @@
     });
     dayOrder = order;
   }
-
-  function dayIndex(dateLabel) {
-    const idx = dayOrder.indexOf(dateLabel);
+  function dayIndex(label){
+    const idx = dayOrder.indexOf(label);
     return idx === -1 ? 999 : idx;
   }
 
-  function timeToMinutes(t) {
-    if (!t) return 9999;
+  function timeToMinutes(t){
+    if(!t) return 9999;
     const s = String(t).trim().toLowerCase();
     const m = s.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/);
-    if (!m) return 9999;
-    let hour = parseInt(m[1], 10);
-    let min = m[2] ? parseInt(m[2], 10) : 0;
+    if(!m) return 9999;
+    let hour = parseInt(m[1],10);
+    let min  = m[2] ? parseInt(m[2],10) : 0;
     const ampm = m[3];
-    if (ampm === 'pm' && hour < 12) hour += 12;
-    if (ampm === 'am' && hour === 12) hour = 0;
-    return hour * 60 + min;
+    if(ampm === 'pm' && hour < 12) hour += 12;
+    if(ampm === 'am' && hour === 12) hour = 0;
+    return hour*60 + min;
   }
 
-  function getTeamMap() {
+  function getTeamMap(){
     const map = {};
-    teams.forEach(t => {
-      if (t && t.id) map[String(t.id)] = t;
+    teams.forEach(t=>{
+      if(t && t.id) map[String(t.id)] = t;
     });
-    if (adminState.manualTeams && Array.isArray(adminState.manualTeams)) {
-      adminState.manualTeams.forEach(m => {
-        if (m && m.id) map[String(m.id)] = m;
-      });
-    }
-    return map;
-  }
-
-  function getPoolMap() {
-    const map = {};
-    adminState.pools.forEach(p => {
-      if (p && p.id) map[p.id] = p;
+    adminState.manualTeams.forEach(m=>{
+      if(m && m.id) map[String(m.id)] = m;
     });
     return map;
   }
 
-  function getScheduleForDivision(div) {
-    const found = adminState.schedules.find(s => s.division === div);
-    if (!found) return { division: div, games: [], knockouts: [] };
+  function getPoolMap(){
+    const map = {};
+    adminState.pools.forEach(p=>{
+      if(p && p.id) map[p.id] = p;
+    });
+    return map;
+  }
+
+  function getScheduleForDivision(div){
+    const s = adminState.schedules.find(x=>x.division === div);
+    if(!s) return { division:div, games:[], knockouts:[] };
     return {
-      division: div,
-      games: Array.isArray(found.games) ? found.games : [],
-      knockouts: Array.isArray(found.knockouts) ? found.knockouts : []
+      division:div,
+      games:Array.isArray(s.games)?s.games:[],
+      knockouts:Array.isArray(s.knockouts)?s.knockouts:[]
     };
   }
 
-  function formatTeamName(team) {
-    if (!team) return 'TBD';
+  function formatTeamName(team){
+    if(!team) return 'TBD';
     return team.teamName || 'Team';
   }
 
-  /* ===== Rendering: Division View ===== */
+  /* ========== Rendering: Division Block View ========== */
 
-  function renderDivisionView(division) {
+  function renderDivisionView(division){
     const sched = getScheduleForDivision(division);
-    const teamMap = getTeamMap();
-    const poolMap = getPoolMap();
-
     const games = (sched.games || []).slice();
     const knockouts = (sched.knockouts || []).slice();
-
-    if (!games.length && !knockouts.length) {
-      scheduleContent.innerHTML =
-        '<div class="empty">No games have been scheduled yet for this division.</div>';
-      viewTitle.textContent = `${DIVISION_LABELS[division] || division}`;
-      viewSubtitle.textContent = 'Pool-play and knockout games will appear here once scheduled.';
-      summaryTag.textContent = '';
-      return;
-    }
-
-    // sort pool games by day, time, field
-    games.sort((a,b) => {
-      const da = dayIndex(a.date || ''), db = dayIndex(b.date || '');
-      if (da !== db) return da - db;
-      const ta = timeToMinutes(a.time), tb = timeToMinutes(b.time);
-      if (ta !== tb) return ta - tb;
-      return (a.field || '').localeCompare(b.field || '');
-    });
-
-    // sort knockouts similarly
-    knockouts.sort((a,b) => {
-      const da = dayIndex(a.date || ''), db = dayIndex(b.date || '');
-      if (da !== db) return da - db;
-      const ta = timeToMinutes(a.time), tb = timeToMinutes(b.time);
-      if (ta !== tb) return ta - tb;
-      return (a.field || '').localeCompare(b.field || '');
-    });
-
-    // group by day
-    const byDayPool = {};
-    games.forEach(g => {
-      const d = g.date || 'TBD';
-      if (!byDayPool[d]) byDayPool[d] = [];
-      byDayPool[d].push(g);
-    });
-    const byDayKO = {};
-    knockouts.forEach(k => {
-      const d = k.date || 'TBD';
-      if (!byDayKO[d]) byDayKO[d] = [];
-      byDayKO[d].push(k);
-    });
-
-    const allDays = new Set([
-      ...Object.keys(byDayPool),
-      ...Object.keys(byDayKO)
-    ]);
-    const dayArray = Array.from(allDays)
-      .sort((a,b) => dayIndex(a) - dayIndex(b));
-
-    let html = '';
-
-    dayArray.forEach(day => {
-      const poolGames = byDayPool[day] || [];
-      const koGames = byDayKO[day] || [];
-      const totalForDay = poolGames.length + koGames.length;
-
-      html += `
-        <div class="day-block">
-          <div class="day-header">
-            <div>${day}</div>
-            <span class="sub">${totalForDay} game${totalForDay===1?'':'s'}</span>
-          </div>
-      `;
-
-      if (poolGames.length) {
-        html += `
-          <table>
-            <thead>
-              <tr>
-                <th style="width:80px;">Time</th>
-                <th style="width:80px;">Field</th>
-                <th style="width:80px;">Pool</th>
-                <th>Home</th>
-                <th>Away</th>
-              </tr>
-            </thead>
-            <tbody>
-        `;
-        poolGames.forEach(g => {
-          const poolName = poolMap[g.poolId]?.name || '';
-          const home = teamMap[g.homeId];
-          const away = teamMap[g.awayId];
-          html += `
-            <tr>
-              <td>${g.time || ''}</td>
-              <td>${g.field || ''}</td>
-              <td>${poolName || '-'}</td>
-              <td>${formatTeamName(home)}</td>
-              <td>${formatTeamName(away)}</td>
-            </tr>
-          `;
-        });
-        html += `</tbody></table>`;
-      }
-
-      if (koGames.length) {
-        html += `
-          <table>
-            <thead>
-              <tr>
-                <th style="width:80px;">Time</th>
-                <th style="width:80px;">Field</th>
-                <th style="width:120px;">Match</th>
-                <th>Home</th>
-                <th>Away</th>
-              </tr>
-            </thead>
-            <tbody>
-        `;
-        koGames.forEach(k => {
-          const home = teamMap[k.homeId];
-          const away = teamMap[k.awayId];
-          html += `
-            <tr>
-              <td>${k.time || ''}</td>
-              <td>${k.field || ''}</td>
-              <td>${k.type || 'Knockout'}</td>
-              <td>${formatTeamName(home)}</td>
-              <td>${formatTeamName(away)}</td>
-            </tr>
-          `;
-        });
-        html += `</tbody></table>`;
-      }
-
-      html += `</div>`;
-    });
-
-    scheduleContent.innerHTML = html;
-    viewTitle.textContent = `${DIVISION_LABELS[division] || division}`;
-    viewSubtitle.textContent = 'Pool-play and knockout games for this division.';
-    const totalGames = games.length + knockouts.length;
-    summaryTag.textContent = `${totalGames} total game${totalGames===1?'':'s'}`;
-  }
-
-  /* ===== Rendering: All Divisions Combined ===== */
-
-  function renderCombinedView() {
     const teamMap = getTeamMap();
-    const poolMap = getPoolMap();
 
-    // Build one big list of games: pool + knockout across all divisions
-    const allGames = [];
-
-    adminState.schedules.forEach(s => {
-      const division = s.division;
-      (s.games || []).forEach(g => {
-        allGames.push({
-          kind: 'pool',
-          division,
-          id: g.id,
-          date: g.date,
-          time: g.time,
-          field: g.field,
-          poolId: g.poolId,
-          homeId: g.homeId,
-          awayId: g.awayId
-        });
-      });
-      (s.knockouts || []).forEach(k => {
-        allGames.push({
-          kind: 'ko',
-          division,
-          id: k.id,
-          date: k.date,
-          time: k.time,
-          field: k.field,
-          type: k.type || 'Knockout',
-          homeId: k.homeId,
-          awayId: k.awayId
-        });
-      });
-    });
-
-    if (!allGames.length) {
-      scheduleContent.innerHTML =
-        '<div class="empty">No games have been scheduled yet.</div>';
-      viewTitle.textContent = 'All Divisions • By Field & Time';
-      viewSubtitle.textContent = 'Once schedules are published, all divisions will appear here.';
+    if(!games.length && !knockouts.length){
+      scheduleContent.innerHTML = '<div class="empty">No games scheduled yet for this division.</div>';
+      viewTitle.textContent = DIVISION_LABELS[division] || division;
+      viewSubtitle.textContent = 'Pool play and knockout games will appear once published.';
       summaryTag.textContent = '';
       return;
     }
 
-    allGames.sort((a,b) => {
-      const da = dayIndex(a.date || ''), db = dayIndex(b.date || '');
-      if (da !== db) return da - db;
-      const ta = timeToMinutes(a.time), tb = timeToMinutes(b.time);
-      if (ta !== tb) return ta - tb;
-      const fa = (a.field || '').toLowerCase();
-      const fb = (b.field || '').toLowerCase();
-      if (fa !== fb) return fa.localeCompare(fb);
-      return (a.division || '').localeCompare(b.division || '');
-    });
+    // Combine pool + knockout for grid display
+    const all = games.map(g=>({
+      kind:'pool',
+      division,
+      date:g.date || '',
+      time:g.time || '',
+      field:g.field || '',
+      poolId:g.poolId,
+      homeId:g.homeId,
+      awayId:g.awayId,
+      label:null
+    })).concat(
+      knockouts.map(k=>({
+        kind:'ko',
+        division,
+        date:k.date || '',
+        time:k.time || '',
+        field:k.field || '',
+        poolId:null,
+        homeId:k.homeId,
+        awayId:k.awayId,
+        label:k.type || 'Knockout'
+      }))
+    );
 
     // Group by day
     const byDay = {};
-    allGames.forEach(g => {
+    all.forEach(g=>{
       const d = g.date || 'TBD';
-      if (!byDay[d]) byDay[d] = [];
+      if(!byDay[d]) byDay[d] = [];
       byDay[d].push(g);
     });
 
-    const dayArray = Object.keys(byDay)
-      .sort((a,b) => dayIndex(a) - dayIndex(b));
+    const days = Object.keys(byDay).sort((a,b)=>dayIndex(a)-dayIndex(b));
+
+    const poolMap = getPoolMap();
+    const poolsForDiv = adminState.pools.filter(p=>p.division === division);
 
     let html = '';
-    dayArray.forEach(day => {
+
+    // --- Optional Pool Summary at top (simple table) ---
+    if(poolsForDiv.length){
+      html += '<div class="pool-summary"><strong>Pools</strong><table class="pool-table"><thead><tr><th>Pool</th><th>Teams</th></tr></thead><tbody>';
+      poolsForDiv.forEach(p=>{
+        const teamNames = (p.teamIds || []).map(id=>{
+          const t = getTeamMap()[String(id)];
+          return t ? t.teamName : null;
+        }).filter(Boolean);
+        html += `<tr><td>${p.name}</td><td>${teamNames.join(', ') || '-'}</td></tr>`;
+      });
+      html += '</tbody></table></div>';
+    }
+
+    // --- Day blocks with field/time grid ---
+    days.forEach(day=>{
       const gamesForDay = byDay[day];
 
-      html += `
-        <div class="day-block">
-          <div class="day-header">
-            <div>${day}</div>
-            <span class="sub">${gamesForDay.length} game${gamesForDay.length===1?'':'s'}</span>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th style="width:80px;">Time</th>
-                <th style="width:80px;">Field</th>
-                <th style="width:80px;">Division</th>
-                <th style="width:110px;">Stage</th>
-                <th>Home</th>
-                <th>Away</th>
-                <th style="width:80px;">Pool</th>
-              </tr>
-            </thead>
-            <tbody>
-      `;
-
-      gamesForDay.forEach(g => {
-        const divisionLabel = DIVISION_LABELS[g.division] || g.division || '';
-        const home = teamMap[g.homeId];
-        const away = teamMap[g.awayId];
-        const stageLabel = g.kind === 'pool' ? 'Pool Play' : (g.type || 'Knockout');
-        const poolName = (g.kind === 'pool' && poolMap[g.poolId]) ? poolMap[g.poolId].name : '';
-
-        html += `
-          <tr>
-            <td>${g.time || ''}</td>
-            <td>${g.field || ''}</td>
-            <td>${divisionLabel}</td>
-            <td>${stageLabel}</td>
-            <td>${formatTeamName(home)}</td>
-            <td>${formatTeamName(away)}</td>
-            <td>${poolName || '-'}</td>
-          </tr>
-        `;
+      // Collect unique times & fields
+      const timeSet = new Set();
+      const fieldSet = new Set();
+      gamesForDay.forEach(g=>{
+        if(g.time) timeSet.add(g.time);
+        if(g.field) fieldSet.add(g.field);
       });
+      const times = Array.from(timeSet).sort((a,b)=>timeToMinutes(a)-timeToMinutes(b));
+      const fields = Array.from(fieldSet).sort((a,b)=>a.localeCompare(b));
 
+      if(!times.length || !fields.length){
+        return;
+      }
+
+      html += '<div class="grid-block">';
+      html += `<div class="grid-header-main">${DIVISION_LABELS[division] || division} – Pool Play & Finals</div>`;
       html += `
-            </tbody>
-          </table>
+        <div class="grid-sub-row">
+          <div class="grid-sub-cell day-label">${day}</div>
+          <div class="grid-sub-cell">Field Grid</div>
         </div>
       `;
+
+      html += '<table class="time-field-table"><thead><tr>';
+      html += '<th class="time-col">Time</th>';
+      fields.forEach(f=>{
+        html += `<th>${f}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      times.forEach((time, idx)=>{
+        const rowGames = gamesForDay.filter(g=>g.time === time);
+        const rowClass = (idx % 2 === 1) ? 'row-alt' : '';
+        html += `<tr class="${rowClass}"><td class="time-col">${time}</td>`;
+
+        fields.forEach(field=>{
+          const game = rowGames.find(g=>g.field === field);
+          if(!game){
+            html += '<td></td>';
+          }else{
+            const home = teamMap[game.homeId];
+            const away = teamMap[game.awayId];
+            const label = game.label || '';
+            html += '<td>';
+            html += `<div class="slot">${formatTeamName(home)} v ${formatTeamName(away)}`;
+            if(label){
+              html += `<small>${label}</small>`;
+            }else if(game.kind === 'pool' && game.poolId && poolMap[game.poolId]){
+              html += `<small>Pool ${poolMap[game.poolId].name}</small>`;
+            }
+            html += '</div>';
+            html += '</td>';
+          }
+        });
+
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+    });
+
+    scheduleContent.innerHTML = html || '<div class="empty">No games found for this division.</div>';
+
+    viewTitle.textContent = DIVISION_LABELS[division] || division;
+    viewSubtitle.textContent = 'Block view by field and time. Includes pool play and knockout games.';
+    const totalGames = all.length;
+    summaryTag.textContent = `${totalGames} game${totalGames===1?'':'s'}`;
+  }
+
+  /* ========== Rendering: All Divisions Combined Grid ========== */
+
+  function renderCombinedView(){
+    const teamMap = getTeamMap();
+    const poolMap = getPoolMap();
+
+    const all = [];
+    adminState.schedules.forEach(s=>{
+      const div = s.division;
+      (s.games || []).forEach(g=>{
+        all.push({
+          kind:'pool',
+          division:div,
+          date:g.date || '',
+          time:g.time || '',
+          field:g.field || '',
+          poolId:g.poolId,
+          homeId:g.homeId,
+          awayId:g.awayId,
+          label:null
+        });
+      });
+      (s.knockouts || []).forEach(k=>{
+        all.push({
+          kind:'ko',
+          division:div,
+          date:k.date || '',
+          time:k.time || '',
+          field:k.field || '',
+          poolId:null,
+          homeId:k.homeId,
+          awayId:k.awayId,
+          label:k.type || 'Knockout'
+        });
+      });
+    });
+
+    if(!all.length){
+      scheduleContent.innerHTML = '<div class="empty">No games scheduled yet.</div>';
+      viewTitle.textContent = 'All Divisions';
+      viewSubtitle.textContent = 'Schedule will appear here once games are published.';
+      summaryTag.textContent = '';
+      return;
+    }
+
+    // Group by day
+    const byDay = {};
+    all.forEach(g=>{
+      const d = g.date || 'TBD';
+      if(!byDay[d]) byDay[d] = [];
+      byDay[d].push(g);
+    });
+    const days = Object.keys(byDay).sort((a,b)=>dayIndex(a)-dayIndex(b));
+
+    let html = '';
+
+    days.forEach(day=>{
+      const gamesForDay = byDay[day];
+
+      const timeSet = new Set();
+      const fieldSet = new Set();
+      gamesForDay.forEach(g=>{
+        if(g.time) timeSet.add(g.time);
+        if(g.field) fieldSet.add(g.field);
+      });
+      const times = Array.from(timeSet).sort((a,b)=>timeToMinutes(a)-timeToMinutes(b));
+      const fields = Array.from(fieldSet).sort((a,b)=>a.localeCompare(b));
+
+      if(!times.length || !fields.length) return;
+
+      html += '<div class="grid-block">';
+      html += `<div class="grid-header-main">All Divisions – Field Schedule</div>`;
+      html += `
+        <div class="grid-sub-row">
+          <div class="grid-sub-cell day-label">${day}</div>
+          <div class="grid-sub-cell">All divisions using shared fields</div>
+        </div>
+      `;
+
+      html += '<table class="time-field-table"><thead><tr>';
+      html += '<th class="time-col">Time</th>';
+      fields.forEach(f=>{
+        html += `<th>${f}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      times.forEach((time, idx)=>{
+        const rowGames = gamesForDay.filter(g=>g.time === time);
+        const rowClass = (idx % 2 === 1) ? 'row-alt' : '';
+        html += `<tr class="${rowClass}"><td class="time-col">${time}</td>`;
+
+        fields.forEach(field=>{
+          const game = rowGames.find(g=>g.field === field);
+          if(!game){
+            html += '<td></td>';
+          }else{
+            const home = teamMap[game.homeId];
+            const away = teamMap[game.awayId];
+            const divLabel = DIVISION_LABELS[game.division] || game.division || '';
+            const stageLabel = game.kind === 'pool'
+              ? (game.poolId && poolMap[game.poolId] ? 'Pool ' + poolMap[game.poolId].name : 'Pool Play')
+              : (game.label || 'Knockout');
+            html += '<td>';
+            html += `<div class="slot">${divLabel}: ${formatTeamName(home)} v ${formatTeamName(away)}<small>${stageLabel}</small></div>`;
+            html += '</td>';
+          }
+        });
+
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
     });
 
     scheduleContent.innerHTML = html;
-    viewTitle.textContent = 'All Divisions • By Field & Time';
-    viewSubtitle.textContent = 'Pool-play and knockout games across every division.';
-    summaryTag.textContent = `${allGames.length} total games`;
+    viewTitle.textContent = 'All Divisions';
+    viewSubtitle.textContent = 'Field / time grid across every division (pool play & finals).';
+    summaryTag.textContent = `${all.length} game${all.length===1?'':'s'}`;
   }
 
-  /* ===== Tabs / Switching Views ===== */
+  /* ========== Tabs / View Switching ========== */
 
-  function setActiveDivision(div) {
+  function setActiveDivision(div){
     activeDivision = div;
-    document.querySelectorAll('#divisionTabs .tab-btn').forEach(btn => {
+    document.querySelectorAll('#divisionTabs .tab-btn').forEach(btn=>{
       const d = btn.getAttribute('data-div');
       btn.classList.toggle('active', d === div);
     });
-
-    if (div === 'all') {
+    if(div === 'all'){
       renderCombinedView();
-    } else {
+    }else{
       renderDivisionView(div);
     }
   }
 
-  document.querySelectorAll('#divisionTabs .tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll('#divisionTabs .tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
       const d = btn.getAttribute('data-div');
       setActiveDivision(d);
     });
   });
 
-  /* ===== Load data from Apps Script ===== */
+  /* ========== Load from Apps Script ========== */
 
-  async function loadData() {
-    try {
+  async function loadData(){
+    try{
       const [teamsRes, stateRes] = await Promise.all([
         fetch(API_URL),
         fetch(API_URL + '?entity=state')
@@ -632,8 +663,8 @@
       teams = await teamsRes.json();
       adminState = normalizeState(await stateRes.json());
       buildDayOrder();
-      setActiveDivision('all'); // default view
-    } catch (err) {
+      setActiveDivision('all');
+    }catch(err){
       console.error(err);
       scheduleContent.innerHTML =
         '<div class="error">Unable to load schedule. Please try again later.</div>';
