@@ -524,7 +524,7 @@
    <div id="scheduleContainer">
     <div class="sched-block">
       <div class="sched-title">Loading schedule…</div>
-      <p class="empty-message">If this stays here, ask your tournament staff to verify the admin portal and spreadsheet.</p>
+      <p class="empty-message">If this doesn’t update, check that the admin portal and spreadsheet are published correctly.</p>
     </div>
    </div>
   </div>
@@ -533,12 +533,12 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
     const DIVISION_LABELS = {
-      '10UB':'10U Boys',
-      '10UG':'10U Girls',
-      '12UB':'12U Boys',
-      '12UG':'12U Girls',
-      '14UB':'14U Boys',
-      '14UG':'14U Girls'
+      '10UB': '10U Boys',
+      '10UG': '10U Girls',
+      '12UB': '12U Boys',
+      '12UG': '12U Girls',
+      '14UB': '14U Boys',
+      '14UG': '14U Girls'
     };
 
     let allTeams = [];
@@ -553,7 +553,7 @@
     const scheduleContainer = document.getElementById('scheduleContainer');
     const tabButtons = document.querySelectorAll('.tab-btn');
 
-    function normalizeState(state){
+    function normalizeState(state) {
       if (!state || typeof state !== 'object') state = {};
       state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
       state.pools = Array.isArray(state.pools) ? state.pools : [];
@@ -563,83 +563,89 @@
       return state;
     }
 
-    function getAllTeamsCombined(){
-      const manual = adminState.manualTeams.map(m => Object.assign({manual:true}, m));
+    function getAllTeamsCombined() {
+      const manual = adminState.manualTeams.map(m => Object.assign({ manual: true }, m));
       return allTeams.concat(manual);
     }
 
-    function getTeamById(id){
+    function getTeamById(id) {
+      if (id === undefined || id === null) return null;
       id = String(id);
       return getAllTeamsCombined().find(t => String(t.id) === id) || null;
     }
 
-    function parseTimeToMinutes(t){
+    function parseTimeToMinutes(t) {
       if (!t) return 0;
       let s = String(t).trim().toLowerCase();
+
       let m = s.match(/^(\d{1,2}):(\d{2})\s*([ap]m)$/);
-      if (m){
-        let h = parseInt(m[1],10);
-        const min = parseInt(m[2],10);
+      if (m) {
+        let h = parseInt(m[1], 10);
+        const min = parseInt(m[2], 10);
         const ampm = m[3];
         if (h === 12) h = 0;
         if (ampm === 'pm') h += 12;
-        return h*60 + min;
+        return h * 60 + min;
       }
+
       m = s.match(/^(\d{1,2}):(\d{2})$/);
-      if (m){
-        const h = parseInt(m[1],10);
-        const min = parseInt(m[2],10);
-        return h*60 + min;
+      if (m) {
+        const h = parseInt(m[1], 10);
+        const min = parseInt(m[2], 10);
+        return h * 60 + min;
       }
+
       return 0;
     }
 
-    function sortFields(fields){
-      return fields.sort((a,b)=>{
+    function sortFields(fields) {
+      return fields.sort((a, b) => {
         const sa = String(a), sb = String(b);
-        const na = parseInt(sa.replace(/\D/g,''),10);
-        const nb = parseInt(sb.replace(/\D/g,''),10);
+        const na = parseInt(sa.replace(/\D/g, ''), 10);
+        const nb = parseInt(sb.replace(/\D/g, ''), 10);
         if (!isNaN(na) && !isNaN(nb)) return na - nb;
         return sa.localeCompare(sb);
       });
     }
 
-    function normalizeStateForRendering(rawState){
+    function normalizeStateForRendering(rawState) {
       adminState = normalizeState(rawState);
     }
 
-    async function loadData(){
+    async function loadData() {
       try {
         const [teamsRes, stateRes] = await Promise.all([
           fetch(API_URL),
           fetch(API_URL + '?entity=state')
         ]);
+
         allTeams = await teamsRes.json();
         const stateJson = await stateRes.json();
         normalizeStateForRendering(stateJson);
+
         renderSchedule('');
-      } catch (e){
+      } catch (e) {
         console.error(e);
         scheduleContainer.innerHTML = `
           <div class="sched-block">
             <div class="sched-title">Unable to load schedule</div>
             <p class="empty-message">
-              Please refresh the page. If this continues, ask the tournament staff to verify the admin portal and spreadsheet.
+              Please refresh the page. If this continues, ask tournament staff to verify the admin portal and spreadsheet.
             </p>
           </div>
         `;
       }
     }
 
-    function collectGames(divisionFilter){
+    function collectGames(divisionFilter) {
       const all = [];
       const schedules = adminState.schedules || [];
 
-      schedules.forEach(sched=>{
+      schedules.forEach(sched => {
         const div = sched.division;
         if (divisionFilter && div !== divisionFilter) return;
 
-        (sched.games || []).forEach(g=>{
+        (sched.games || []).forEach(g => {
           if (!g.date || !g.time || !g.field) return;
           all.push({
             id: g.id,
@@ -655,7 +661,7 @@
           });
         });
 
-        (sched.knockouts || []).forEach(k=>{
+        (sched.knockouts || []).forEach(k => {
           if (!k.date || !k.time || !k.field) return;
           all.push({
             id: k.id,
@@ -675,14 +681,14 @@
       return all;
     }
 
-    function renderSchedule(divisionFilter){
+    function renderSchedule(divisionFilter) {
       const games = collectGames(divisionFilter);
       const poolsById = {};
       (adminState.pools || []).forEach(p => { poolsById[p.id] = p; });
 
       scheduleContainer.innerHTML = '';
 
-      if (!games.length){
+      if (!games.length) {
         scheduleContainer.innerHTML = `
           <div class="sched-block">
             <div class="sched-title">${
@@ -691,7 +697,7 @@
                 : 'No scheduled games yet'
             }</div>
             <p class="empty-message">
-              Once your tournament staff publish games from the admin portal, they will appear here automatically.
+              Once tournament staff publish games from the admin portal, they will appear here automatically.
             </p>
           </div>
         `;
@@ -699,11 +705,12 @@
       }
 
       const groups = {};
-      games.forEach(g=>{
+      games.forEach(g => {
         const key = divisionFilter
           ? (g.division + '||' + (g.date || ''))
           : (g.date || '');
-        if (!groups[key]){
+
+        if (!groups[key]) {
           groups[key] = {
             division: g.division,
             date: g.date || '',
@@ -717,16 +724,16 @@
         if (g.time) groups[key].times.add(g.time);
       });
 
-      const groupKeys = Object.keys(groups).sort((a,b)=>{
+      const groupKeys = Object.keys(groups).sort((a, b) => {
         const da = groups[a].date || '';
         const db = groups[b].date || '';
         return da.localeCompare(db);
       });
 
-      groupKeys.forEach(key=>{
+      groupKeys.forEach(key => {
         const group = groups[key];
         const fields = sortFields(Array.from(group.fields));
-        const times = Array.from(group.times).sort((t1,t2)=>parseTimeToMinutes(t1)-parseTimeToMinutes(t2));
+        const times = Array.from(group.times).sort((t1, t2) => parseTimeToMinutes(t1) - parseTimeToMinutes(t2));
 
         if (!fields.length || !times.length) return;
 
@@ -735,42 +742,49 @@
 
         const title = document.createElement('div');
         title.className = 'sched-title';
-        if (divisionFilter){
+
+        if (divisionFilter) {
           const label = DIVISION_LABELS[group.division] || group.division || 'Division';
           title.textContent = group.date ? `${label} – ${group.date}` : label;
         } else {
           title.textContent = group.date ? `${group.date} – All Divisions` : 'All Divisions';
         }
+
         block.appendChild(title);
 
         const grid = document.createElement('div');
         grid.className = 'schedule-grid';
+        // Override column count so fields/time line up cleanly with however many fields exist
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = `120px repeat(${fields.length}, minmax(0, 1fr))`;
 
+        // Header row
         const timeHeader = document.createElement('div');
         timeHeader.className = 'grid-header';
         timeHeader.textContent = 'Time';
         grid.appendChild(timeHeader);
 
-        fields.forEach(f=>{
+        fields.forEach(f => {
           const h = document.createElement('div');
           h.className = 'grid-header';
           h.textContent = f || 'Field';
           grid.appendChild(h);
         });
 
-        times.forEach(time=>{
+        // Rows per time
+        times.forEach(time => {
           const timeCell = document.createElement('div');
           timeCell.className = 'time-slot';
           timeCell.textContent = time;
           grid.appendChild(timeCell);
 
-          fields.forEach(field=>{
+          fields.forEach(field => {
             const cell = document.createElement('div');
             cell.className = 'game-slot';
 
             const game = group.games.find(g => g.time === time && g.field === field);
 
-            if (game){
+            if (game) {
               cell.classList.add('has-game');
 
               const home = getTeamById(game.homeId);
@@ -798,9 +812,9 @@
               const infoDiv = document.createElement('div');
               infoDiv.className = 'game-info';
 
-              if (game.stage === 'knockout'){
+              if (game.stage === 'knockout') {
                 const divLabel = DIVISION_LABELS[game.division] || game.division;
-                infoDiv.textContent = `${game.type || 'KO'} • ${divLabel}`;
+                infoDiv.textContent = `${game.type || 'Knockout'} • ${divLabel}`;
               } else {
                 const pool = poolsById[game.poolId];
                 const divLabel = DIVISION_LABELS[game.division] || game.division;
@@ -827,9 +841,9 @@
       });
     }
 
-    tabButtons.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        tabButtons.forEach(b=>b.classList.remove('active'));
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const div = btn.getAttribute('data-division') || '';
         renderSchedule(div);
