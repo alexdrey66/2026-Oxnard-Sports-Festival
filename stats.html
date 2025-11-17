@@ -71,6 +71,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
+      justify-content:中心;
       justify-content: center;
     }
 
@@ -413,32 +414,87 @@
       return byId;
     }
 
-    function getScoresForGame(game) {
+    function extractGoals(obj, homeKeyCandidates, awayKeyCandidates) {
+      if (!obj) return null;
+
       let home = null;
       let away = null;
 
-      if (game.homeGoals !== undefined && game.awayGoals !== undefined) {
-        home = Number(game.homeGoals);
-        away = Number(game.awayGoals);
-      } else if (game.homeScore !== undefined && game.awayScore !== undefined) {
-        home = Number(game.homeScore);
-        away = Number(game.awayScore);
-      } else if (adminState.scores) {
-        const s = adminState.scores[game.id] || adminState.scores[String(game.id)];
-        if (s) {
-          if (s.homeGoals !== undefined && s.awayGoals !== undefined) {
-            home = Number(s.homeGoals);
-            away = Number(s.awayGoals);
-          } else if (s.homeScore !== undefined && s.awayScore !== undefined) {
-            home = Number(s.homeScore);
-            away = Number(s.awayScore);
-          }
+      for (const k of homeKeyCandidates) {
+        if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') {
+          home = Number(obj[k]);
+          break;
+        }
+      }
+      for (const k of awayKeyCandidates) {
+        if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') {
+          away = Number(obj[k]);
+          break;
         }
       }
 
       if (home === null || away === null) return null;
       if (Number.isNaN(home) || Number.isNaN(away)) return null;
+
       return { home, away };
+    }
+
+    function getScoresForGame(game) {
+      const homeKeys = ['homeGoals', 'homeScore', 'home_goals', 'home', 'home_team_score'];
+      const awayKeys = ['awayGoals', 'awayScore', 'away_goals', 'away', 'away_team_score'];
+
+      // 1) Inline on game object
+      const inline = extractGoals(game, homeKeys, awayKeys);
+      if (inline) return inline;
+
+      // 2) In adminState.scores – try to find matching record
+      const scores = adminState.scores || {};
+      const gameId = String(game.id ?? game.gameId ?? '');
+      const div = game.division || '';
+      const date = game.date || '';
+      const time = game.time || '';
+      const field = String(game.field || '');
+      const homeId = String(game.homeId ?? game.homeTeamId ?? (game.home && game.home.id) ?? '');
+      const awayId = String(game.awayId ?? game.awayTeamId ?? (game.away && game.away.id) ?? '');
+
+      let bestMatch = null;
+
+      Object.keys(scores).forEach(key => {
+        const s = scores[key];
+        if (!s || typeof s !== 'object') return;
+
+        // If score object has a direct game id, use that
+        const scoreGameId = String(s.gameId ?? s.id ?? '');
+        if (gameId && scoreGameId && scoreGameId === gameId) {
+          const eg = extractGoals(s, homeKeys, awayKeys);
+          if (eg) {
+            bestMatch = eg;
+            return;
+          }
+        }
+
+        // Otherwise, try to match by metadata (division/date/time/field/teams)
+        const sDiv = s.division || '';
+        const sDate = s.date || '';
+        const sTime = s.time || '';
+        const sField = String(s.field || '');
+        const sHomeId = String(s.homeId ?? s.homeTeamId ?? (s.home && s.home.id) ?? '');
+        const sAwayId = String(s.awayId ?? s.awayTeamId ?? (s.away && s.away.id) ?? '');
+
+        if (div && sDiv && div !== sDiv) return;
+        if (date && sDate && date !== sDate) return;
+        if (time && sTime && time !== sTime) return;
+        if (field && sField && field !== sField) return;
+        if (homeId && sHomeId && homeId !== sHomeId) return;
+        if (awayId && sAwayId && awayId !== sAwayId) return;
+
+        const eg2 = extractGoals(s, homeKeys, awayKeys);
+        if (eg2) {
+          bestMatch = eg2;
+        }
+      });
+
+      return bestMatch;
     }
 
     function makeEmptyStats(teamId, teamName) {
@@ -450,7 +506,7 @@
       };
     }
 
-    // Win: 6, Tie: 3, Loss: 0, 1 pt per goal up to 3
+    // Win: 6, Tie: 3, Loss: 0; +1 per goal scored up to 3
     function updateStatsForGame(homeStats, awayStats, homeGoals, awayGoals) {
       homeGoals = Number(homeGoals) || 0;
       awayGoals = Number(awayGoals) || 0;
@@ -495,7 +551,7 @@
         (sched.games || []).forEach(g => {
           games.push(Object.assign({}, g, { division: div }));
         });
-        // pool standings usually ignore knockouts; skip sched.knockouts
+        // We ignore knockouts for pool standings
       });
       return games;
     }
@@ -511,7 +567,7 @@
         return `${division || ''}||${poolId || 'pool'}`;
       }
 
-      // Seed teams from pool definitions
+      // Seed from pools
       pools.forEach(pool => {
         if (divisionFilter && pool.division !== divisionFilter) return;
         const div = pool.division || '';
@@ -536,7 +592,7 @@
         });
       });
 
-      // Apply game results
+      // Apply results
       games.forEach(game => {
         const scores = getScoresForGame(game);
         if (!scores) return;
@@ -616,7 +672,7 @@
         return;
       }
 
-      // Sort pools by division + name for consistent order
+      // Sort pools by division label then pool name
       poolKeys.sort((a, b) => {
         const pa = standingsByPool[a];
         const pb = standingsByPool[b];
