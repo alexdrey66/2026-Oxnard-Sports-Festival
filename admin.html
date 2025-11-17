@@ -734,29 +734,34 @@
 
   /* ===== Save to Apps Script (no JSON parse) ===== */
   async function saveStateToApi(showMessage = true){
-    try{
-      const res = await fetch(API_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({entity:'state',state:adminState})
-      });
-      if (!res.ok){
-        console.error('Save HTTP error', res.status);
-        if (showMessage) showToast('Save failed');
-        return false;
-      }
-      if (showMessage) showToast('Saved');
-      return true;
-    }catch(e){
-      console.error(e);
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      // no Content-Type header -> avoids CORS preflight
+      body: JSON.stringify({
+        // doPost treats anything without mode=create/update as admin state
+        state: adminState
+      })
+    });
+
+    if (!res.ok) {
+      console.error('Save HTTP error', res.status);
       if (showMessage) showToast('Save failed');
       return false;
     }
-  }
 
-  saveStateBtn.addEventListener('click', () => {
-    saveStateToApi(true);
-  });
+    // If you ever want to inspect response:
+    // const text = await res.text(); console.log('Save response:', text);
+
+    if (showMessage) showToast('Saved');
+    return true;
+  } catch (e) {
+    console.error('Save fetch error', e);
+    if (showMessage) showToast('Save failed');
+    return false;
+  }
+}
+
 
   /* ===== Load from Apps Script ===== */
   async function loadAdminData(){
@@ -971,33 +976,41 @@
     return card;
   }
 
-  async function updateTeamOnServer(updatedTeam){
-    try{
-      const res=await fetch(API_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({mode:'update',team:updatedTeam})
-      });
-      const data=await res.json();
-      if(!data.ok){
-        console.error('Update failed',data);
-        showToast('Update failed');
-        return;
-      }
-      const idx=allTeams.findIndex(t=>String(t.id)===String(updatedTeam.id));
-      if(idx!==-1) allTeams[idx]=updatedTeam;
-      renderTeamsTab();
-      showToast('Team updated');
-    }catch(e){
-      console.error(e);
-      showToast('Update failed');
-    }
-  }
+ async function updateTeamOnServer(updatedTeam){
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      // no Content-Type header -> avoids CORS preflight
+      body: JSON.stringify({ mode: 'update', team: updatedTeam })
+    });
 
-  function changeTeamStatus(team,status){
-    const updated=Object.assign({},team,{status});
-    updateTeamOnServer(updated);
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (err) {
+      console.error('Non-JSON response from Apps Script on update:', text);
+      showToast('Update failed');
+      return;
+    }
+
+    if (!data.ok) {
+      console.error('Update failed:', data.error);
+      showToast('Update failed');
+      return;
+    }
+
+    const idx = allTeams.findIndex(t => String(t.id) === String(updatedTeam.id));
+    if (idx !== -1) allTeams[idx] = updatedTeam;
+
+    renderTeamsTab();
+    showToast('Team updated');
+  } catch (e) {
+    console.error('Update fetch error', e);
+    showToast('Update failed');
   }
+}
+
 
   /* ---- POOLS TAB ---- */
   const poolsDivisionSel=document.getElementById('poolsDivisionSelect');
