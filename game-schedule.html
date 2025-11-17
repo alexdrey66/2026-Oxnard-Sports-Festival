@@ -432,6 +432,26 @@
     card.appendChild(grid);
     poolsWrapper.appendChild(card);
   }
+  function timeToMinutes(t){
+    if (!t) return 24 * 60 + 1; // push empties to the end
+    t = String(t).trim().toLowerCase();
+
+    if (t === 'tbd') return 24 * 60 + 1;
+
+    // Handles formats like:
+    // 8am, 8:00am, 8:00 am, 12pm, 12:15pm, etc.
+    const match = t.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
+    if (!match) return 24 * 60 + 1;
+
+    let hour = parseInt(match[1], 10);
+    let minute = match[2] ? parseInt(match[2], 10) : 0;
+    const mer = match[3];
+
+    if (mer === 'pm' && hour !== 12) hour += 12;
+    if (mer === 'am' && hour === 12) hour = 0;
+
+    return hour * 60 + minute;
+  }
 
   function renderSchedule(division){
     scheduleWrapper.innerHTML = '';
