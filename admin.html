@@ -2,415 +2,413 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OSF 2026 – Tournament Admin</title>
+  <title>OSF 2026 – Admin Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    :root {
-      --primary: #004b8d;
-      --accent:  #d62828;
-      --bg:      #f3f4f6;
-      --card:    #ffffff;
-      --border:  #e5e7eb;
-      --text:    #111827;
-      --muted:   #6b7280;
+    :root{
+      --primary:#004b8d;
+      --accent:#d62828;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+      --green:#16a34a;
+      --amber:#f59e0b;
+      --red:#dc2626;
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #dbeafe 0, #f9fafb 40%, #e5e7eb 100%);
-      color: var(--text);
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
+      color:var(--text);
     }
-
-    .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-    }
-
-    h1 {
-      margin: 0 0 6px;
-      font-size: 24px;
-      letter-spacing: 0.03em;
-    }
-
-    .subtitle {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(37, 99, 235, 0.07);
-      color: #1d4ed8;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #facc15;
-      box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.32);
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 16px 14px 14px;
-      margin-bottom: 18px;
-    }
-
-    .card-title {
-      margin: 0 0 4px;
-      font-size: 16px;
-    }
-
-    .card-subtitle {
-      margin: 0 0 10px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .login-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .login-row input {
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      padding: 7px 11px;
-      font-size: 13px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 7px 13px;
-      font-size: 13px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #1d4ed8);
-      color: #fff;
-      box-shadow: 0 12px 26px rgba(37,99,235,0.45);
-    }
-
-    .btn-small {
-      border-radius: 999px;
-      border: none;
-      padding: 3px 7px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .btn-ghost {
-      background: #f3f4f6;
-      color: #374151;
-    }
-
-    .btn-approve { background:#22c55e; color:#fff; }
-    .btn-decline { background:#ef4444; color:#fff; }
-    .btn-pending { background:#f97316; color:#fff; }
-
-    .message {
-      font-size: 12px;
-      margin-top: 4px;
-      padding: 6px 8px;
-      border-radius: 8px;
-      display: none;
-    }
-    .message.visible { display:block; }
-    .message.success {
-      background:#ecfdf3;
-      border:1px solid #22c55e;
-      color:#166534;
-    }
-    .message.error {
-      background:#fef2f2;
-      border:1px solid:#ef4444;
-      color:#991b1b;
-    }
-
-    .tabs {
+    .nav{
+      background:#000;
+      color:#fff;
+      padding:10px 18px;
       display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      border-bottom:1px solid rgba(148,163,184,0.5);
-      margin-bottom:10px;
+      align-items:center;
+      justify-content:space-between;
     }
-
-    .tab-btn {
-      border:none;
-      background:transparent;
-      padding:7px 12px;
-      font-size:13px;
-      cursor:pointer;
-      border-radius:999px 999px 0 0;
-      color:#6b7280;
-      font-weight:500;
-    }
-
-    .tab-btn.active {
-      background:#fff;
-      color:#111827;
-      box-shadow:0 -1px 0 #fff, 0 -2px 0 #1d4ed8;
-    }
-
-    .tab-panel { display:none; }
-    .tab-panel.active { display:block; }
-
-    table {
-      width:100%;
-      border-collapse:collapse;
-      font-size:13px;
-      margin-top:8px;
-    }
-    thead { background:#f3f4f6; }
-    th, td {
-      padding:7px 9px;
-      border-bottom:1px solid #e5e7eb;
-      text-align:left;
-      vertical-align:top;
-    }
-    th {
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.06em;
-      color:#6b7280;
-    }
-    tbody tr:hover { background:#f9fafb; }
-
-    .status-chip {
-      display:inline-block;
-      padding:2px 8px;
-      border-radius:999px;
-      font-size:11px;
+    .nav-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
       font-weight:600;
     }
-    .status-pending { background:#fef3c7; color:#92400e; }
-    .status-approved{ background:#dcfce7; color:#166534;}
-    .status-declined{ background:#fee2e2; color:#991b1b;}
-
-    .coach-line{font-size:11px;color:#4b5563;}
-    .email-line{font-size:11px;color:#6b7280;word-break:break-all;}
-
-    .docs-flags{display:flex;flex-direction:column;gap:3px;font-size:11px;}
-    .docs-flag-row{display:flex;align-items:center;gap:6px;}
-    .docs-flag-row input[type="checkbox"]{width:13px;height:13px;cursor:pointer;}
-
-    .empty-note{font-size:12px;color:var(--muted);margin-top:6px;}
-
-    .small-input-row{
+    .nav-links{
       display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-bottom:8px;
+      gap:18px;
       font-size:13px;
     }
-    .small-input-row input,
-    .small-input-row select {
-      padding:6px 9px;
-      border-radius:8px;
-      border:1px solid var(--border);
-      font-size:13px;
+    .nav-links a{
+      color:#e5e7eb;
+      text-decoration:none;
+      padding:4px 0;
     }
-    .small-label{
-      font-size:12px;
-      color:#4b5563;
-      margin-bottom:2px;
-    }
+    .nav-links a:hover{color:#fff;}
 
-    .pill{
+    .page{
+      max-width:1150px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+    .badge{
       display:inline-flex;
       align-items:center;
       gap:6px;
       padding:4px 10px;
       border-radius:999px;
-      background:#f3f4f6;
-      margin-right:6px;
-      margin-bottom:4px;
+      background:rgba(37,99,235,0.07);
+      color:#1d4ed8;
       font-size:12px;
+      font-weight:600;
+      margin-bottom:6px;
     }
-    .pill span:last-child{font-size:11px;color:#6b7280;}
-
-    .tag{
-      display:inline-block;
-      padding:2px 6px;
-      border-radius:999px;
-      background:#e5e7eb;
-      font-size:11px;
-      margin:2px 4px 2px 0;
+    h1{
+      margin:0 0 4px;
+      font-size:26px;
+      letter-spacing:0.03em;
+    }
+    .subtitle{
+      margin:0 0 16px;
+      font-size:13px;
+      color:var(--muted);
     }
 
-    .game-row{
+    .tabs{
       display:flex;
-      flex-wrap:wrap;
       gap:6px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    .tab-btn{
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.8);
+      background:rgba(15,23,42,0.02);
+      padding:7px 14px;
+      font-size:12px;
+      cursor:pointer;
+      display:inline-flex;
       align-items:center;
-      font-size:12px;
-      padding:4px 0;
-      border-bottom:1px solid #e5e7eb;
+      gap:6px;
+      color:#374151;
     }
-    .game-row:last-child{border-bottom:none;}
-
-    .admin-game-input{
-      width:100px;
-      padding:3px 5px;
-      border-radius:6px;
-      border:1px solid var(--border);
-      font-size:11px;
-    }
-
-    .score-input{
-      width:40px;
-      padding:2px 4px;
-      border-radius:4px;
-      border:1px solid var(--border);
-      font-size:12px;
-      text-align:center;
-    }
-
-    .schedule-grid{
-      border:1px solid #e5e7eb;
-      border-radius:10px;
-      overflow:hidden;
-      margin-top:10px;
-      background:#fff;
-    }
-    .schedule-date-header{
+    .tab-btn.active{
       background:#111827;
       color:#fff;
-      padding:6px 10px;
-      font-size:13px;
+      border-color:#0f172a;
+    }
+
+    .tab-panel{
+      display:none;
+    }
+    .tab-panel.active{
+      display:block;
+    }
+
+    .layout-two{
+      display:grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap:16px;
+    }
+    @media (max-width:900px){
+      .layout-two{grid-template-columns:1fr;}
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      box-shadow:0 16px 36px rgba(15,23,42,0.16);
+      border:1px solid rgba(148,163,184,0.4);
+      padding:14px 12px 14px;
+      margin-bottom:14px;
+    }
+    .card-header{
+      font-size:14px;
       font-weight:600;
+      margin-bottom:4px;
     }
-    .schedule-grid table{
-      border-collapse:collapse;
-      width:100%;
-      margin:0;
+    .card-sub{
       font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
     }
-    .schedule-grid th,
-    .schedule-grid td{
-      border:1px solid #e5e7eb;
-      padding:5px 6px;
-      text-align:center;
+
+    label{
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      display:block;
+      margin-bottom:3px;
+      color:#6b7280;
     }
-    .schedule-field-header{
-      background:#e5e7eb;
+    select,input,textarea{
+      width:100%;
+      border-radius:9px;
+      border:1px solid var(--border);
+      padding:6px 8px;
+      font-size:13px;
+      font-family:inherit;
+      outline:none;
+      background:#f9fafb;
+      transition:border-color .15s, box-shadow .15s, background .15s;
+    }
+    select:focus,input:focus,textarea:focus{
+      border-color:#2563eb;
+      background:#fff;
+      box-shadow:0 0 0 1px rgba(37,99,235,0.25);
+    }
+    textarea{
+      resize:vertical;
+      min-height:60px;
+    }
+
+    .row{
+      display:flex;
+      gap:8px;
+      margin-bottom:6px;
+      flex-wrap:wrap;
+    }
+    .row > div{flex:1;}
+
+    .btn{
+      border-radius:999px;
+      border:none;
+      padding:7px 13px;
+      font-size:12px;
+      font-weight:600;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,#2563eb,#1d4ed8);
+      color:#fff;
+      box-shadow:0 12px 22px rgba(37,99,235,0.35);
+    }
+    .btn-ghost{
+      background:rgba(15,23,42,0.03);
+      color:#111827;
+      border:1px solid rgba(148,163,184,0.6);
+    }
+    .btn-small{
+      padding:4px 9px;
+      font-size:11px;
+      box-shadow:none;
+    }
+    .btn-approve{
+      background:#16a34a;
+      color:#fff;
+    }
+    .btn-decline{
+      background:#ef4444;
+      color:#fff;
+    }
+    .btn-pending{
+      background:#eab308;
+      color:#111827;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:2px 8px;
+      border-radius:999px;
       font-size:11px;
       font-weight:600;
     }
-    .highlight{background:#fef3c7;}
+    .status-pending{
+      background:#fef9c3;
+      color:#854d0e;
+    }
+    .status-approved{
+      background:#dcfce7;
+      color:#166534;
+    }
+    .status-declined{
+      background:#fee2e2;
+      color:#991b1b;
+    }
 
-    @media (max-width:640px){
-      .card{padding:12px 8px;}
-      th:nth-child(5),td:nth-child(5){display:none;}
+    .team-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height:420px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .team-card{
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      padding:8px 8px;
+      font-size:12px;
+    }
+    .team-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+      margin-bottom:2px;
+    }
+    .team-title{
+      font-weight:600;
+      font-size:13px;
+    }
+    .team-meta{
+      font-size:11px;
+      color:#6b7280;
+    }
+    .team-row{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      margin-top:4px;
+      flex-wrap:wrap;
+    }
+    .check-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:4px;
+    }
+    .check-row label{
+      font-size:11px;
+      text-transform:none;
+      letter-spacing:0;
+      font-weight:500;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      color:#374151;
+    }
+    .check-row input[type="checkbox"]{
+      width:auto;
+      height:auto;
+    }
+    .note-input{
+      width:100%;
+      border-radius:8px;
+      border:1px dashed #cbd5f5;
+      background:#fff;
+      padding:4px 6px;
+      font-size:11px;
+      margin-top:4px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#eff6ff;
+      color:#1d4ed8;
+      font-size:11px;
+      font-weight:600;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      padding:2px 7px;
+      font-size:11px;
+      border-radius:999px;
+      background:#e5e7eb;
+      margin:2px 4px 2px 0;
+    }
+    .empty-note{
+      font-size:12px;
+      color:#9ca3af;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+    th,td{
+      padding:5px 6px;
+      border:1px solid #e5e7eb;
+      text-align:left;
+    }
+    th{
+      background:#f3f4f6;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:#6b7280;
+    }
+
+    .toast{
+      position:fixed;
+      bottom:16px;
+      right:16px;
+      background:#111827;
+      color:#f9fafb;
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(8px);
+      transition:all .2s ease-out;
+      box-shadow:0 10px 25px rgba(15,23,42,0.35);
+      z-index:50;
+    }
+    .toast.visible{
+      opacity:1;
+      transform:translateY(0);
     }
   </style>
 </head>
 <body>
-<div class="page">
-  <header>
-    <div class="badge">
-      <span class="badge-dot"></span>
-      OSF 2026 • Tournament Admin
-    </div>
-    <h1>Admin Control Center</h1>
-    <p class="subtitle">Manage teams, pools, schedules, semis/finals, and scoring in one place.</p>
-  </header>
+<header class="nav">
+  <div class="nav-left">
+    <span>2026 Oxnard Sports Festival</span>
+  </div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="team-registration.html">Register Your Team</a>
+    <a href="approved-teams.html">Approved Teams</a>
+    <a href="#">Sign Up To Referee</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
 
-  <section class="card">
-    <div class="login-row">
-      <input type="password" id="adminPassword" placeholder="Admin password">
-      <button class="btn btn-primary" id="adminLoginBtn">Unlock Admin</button>
-    </div>
-    <div id="adminLoginMessage" class="message"></div>
+<main class="page">
+  <div class="badge">OSF 2026 • Tournament Admin</div>
+  <h1>Admin Portal</h1>
+  <p class="subtitle">
+    One-stop view for teams, pools, schedules, and scoring. Changes save back to your Google Sheet via Apps Script.
+  </p>
 
-    <div id="adminMain" style="display:none; margin-top:10px;">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="teamsTab">Teams</button>
-        <button class="tab-btn" data-tab="poolsTab">Pools</button>
-        <button class="tab-btn" data-tab="scheduleTab">Game Schedules</button>
-        <button class="tab-btn" data-tab="scoringTab">Scoring</button>
-      </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="teams">Teams</button>
+    <button class="tab-btn" data-tab="pools">Pools</button>
+    <button class="tab-btn" data-tab="schedule">Game Schedule</button>
+    <button class="tab-btn" data-tab="scoring">Scoring</button>
+  </div>
 
-      <!-- TEAMS TAB -->
-      <div id="teamsTab" class="tab-panel active">
-        <section class="card" style="margin-top:4px;">
-          <h2 class="card-title">Teams (Pending &amp; Approved)</h2>
-          <p class="card-subtitle">
-            Track documents and approve/decline teams. Declined teams show in a separate list.
-          </p>
-
-          <table>
-            <thead>
-            <tr>
-              <th>Division</th>
-              <th>Region</th>
-              <th>Team / Coach</th>
-              <th>Docs</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody id="adminTeamsBody"></tbody>
-          </table>
-          <div id="activeEmpty" class="empty-note" style="display:none;">No pending or approved teams yet.</div>
-        </section>
-
-        <section class="card">
-          <h2 class="card-title">Declined Teams</h2>
-          <p class="card-subtitle">
-            Declined teams can be moved back to Pending if needed.
-          </p>
-          <table>
-            <thead>
-            <tr>
-              <th>Division</th>
-              <th>Region</th>
-              <th>Team / Coach</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody id="declinedTeamsBody"></tbody>
-          </table>
-          <div id="declinedEmpty" class="empty-note" style="display:none;">No declined teams at this time.</div>
-        </section>
-      </div>
-
-      <!-- POOLS TAB -->
-      <div id="poolsTab" class="tab-panel">
-        <section class="card" style="margin-top:4px;">
-          <h2 class="card-title">Pools</h2>
-          <p class="card-subtitle">
-            Create pools per division and assign approved teams. Edit or delete pools as needed.
-          </p>
-
-          <div class="small-input-row">
+  <!-- TEAMS TAB -->
+  <section id="tab-teams" class="tab-panel active">
+    <div class="layout-two">
+      <div>
+        <div class="card">
+          <div class="card-header">Filters</div>
+          <div class="card-sub">Filter by division and status.</div>
+          <div class="row">
             <div>
-              <div class="small-label">Division</div>
-              <select id="poolDivision">
+              <label>Division</label>
+              <select id="teamsDivisionFilter">
+                <option value="">All divisions</option>
                 <option value="10UB">10U Boys</option>
                 <option value="10UG">10U Girls</option>
                 <option value="12UB">12U Boys</option>
@@ -420,494 +418,629 @@
               </select>
             </div>
             <div>
-              <div class="small-label">New Pool Name</div>
-              <input id="poolName" placeholder="e.g., Pool A">
-            </div>
-            <div style="align-self:flex-end;">
-              <button class="btn btn-primary" id="createPoolBtn">Add Pool</button>
-            </div>
-          </div>
-
-          <p class="small-label">Teams in this division (approved or manual): assign to pools</p>
-          <div id="poolTeamsArea" class="empty-note">No teams yet for this division.</div>
-
-          <h3 class="card-title" style="margin-top:14px;">Existing Pools</h3>
-          <div id="poolsList"></div>
-
-          <hr style="margin:12px 0; border:none; border-top:1px solid #e5e7eb;">
-
-          <h3 class="card-title">Manual Placeholder Teams</h3>
-          <p class="card-subtitle">
-            Use this for saved spots (e.g., “Reserved Spot 1”).
-          </p>
-          <div class="small-input-row">
-            <div style="flex:1;">
-              <div class="small-label">Manual Team (placeholder)</div>
-              <input id="manualTeamName" style="width:100%;" placeholder="e.g., Reserved Spot 1">
-            </div>
-            <div style="align-self:flex-end;">
-              <button class="btn btn-ghost" id="addManualTeamBtn">Add Manual Team</button>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- SCHEDULE TAB -->
-      <div id="scheduleTab" class="tab-panel">
-        <section class="card" style="margin-top:4px;">
-          <h2 class="card-title">Game Schedules</h2>
-          <p class="card-subtitle">
-            Build pool-play schedules, then add 2 Semis, a Championship, and a Consolation per division.
-          </p>
-
-          <div class="small-input-row">
-            <div>
-              <div class="small-label">Division</div>
-              <select id="schedDivision">
-                <option value="10UB">10U Boys</option>
-                <option value="10UG">10U Girls</option>
-                <option value="12UB">12U Boys</option>
-                <option value="12UG">12U Girls</option>
-                <option value="14UB">14U Boys</option>
-                <option value="14UG">14U Girls</option>
+              <label>Status</label>
+              <select id="teamsStatusFilter">
+                <option value="">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="declined">Declined</option>
               </select>
             </div>
           </div>
+        </div>
 
-          <h3 class="card-title">Pool-Play Day Setup</h3>
-          <p class="card-subtitle">
-            Each day can have its own fields and time slots (e.g., Saturday vs Sunday).
-          </p>
-
-          <div id="dayConfigs"></div>
-          <button class="btn btn-ghost" id="addDayBtn">Add Day</button>
-
-          <div class="small-input-row" style="margin-top:10px;">
-            <label style="display:flex;align-items:center;gap:6px;font-size:12px;">
-              <input type="checkbox" id="crossPoolCheckbox">
-              Allow a few cross-pool games (only if needed; max 3 pool games per team).
-            </label>
+        <div class="card">
+          <div class="card-header">Teams</div>
+          <div class="card-sub">
+            Approve, decline, or move teams back to pending. Toggle document checkboxes as paperwork is received.
           </div>
-
-          <button class="btn btn-primary" id="generateScheduleBtn" style="margin-top:6px;">
-            Generate / Regenerate Pool-Play
-          </button>
-
-          <div id="scheduleAdmin" style="margin-top:14px;font-size:12px;"></div>
-
-          <hr style="margin:14px 0; border:none; border-top:1px solid #e5e7eb;">
-
-          <h3 class="card-title">Knockout Games (Semis / Consolation / Championship)</h3>
-          <p class="card-subtitle">
-            For each division, define exactly 4 bracket games:<br>
-            Semi 1, Semi 2, Consolation, and Championship. Teams can stay <strong>TBD</strong> until decided.
-          </p>
-
-          <div id="knockoutEditor"></div>
-
-          <hr style="margin:14px 0; border:none; border-top:1px solid #e5e7eb;">
-
-          <h3 class="card-title">Parent-Facing Schedule Preview</h3>
-          <p class="card-subtitle">
-            Pool play and knockout games shown in grid format by date, fields across and times down.
-          </p>
-          <div id="schedulePreview"></div>
-        </section>
+          <div id="teamsList" class="team-list"></div>
+        </div>
       </div>
 
-      <!-- SCORING TAB -->
-      <div id="scoringTab" class="tab-panel">
-        <section class="card" style="margin-top:4px;">
-          <h2 class="card-title">Scoring & Standings</h2>
-          <p class="card-subtitle">
-            Enter pool-play scores (by pool). Points: Win 6 • Tie 3 • Loss 0 • Shutout +1 • Goals +1 (max 3).
-          </p>
+      <div>
+        <div class="card">
+          <div class="card-header">Summary</div>
+          <div class="card-sub">Counts by status (all divisions).</div>
+          <div id="teamsSummary"></div>
+        </div>
 
-          <div class="small-input-row">
-            <div>
-              <div class="small-label">Division</div>
-              <select id="scoreDivision">
-                <option value="10UB">10U Boys</option>
-                <option value="10UG">10U Girls</option>
-                <option value="12UB">12U Boys</option>
-                <option value="12UG">12U Girls</option>
-                <option value="14UB">14U Boys</option>
-                <option value="14UG">14U Girls</option>
-              </select>
-            </div>
-            <div style="align-self:flex-end;">
-              <button class="btn btn-primary" id="loadScoresBtn">Load Games</button>
-            </div>
-          </div>
-
-          <div id="scoringGames" style="margin-top:6px;"></div>
-          <div id="standingsOutput" style="margin-top:10px;font-size:12px;"></div>
-        </section>
+        <div class="card">
+          <div class="card-header">Legend</div>
+          <div class="card-sub">How statuses and docs flow into the public views.</div>
+          <ul style="padding-left:18px; font-size:12px; margin:0;">
+            <li><strong>Pending</strong>: visible only in Admin until all documents and payment are confirmed.</li>
+            <li><strong>Approved</strong>: appears on the public <em>Approved Teams</em> list.</li>
+            <li><strong>Declined</strong>: stays in the system; can be moved back to Pending.</li>
+            <li><strong>Docs checkboxes</strong>: for your tracking only; they do not affect public visibility.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
-</div>
+
+  <!-- POOLS TAB -->
+  <section id="tab-pools" class="tab-panel">
+    <div class="layout-two">
+      <div>
+        <div class="card">
+          <div class="card-header">Pools by Division</div>
+          <div class="card-sub">Create pools and assign approved or manual teams.</div>
+          <div class="row">
+            <div>
+              <label>Division</label>
+              <select id="poolsDivisionSelect">
+                <option value="10UB">10U Boys</option>
+                <option value="10UG">10U Girls</option>
+                <option value="12UB">12U Boys</option>
+                <option value="12UG">12U Girls</option>
+                <option value="14UB">14U Boys</option>
+                <option value="14UG">14U Girls</option>
+              </select>
+            </div>
+            <div>
+              <label>New Pool Name</label>
+              <div class="row" style="margin-bottom:0;">
+                <div>
+                  <input type="text" id="newPoolName" placeholder="Pool A">
+                </div>
+                <div style="flex:0 0 auto;">
+                  <button class="btn btn-primary btn-small" id="addPoolBtn">Add Pool</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="poolsList" style="margin-top:8px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Assign Teams to Pools</div>
+          <div class="card-sub">Includes approved teams and manual placeholders.</div>
+          <div id="poolTeamsArea"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">Manual Teams</div>
+          <div class="card-sub">
+            Use this if you’re holding spots or need a placeholder team that isn’t in the registration list.
+          </div>
+          <div class="row">
+            <div>
+              <label>Team Name</label>
+              <input type="text" id="manualTeamName" placeholder="Placeholder Team">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Region #</label>
+              <input type="number" id="manualTeamRegion" placeholder="304">
+            </div>
+            <div>
+              <label>City</label>
+              <input type="text" id="manualTeamCity" placeholder="Oxnard">
+            </div>
+            <div>
+              <label>State</label>
+              <input type="text" id="manualTeamState" placeholder="CA" maxlength="2">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-small" id="addManualTeamBtn">Add Manual Team</button>
+
+          <div id="manualTeamsList" style="margin-top:10px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE TAB -->
+  <section id="tab-schedule" class="tab-panel">
+    <div class="layout-two">
+      <div>
+        <div class="card">
+          <div class="card-header">Day & Field Configuration</div>
+          <div class="card-sub">
+            Set up days, fields, and time slots per division. The generator uses these slots for pool-play games.
+          </div>
+          <div class="row">
+            <div>
+              <label>Division</label>
+              <select id="schedDivisionSelect">
+                <option value="10UB">10U Boys</option>
+                <option value="10UG">10U Girls</option>
+                <option value="12UB">12U Boys</option>
+                <option value="12UG">12U Girls</option>
+                <option value="14UB">14U Boys</option>
+                <option value="14UG">14U Girls</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Date label</label>
+              <input type="text" id="schedDayLabel" placeholder="Saturday">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Fields (comma-separated)</label>
+              <input type="text" id="schedFields" placeholder="Field 1, Field 2">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Times (comma-separated, e.g. 8:00am, 9:15am)</label>
+              <input type="text" id="schedTimes" placeholder="8:00am, 9:15am, 10:30am">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-small" id="addDayConfigBtn">Add Day</button>
+
+          <div id="dayConfigsList" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Generate Pool-Play Schedule</div>
+          <div class="card-sub">
+            Uses current pools, teams, and day configuration. You can edit games after generation.
+          </div>
+          <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">Pool-Play Games</div>
+          <div class="card-sub">
+            All pool-play games for the selected division. Times, fields, and matchups are editable.
+          </div>
+          <div id="gamesList" style="max-height:360px; overflow:auto; padding-right:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Knockout Games (Semis, Consolation, Final)</div>
+      <div class="card-sub">
+        These feed into the public schedule. You can leave teams as TBD and fill them in later.
+      </div>
+      <div id="knockoutsList"></div>
+    </div>
+  </section>
+
+  <!-- SCORING TAB -->
+  <section id="tab-scoring" class="tab-panel">
+    <div class="card">
+      <div class="card-header">Scoring & Standings</div>
+      <div class="card-sub">
+        Enter scores for pool-play games. Points use: Win 6 • Tie 3 • Loss 0 • Shutout +1 • Goals +1 (max 3 per game).
+        Clearing scores resets the points for that game.
+      </div>
+      <div class="row">
+        <div style="max-width:220px;">
+          <label>Division</label>
+          <select id="scoreDivisionSelect">
+            <option value="10UB">10U Boys</option>
+            <option value="10UG">10U Girls</option>
+            <option value="12UB">12U Boys</option>
+            <option value="12UG">12U Girls</option>
+            <option value="14UB">14U Boys</option>
+            <option value="14UG">14U Girls</option>
+          </select>
+        </div>
+      </div>
+      <div id="scoringContent"></div>
+    </div>
+  </section>
+</main>
+
+<div id="toast" class="toast">Saved</div>
 
 <script>
-  // ========= CONFIG ==========
-  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
-  const ADMIN_PASSWORD = 'PLAYSOCCER';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
-  // ========= SHARED STATE (loaded from AdminState) ==========
-  let teams = [];        // from Teams sheet
-  let manualTeams = [];  // from AdminState
-  let pools = [];        // from AdminState
-  let schedules = [];    // from AdminState
-  let scores = {};       // from AdminState
-  let dayConfigs = {};   // from AdminState
+  const DIVISION_LABELS = {
+    '10UB':'10U Boys',
+    '10UG':'10U Girls',
+    '12UB':'12U Boys',
+    '12UG':'12U Girls',
+    '14UB':'14U Boys',
+    '14UG':'14U Girls'
+  };
 
-  // ========= HELPERS ==========
-  function divisionLabel(code){
-    return {
-      '10UB':'10U Boys','10UG':'10U Girls',
-      '12UB':'12U Boys','12UG':'12U Girls',
-      '14UB':'14U Boys','14UG':'14U Girls'
-    }[code] || code || '';
+  let allTeams = [];
+  let adminState = {
+    manualTeams: [],
+    pools: [],
+    schedules: [],
+    scores: {},
+    dayConfigs: {}
+  };
+
+  const toastEl = document.getElementById('toast');
+  let toastTimer = null;
+
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('visible');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('visible'), 1500);
   }
 
-  function toBool(v){
-    return v === true || v === 'true' || v === 'TRUE' || v === 1 || v === '1' ||
-           v === 'Yes' || v === 'YES' || v === 'yes';
+  function normalizeState(state){
+    if (!state || typeof state !== 'object') state = {};
+    state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
+    state.pools = Array.isArray(state.pools) ? state.pools : [];
+    state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
+    state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
+    state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
+    return state;
   }
 
-  function getAllTeams(){
-    return [...teams, ...manualTeams];
-  }
-  function getTeamById(id){
-    id = String(id);
-    return teams.find(t => String(t.id) === id) ||
-           manualTeams.find(t => String(t.id) === id) || null;
-  }
-  function getPoolsForDivision(division){
-    return pools.filter(p => p.division === division);
-  }
-  function getPoolForTeam(division, teamId){
-    teamId = String(teamId);
-    return pools.find(p => p.division === division && p.teamIds.includes(teamId)) || null;
-  }
-
-  // ========= STATE SYNC (ADMINSTATE SHEET) ==========
-  async function loadStateFromApi() {
-    try {
-      const res = await fetch(API_URL + '?entity=state');
-      const data = await res.json();
-
-      if (data) {
-        manualTeams = Array.isArray(data.manualTeams) ? data.manualTeams : [];
-        pools       = Array.isArray(data.pools)       ? data.pools       : [];
-        schedules   = Array.isArray(data.schedules)   ? data.schedules   : [];
-        scores      = data.scores && typeof data.scores === 'object' ? data.scores : {};
-        dayConfigs  = data.dayConfigs && typeof data.dayConfigs === 'object' ? data.dayConfigs : {};
-      }
-    } catch (err) {
-      console.error('Error loading admin state from API:', err);
-      // If this fails, state just stays at defaults.
-    }
-  }
-
-  async function saveStateToApi() {
-    const state = {
-      manualTeams,
-      pools,
-      schedules,
-      scores,
-      dayConfigs
-    };
-
-    try {
+  async function saveStateToApi(){
+    try{
       await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          entity: 'state',
-          state
-        })
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ entity:'state', state: adminState })
       });
-    } catch (err) {
-      console.error('Error saving admin state to API:', err);
+      showToast('Admin state saved');
+    }catch(err){
+      console.error(err);
+      showToast('Save failed');
+    }
+  }
+  async function loadAdminData(){
+    try{
+      const [teamsRes, stateRes] = await Promise.all([
+        fetch(API_URL),
+        fetch(API_URL + '?entity=state')
+      ]);
+      allTeams = await teamsRes.json();
+      adminState = normalizeState(await stateRes.json());
+      renderAll();
+    }catch(err){
+      console.error(err);
+      showToast('Error loading admin data');
     }
   }
 
-  // These are now just wrappers around saveStateToApi
-  function saveManualTeams(){ saveStateToApi(); }
-  function savePools(){ saveStateToApi(); }
-  function saveSchedules(){ saveStateToApi(); }
-  function saveScoresStore(){ saveStateToApi(); }
-  function saveDayConfigs(){ saveStateToApi(); }
-
-  // ========= LOGIN + TABS ==========
-  const adminLoginBtn = document.getElementById('adminLoginBtn');
-  const adminPasswordInput = document.getElementById('adminPassword');
-  const adminLoginMessage = document.getElementById('adminLoginMessage');
-  const adminMain = document.getElementById('adminMain');
-
-  adminLoginBtn.addEventListener('click', async () => {
-    if (adminPasswordInput.value.trim() !== ADMIN_PASSWORD){
-      adminLoginMessage.textContent = 'Incorrect password.';
-      adminLoginMessage.className = 'message visible error';
-      adminMain.style.display = 'none';
-      return;
-    }
-    adminLoginMessage.textContent = 'Admin panel unlocked.';
-    adminLoginMessage.className = 'message visible success';
-    adminMain.style.display = 'block';
-
-    // 1. Load teams from Teams sheet
-    await loadTeamsFromApi();
-    // 2. Load shared admin state (pools, schedules, scores, etc.)
-    await loadStateFromApi();
-
-    renderTeamsTables();
+  function renderAll(){
+    renderTeamsTab();
     refreshPoolsUI();
+    renderManualTeams();
     renderDayConfigsUI();
-    renderKnockoutEditor();
-    renderScheduleAdmin(document.getElementById('schedDivision').value);
-    renderSchedulePreview(document.getElementById('schedDivision').value);
-  });
+    renderGamesUI();
+    renderKnockoutsUI();
+    renderScoringTab();
+  }
 
+  /* ============== TAB HANDLING ============== */
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => {
+        p.classList.toggle('active', p.id === 'tab-' + tab);
+      });
     });
   });
 
-  async function loadTeamsFromApi(){
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    teams = Array.isArray(data) ? data : [];
+  /* ============== TEAMS TAB ============== */
+
+  const teamsDivisionFilter = document.getElementById('teamsDivisionFilter');
+  const teamsStatusFilter = document.getElementById('teamsStatusFilter');
+  const teamsListEl = document.getElementById('teamsList');
+  const teamsSummaryEl = document.getElementById('teamsSummary');
+
+  teamsDivisionFilter.addEventListener('change', renderTeamsTab);
+  teamsStatusFilter.addEventListener('change', renderTeamsTab);
+
+  function statusPill(status){
+    const span = document.createElement('span');
+    span.classList.add('status-pill');
+    if (status === 'approved'){
+      span.classList.add('status-approved');
+      span.textContent = 'Approved';
+    }else if (status === 'declined'){
+      span.classList.add('status-declined');
+      span.textContent = 'Declined';
+    }else{
+      span.classList.add('status-pending');
+      span.textContent = 'Pending';
+    }
+    return span;
   }
 
-  async function postUpdate(payload){
-    try {
+  function renderTeamsTab(){
+    if (!Array.isArray(allTeams)) allTeams = [];
+    const divFilter = teamsDivisionFilter.value;
+    const statusFilter = teamsStatusFilter.value;
+
+    let teams = allTeams.slice();
+    if (divFilter){
+      teams = teams.filter(t => t.division === divFilter);
+    }
+    if (statusFilter){
+      teams = teams.filter(t => String(t.status).toLowerCase() === statusFilter);
+    }
+
+    teamsListEl.innerHTML = '';
+    if (!teams.length){
+      teamsListEl.innerHTML = '<div class="empty-note">No teams match the current filters.</div>';
+    }else{
+      teams.forEach(team => {
+        teamsListEl.appendChild(renderTeamCard(team));
+      });
+    }
+
+    // summary counts
+    const pending = allTeams.filter(t => String(t.status).toLowerCase() === 'pending').length;
+    const approved = allTeams.filter(t => String(t.status).toLowerCase() === 'approved').length;
+    const declined = allTeams.filter(t => String(t.status).toLowerCase() === 'declined').length;
+
+    teamsSummaryEl.innerHTML = `
+      <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+        <span class="pill">Pending: ${pending}</span>
+        <span class="pill" style="background:#dcfce7; color:#166534;">Approved: ${approved}</span>
+        <span class="pill" style="background:#fee2e2; color:#991b1b;">Declined: ${declined}</span>
+      </div>
+    `;
+  }
+
+  function renderTeamCard(team){
+    const card = document.createElement('div');
+    card.className = 'team-card';
+
+    const header = document.createElement('div');
+    header.className = 'team-header';
+
+    const left = document.createElement('div');
+    const title = document.createElement('div');
+    title.className = 'team-title';
+    title.textContent = team.teamName || 'Team';
+    const meta = document.createElement('div');
+    meta.className = 'team-meta';
+    const divLabel = DIVISION_LABELS[team.division] || team.division || '';
+    meta.textContent = `${divLabel} • Region ${team.regionNumber || ''} • ${team.city || ''}, ${team.state || ''}`;
+    left.appendChild(title);
+    left.appendChild(meta);
+
+    const right = document.createElement('div');
+    right.appendChild(statusPill(String(team.status).toLowerCase()));
+
+    header.appendChild(left);
+    header.appendChild(right);
+
+    const row1 = document.createElement('div');
+    row1.className = 'team-row';
+    row1.innerHTML = `
+      <div><strong>Coach:</strong> ${team.coachName || ''}</div>
+      <div><strong>Email:</strong> ${team.coachEmail || ''}</div>
+      <div><strong>Phone:</strong> ${team.coachPhone || ''}</div>
+    `;
+
+    const checks = document.createElement('div');
+    checks.className = 'check-row';
+
+    const docs = [
+      { key:'docs_application', label:'Application' },
+      { key:'docs_roster', label:'Roster' },
+      { key:'docs_check', label:'Check' }
+    ];
+
+    docs.forEach(d => {
+      const lbl = document.createElement('label');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !!team[d.key];
+      cb.addEventListener('change', () => {
+        const updated = Object.assign({}, team, { [d.key]: cb.checked ? 1 : 0 });
+        updateTeamOnServer(updated);
+      });
+      lbl.appendChild(cb);
+      lbl.append(' ' + d.label);
+      checks.appendChild(lbl);
+    });
+
+    const actions = document.createElement('div');
+    actions.className = 'team-row';
+    const leftActions = document.createElement('div');
+    const rightActions = document.createElement('div');
+
+    const btnApprove = document.createElement('button');
+    btnApprove.className = 'btn btn-approve btn-small';
+    btnApprove.textContent = 'Approve';
+    btnApprove.addEventListener('click', () => changeTeamStatus(team, 'approved'));
+
+    const btnPending = document.createElement('button');
+    btnPending.className = 'btn btn-pending btn-small';
+    btnPending.textContent = 'Set Pending';
+    btnPending.addEventListener('click', () => changeTeamStatus(team, 'pending'));
+
+    const btnDecline = document.createElement('button');
+    btnDecline.className = 'btn btn-decline btn-small';
+    btnDecline.textContent = 'Decline';
+    btnDecline.addEventListener('click', () => changeTeamStatus(team, 'declined'));
+
+    leftActions.appendChild(btnApprove);
+    leftActions.appendChild(btnPending);
+    leftActions.appendChild(btnDecline);
+
+    const noteInput = document.createElement('input');
+    noteInput.className = 'note-input';
+    noteInput.placeholder = 'Internal note (not shown publicly)';
+    noteInput.value = team.internalNote || '';
+    noteInput.addEventListener('change', () => {
+      const updated = Object.assign({}, team, { internalNote: noteInput.value });
+      updateTeamOnServer(updated);
+    });
+    rightActions.appendChild(noteInput);
+
+    actions.appendChild(leftActions);
+    actions.appendChild(rightActions);
+
+    card.appendChild(header);
+    card.appendChild(row1);
+    card.appendChild(checks);
+    card.appendChild(actions);
+
+    return card;
+  }
+
+  async function updateTeamOnServer(updatedTeam){
+    try{
       const res = await fetch(API_URL, {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ mode:'update', team: updatedTeam })
       });
-      await res.text();
-    } catch(err){
-      console.error('Update error', err);
+      const data = await res.json();
+      if (!data.ok){
+        console.error('Update failed', data);
+        showToast('Update failed');
+        return;
+      }
+      const idx = allTeams.findIndex(t => String(t.id) === String(updatedTeam.id));
+      if (idx !== -1) allTeams[idx] = updatedTeam;
+      renderTeamsTab();
+      showToast('Team updated');
+    }catch(err){
+      console.error(err);
+      showToast('Update failed');
     }
   }
 
-  // ========= TEAMS TAB ==========
-  const adminTeamsBody   = document.getElementById('adminTeamsBody');
-  const declinedTeamsBody= document.getElementById('declinedTeamsBody');
-  const activeEmpty      = document.getElementById('activeEmpty');
-  const declinedEmpty    = document.getElementById('declinedEmpty');
-
-  function renderTeamsTables(){
-    adminTeamsBody.innerHTML = '';
-    declinedTeamsBody.innerHTML = '';
-
-    const activeTeams = teams.filter(t => (t.status || 'pending') !== 'declined');
-    const declinedTeams = teams.filter(t => t.status === 'declined');
-
-    activeEmpty.style.display = activeTeams.length ? 'none' : 'block';
-    declinedEmpty.style.display = declinedTeams.length ? 'none' : 'block';
-
-    activeTeams.forEach(team => {
-      const tr = document.createElement('tr');
-
-      const tdDiv = document.createElement('td');
-      tdDiv.textContent = divisionLabel(team.division);
-
-      const tdRegion = document.createElement('td');
-      tdRegion.innerHTML = `<strong>${team.regionNumber || ''}</strong>`;
-
-      const tdTeam = document.createElement('td');
-      tdTeam.innerHTML =
-        `<strong>${team.teamName || ''}</strong><br>` +
-        `<div class="coach-line">Coach: ${team.coachName || ''}</div>` +
-        `<div class="email-line">${team.coachEmail || ''}</div>`;
-
-      const tdDocs = document.createElement('td');
-      tdDocs.className = 'docs-flags';
-
-      const makeDocRow = (label, key) => {
-        const row = document.createElement('div');
-        row.className = 'docs-flag-row';
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = toBool(team[key]);
-        cb.addEventListener('change', () => {
-          updateDocs(team.id, {
-            docs_application: key === 'docs_application' ? cb.checked : toBool(team.docs_application),
-            docs_roster:      key === 'docs_roster'      ? cb.checked : toBool(team.docs_roster),
-            docs_check:       key === 'docs_check'       ? cb.checked : toBool(team.docs_check)
-          });
-        });
-        row.appendChild(cb);
-        const span = document.createElement('span');
-        span.textContent = label;
-        row.appendChild(span);
-        return row;
-      };
-
-      tdDocs.appendChild(makeDocRow('Application', 'docs_application'));
-      tdDocs.appendChild(makeDocRow('Roster', 'docs_roster'));
-      tdDocs.appendChild(makeDocRow('Check', 'docs_check'));
-
-      const tdStatus = document.createElement('td');
-      const chip = document.createElement('span');
-      chip.className = 'status-chip';
-      const status = team.status || 'pending';
-      if (status === 'approved') chip.classList.add('status-approved');
-      else if (status === 'declined') chip.classList.add('status-declined');
-      else chip.classList.add('status-pending');
-      chip.textContent = status === 'approved' ? 'Approved' :
-                         status === 'declined' ? 'Declined' :
-                         'Pending';
-      tdStatus.appendChild(chip);
-
-      const tdActions = document.createElement('td');
-      const btnApprove = document.createElement('button');
-      btnApprove.textContent = 'Approve';
-      btnApprove.className = 'btn-small btn-approve';
-      btnApprove.onclick = () => updateStatus(team.id, 'approved');
-      const btnDecline = document.createElement('button');
-      btnDecline.textContent = 'Decline';
-      btnDecline.className = 'btn-small btn-decline';
-      btnDecline.onclick = () => updateStatus(team.id, 'declined');
-      tdActions.appendChild(btnApprove);
-      tdActions.appendChild(document.createElement('br'));
-      tdActions.appendChild(btnDecline);
-
-      tr.appendChild(tdDiv);
-      tr.appendChild(tdRegion);
-      tr.appendChild(tdTeam);
-      tr.appendChild(tdDocs);
-      tr.appendChild(tdStatus);
-      tr.appendChild(tdActions);
-
-      adminTeamsBody.appendChild(tr);
-    });
-
-    declinedTeams.forEach(team => {
-      const tr = document.createElement('tr');
-
-      const tdDiv = document.createElement('td');
-      tdDiv.textContent = divisionLabel(team.division);
-
-      const tdRegion = document.createElement('td');
-      tdRegion.innerHTML = `<strong>${team.regionNumber || ''}</strong>`;
-
-      const tdTeam = document.createElement('td');
-      tdTeam.innerHTML =
-        `<strong>${team.teamName || ''}</strong><br>` +
-        `<div class="coach-line">Coach: ${team.coachName || ''}</div>` +
-        `<div class="email-line">${team.coachEmail || ''}</div>`;
-
-      const tdStatus = document.createElement('td');
-      const chip = document.createElement('span');
-      chip.className = 'status-chip status-declined';
-      chip.textContent = 'Declined';
-      tdStatus.appendChild(chip);
-
-      const tdActions = document.createElement('td');
-      const btnPending = document.createElement('button');
-      btnPending.textContent = 'Move to Pending';
-      btnPending.className = 'btn-small btn-pending';
-      btnPending.onclick = () => updateStatus(team.id, 'pending');
-      tdActions.appendChild(btnPending);
-
-      tr.appendChild(tdDiv);
-      tr.appendChild(tdRegion);
-      tr.appendChild(tdTeam);
-      tr.appendChild(tdStatus);
-      tr.appendChild(tdActions);
-
-      declinedTeamsBody.appendChild(tr);
-    });
+  function changeTeamStatus(team, status){
+    const updated = Object.assign({}, team, { status });
+    updateTeamOnServer(updated);
   }
+  /* ============== POOLS TAB LOGIC ============== */
 
-  async function updateStatus(id, status){
-    await postUpdate({mode:'update', team:{id, status}});
-    await loadTeamsFromApi();
-    renderTeamsTables();
-    refreshPoolsUI();
-    renderSchedulePreview(document.getElementById('schedDivision').value);
-  }
-
-  async function updateDocs(id, docs){
-    await postUpdate({mode:'update', team:{id, ...docs}});
-    await loadTeamsFromApi();
-    renderTeamsTables();
-  }
-
-  // ========= POOLS TAB ==========
-  const poolDivisionSel   = document.getElementById('poolDivision');
-  const poolNameInput     = document.getElementById('poolName');
-  const createPoolBtn     = document.getElementById('createPoolBtn');
-  const poolTeamsArea     = document.getElementById('poolTeamsArea');
-  const poolsList         = document.getElementById('poolsList');
+  const poolsDivisionSel = document.getElementById('poolsDivisionSelect');
+  const newPoolNameInput = document.getElementById('newPoolName');
+  const addPoolBtn = document.getElementById('addPoolBtn');
+  const poolsList = document.getElementById('poolsList');
+  const poolTeamsArea = document.getElementById('poolTeamsArea');
   const manualTeamNameInput = document.getElementById('manualTeamName');
-  const addManualTeamBtn  = document.getElementById('addManualTeamBtn');
+  const manualTeamRegionInput = document.getElementById('manualTeamRegion');
+  const manualTeamCityInput = document.getElementById('manualTeamCity');
+  const manualTeamStateInput = document.getElementById('manualTeamState');
+  const addManualTeamBtn = document.getElementById('addManualTeamBtn');
+  const manualTeamsList = document.getElementById('manualTeamsList');
 
-  poolDivisionSel.addEventListener('change', () => {
+  poolsDivisionSel.addEventListener('change', () => {
     refreshPoolsUI();
+    renderManualTeams();
   });
 
-  createPoolBtn.addEventListener('click', () => {
-    const division = poolDivisionSel.value;
-    const name = poolNameInput.value.trim();
+  addPoolBtn.addEventListener('click', () => {
+    const name = newPoolNameInput.value.trim();
+    const division = poolsDivisionSel.value;
     if (!name) return;
-    const id = 'pool_' + Date.now();
-    pools.push({id, division, name, teamIds:[]});
-    poolNameInput.value = '';
-    savePools();
+    const pool = {
+      id: 'P_' + division + '_' + Date.now(),
+      division,
+      name,
+      teamIds:[]
+    };
+    adminState.pools.push(pool);
+    newPoolNameInput.value = '';
+    saveStateToApi();
     refreshPoolsUI();
   });
 
   addManualTeamBtn.addEventListener('click', () => {
-    const division = poolDivisionSel.value;
+    const division = poolsDivisionSel.value;
     const name = manualTeamNameInput.value.trim();
     if (!name) return;
-    const id = 'manual_' + Date.now();
-    manualTeams.push({
-      id,
+    const manualTeam = {
+      id: 'M_' + Date.now(),
       division,
-      teamName:name,
-      manual:true,
-      regionNumber:'',
-      coachName:'',
-      coachEmail:''
-    });
+      teamName: name,
+      regionNumber: manualTeamRegionInput.value || '',
+      city: manualTeamCityInput.value || '',
+      state: manualTeamStateInput.value || '',
+      manual:true
+    };
+    adminState.manualTeams.push(manualTeam);
     manualTeamNameInput.value = '';
-    saveManualTeams();
+    manualTeamRegionInput.value = '';
+    manualTeamCityInput.value = '';
+    manualTeamStateInput.value = '';
+    saveStateToApi();
     refreshPoolsUI();
-    renderSchedulePreview(document.getElementById('schedDivision').value);
+    renderManualTeams();
   });
 
+  function getPoolsForDivision(division){
+    return adminState.pools.filter(p => p.division === division);
+  }
+
+  function getAllTeamsForDivision(division){
+    const realTeams = allTeams.filter(t => t.division === division);
+    const manual = adminState.manualTeams.filter(m => m.division === division);
+    return realTeams.concat(manual);
+  }
+
+  function getAllTeams(){
+    const manual = adminState.manualTeams.map(m => Object.assign({manual:true}, m));
+    return allTeams.concat(manual);
+  }
+
   function assignTeamToPool(division, teamId, poolId){
-    teamId = String(teamId);
-    pools.forEach(p => {
-      if (p.division !== division) return;
-      p.teamIds = p.teamIds.filter(id => id !== teamId);
+    const teamIdStr = String(teamId);
+    adminState.pools.forEach(p => {
+      if (p.division === division){
+        p.teamIds = (p.teamIds || []).map(String).filter(id => id !== teamIdStr);
+      }
     });
     if (poolId){
-      const pool = pools.find(p => p.id === poolId);
-      if (pool && !pool.teamIds.includes(teamId)) pool.teamIds.push(teamId);
+      const pool = adminState.pools.find(p => p.id === poolId);
+      if (pool){
+        pool.teamIds = pool.teamIds || [];
+        if (!pool.teamIds.map(String).includes(teamIdStr)){
+          pool.teamIds.push(teamIdStr);
+        }
+      }
     }
-    savePools();
+    saveStateToApi();
     refreshPoolsUI();
-    renderSchedulePreview(document.getElementById('schedDivision').value);
+  }
+
+  function divisionLabel(code){
+    return DIVISION_LABELS[code] || code || '';
+  }
+
+  function renderManualTeams(){
+    const division = poolsDivisionSel.value;
+    const manual = adminState.manualTeams.filter(m => m.division === division);
+    manualTeamsList.innerHTML = '';
+    if (!manual.length){
+      manualTeamsList.innerHTML = '<div class="empty-note">No manual teams for this division.</div>';
+      return;
+    }
+    manual.forEach(m => {
+      const row = document.createElement('div');
+      row.style.fontSize = '12px';
+      row.style.marginBottom = '3px';
+      row.innerHTML = `
+        <span class="tag">${m.teamName}</span>
+        <span class="team-meta">Region ${m.regionNumber || ''} • ${m.city || ''} ${m.state || ''}</span>
+      `;
+      manualTeamsList.appendChild(row);
+    });
   }
 
   function refreshPoolsUI(){
-    const division = poolDivisionSel.value;
+    const division = poolsDivisionSel.value;
     const relevantTeams = getAllTeams().filter(t =>
-      t.division === division && (t.status === 'approved' || t.manual)
+      t.division === division && (String(t.status).toLowerCase() === 'approved' || t.manual)
     );
 
+    // Teams assignment UI
     poolTeamsArea.innerHTML = '';
     if (!relevantTeams.length){
       poolTeamsArea.innerHTML = '<span class="empty-note">No approved or manual teams yet for this division.</span>';
@@ -918,985 +1051,205 @@
         const nameSpan = document.createElement('span');
         nameSpan.innerHTML = `<strong>${team.teamName || 'Team'}</strong>`;
         const sub = document.createElement('span');
+        sub.style.fontSize = '11px';
+        sub.style.color = '#6b7280';
         sub.textContent = team.manual ? 'Manual' : `Region ${team.regionNumber || ''}`;
         div.appendChild(nameSpan);
         div.appendChild(sub);
 
         const select = document.createElement('select');
+        select.style.marginLeft = '8px';
         const noneOpt = document.createElement('option');
         noneOpt.value = '';
         noneOpt.textContent = 'No pool';
         select.appendChild(noneOpt);
+
         const poolsForDiv = getPoolsForDivision(division);
         poolsForDiv.forEach(p => {
           const o = document.createElement('option');
           o.value = p.id;
           o.textContent = p.name;
-          if (p.teamIds.includes(String(team.id))) o.selected = true;
+          if ((p.teamIds || []).map(String).includes(String(team.id))) o.selected = true;
           select.appendChild(o);
         });
+
         select.addEventListener('change', () => {
           assignTeamToPool(division, team.id, select.value);
         });
-        div.appendChild(select);
 
+        div.appendChild(select);
         poolTeamsArea.appendChild(div);
       });
     }
 
+    // Pools list
     poolsList.innerHTML = '';
     const poolsForDiv = getPoolsForDivision(division);
     if (!poolsForDiv.length){
       poolsList.innerHTML = '<div class="empty-note">No pools created yet for this division.</div>';
-    } else {
-      poolsForDiv.forEach(pool => {
-        const container = document.createElement('div');
-        container.style.marginTop = '8px';
-
-        const header = document.createElement('div');
-        header.style.display = 'flex';
-        header.style.alignItems = 'center';
-        header.style.gap = '6px';
-
-        const title = document.createElement('div');
-        title.innerHTML = `<strong>${pool.name}</strong> <span style="font-size:11px;color:#6b7280;">(${divisionLabel(pool.division)})</span>`;
-        header.appendChild(title);
-
-        const editBtn = document.createElement('button');
-        editBtn.className = 'btn-small btn-ghost';
-        editBtn.style.fontSize = '10px';
-        editBtn.textContent = 'Edit';
-        editBtn.addEventListener('click', () => {
-          const newName = prompt('New pool name:', pool.name);
-          if (newName && newName.trim()){
-            pool.name = newName.trim();
-            savePools();
-            refreshPoolsUI();
-            renderScheduleAdmin(pool.division);
-            renderSchedulePreview(pool.division);
-          }
-        });
-
-        const delBtn = document.createElement('button');
-        delBtn.className = 'btn-small btn-decline';
-        delBtn.style.fontSize = '10px';
-        delBtn.textContent = 'Delete';
-        delBtn.addEventListener('click', () => {
-          if (!confirm(`Delete ${pool.name}? Teams will be unassigned from this pool.`)) return;
-          pools = pools.filter(p => p.id !== pool.id);
-          savePools();
-          refreshPoolsUI();
-          renderScheduleAdmin(pool.division);
-          renderSchedulePreview(pool.division);
-        });
-
-        header.appendChild(editBtn);
-        header.appendChild(delBtn);
-
-        const body = document.createElement('div');
-        body.style.marginTop = '4px';
-        const members = getAllTeams().filter(t => pool.teamIds.includes(String(t.id)));
-        if (!members.length){
-          body.innerHTML = '<span class="empty-note">No teams assigned yet.</span>';
-        } else {
-          members.forEach(m => {
-            const tag = document.createElement('span');
-            tag.className = 'tag';
-            tag.textContent = m.teamName || 'Team';
-            body.appendChild(tag);
-          });
-        }
-
-        container.appendChild(header);
-        container.appendChild(body);
-        poolsList.appendChild(container);
-      });
+      return;
     }
+
+    poolsForDiv.forEach(pool => {
+      const container = document.createElement('div');
+      container.style.marginTop = '8px';
+
+      const header = document.createElement('div');
+      header.style.display = 'flex';
+      header.style.alignItems = 'center';
+      header.style.gap = '6px';
+
+      const title = document.createElement('div');
+      title.innerHTML = `<strong>${pool.name}</strong> <span style="font-size:11px;color:#6b7280;">(${divisionLabel(pool.division)})</span>`;
+      header.appendChild(title);
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn btn-ghost btn-small';
+      editBtn.style.fontSize = '10px';
+      editBtn.textContent = 'Edit';
+      editBtn.addEventListener('click', () => {
+        const newName = prompt('New pool name:', pool.name);
+        if (newName && newName.trim()){
+          pool.name = newName.trim();
+          saveStateToApi();
+          refreshPoolsUI();
+          renderGamesUI();
+        }
+      });
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn btn-decline btn-small';
+      delBtn.style.fontSize = '10px';
+      delBtn.textContent = 'Delete';
+      delBtn.addEventListener('click', () => {
+        if (!confirm(`Delete ${pool.name}? Teams will be unassigned from this pool.`)) return;
+        adminState.pools = adminState.pools.filter(p => p.id !== pool.id);
+        saveStateToApi();
+        refreshPoolsUI();
+        renderGamesUI();
+      });
+
+      header.appendChild(editBtn);
+      header.appendChild(delBtn);
+
+      const body = document.createElement('div');
+      body.style.marginTop = '4px';
+      const members = getAllTeams().filter(t => (pool.teamIds || []).map(String).includes(String(t.id)));
+      if (!members.length){
+        body.innerHTML = '<span class="empty-note">No teams assigned yet.</span>';
+      } else {
+        members.forEach(m => {
+          const tag = document.createElement('span');
+          tag.className = 'tag';
+          tag.textContent = m.teamName || 'Team';
+          body.appendChild(tag);
+        });
+      }
+
+      container.appendChild(header);
+      container.appendChild(body);
+      poolsList.appendChild(container);
+    });
   }
 
-  // ========= SCHEDULE TAB ==========
-  const schedDivisionSel = document.getElementById('schedDivision');
-  const dayConfigsDiv    = document.getElementById('dayConfigs');
-  const addDayBtn        = document.getElementById('addDayBtn');
-  const crossPoolCheckbox= document.getElementById('crossPoolCheckbox');
-  const generateScheduleBtn = document.getElementById('generateScheduleBtn');
-  const scheduleAdmin    = document.getElementById('scheduleAdmin');
-  const schedulePreview  = document.getElementById('schedulePreview');
-  const knockoutEditor   = document.getElementById('knockoutEditor');
+  /* ============== SCHEDULE HELPERS ============== */
 
-  schedDivisionSel.addEventListener('change', () => {
+  function getScheduleForDivision(division){
+    let sched = adminState.schedules.find(s => s.division === division);
+    if (!sched){
+      sched = { division, games:[], knockouts:[] };
+      adminState.schedules.push(sched);
+    }
+    sched.games = Array.isArray(sched.games) ? sched.games : [];
+    sched.knockouts = Array.isArray(sched.knockouts) ? sched.knockouts : [];
+    return sched;
+  }
+
+  function getDayConfigsForDivision(division){
+    adminState.dayConfigs = adminState.dayConfigs || {};
+    if (!adminState.dayConfigs[division]){
+      adminState.dayConfigs[division] = [];
+    }
+    return adminState.dayConfigs[division];
+  }
+  /* ============== SCHEDULE TAB LOGIC ============== */
+
+  const schedDivisionSelect = document.getElementById('schedDivisionSelect');
+  const schedDayLabelInput = document.getElementById('schedDayLabel');
+  const schedFieldsInput = document.getElementById('schedFields');
+  const schedTimesInput = document.getElementById('schedTimes');
+  const addDayConfigBtn = document.getElementById('addDayConfigBtn');
+  const dayConfigsList = document.getElementById('dayConfigsList');
+  const generateScheduleBtn = document.getElementById('generateScheduleBtn');
+  const gamesListEl = document.getElementById('gamesList');
+  const knockoutsListEl = document.getElementById('knockoutsList');
+
+  schedDivisionSelect.addEventListener('change', () => {
     renderDayConfigsUI();
-    renderScheduleAdmin(schedDivisionSel.value);
-    renderKnockoutEditor();
-    renderSchedulePreview(schedDivisionSel.value);
+    renderGamesUI();
+    renderKnockoutsUI();
   });
 
-  addDayBtn.addEventListener('click', () => {
-    const division = schedDivisionSel.value;
-    if (!dayConfigs[division]) dayConfigs[division] = [];
-    dayConfigs[division].push({label:'',fields:'',times:''});
-    saveDayConfigs();
+  addDayConfigBtn.addEventListener('click', () => {
+    const division = schedDivisionSelect.value;
+    const label = schedDayLabelInput.value.trim();
+    const fieldsStr = schedFieldsInput.value.trim();
+    const timesStr = schedTimesInput.value.trim();
+    if (!label || !fieldsStr || !timesStr) return;
+
+    const cfgs = getDayConfigsForDivision(division);
+    cfgs.push({
+      id:'D_'+Date.now(),
+      label,
+      fields:fieldsStr,
+      times:timesStr
+    });
+    schedDayLabelInput.value = '';
+    schedFieldsInput.value = '';
+    schedTimesInput.value = '';
+    saveStateToApi();
     renderDayConfigsUI();
   });
 
   function renderDayConfigsUI(){
-    const division = schedDivisionSel.value;
-    const list = dayConfigs[division] || [];
-    dayConfigsDiv.innerHTML = '';
-    if (!list.length){
-      dayConfigsDiv.innerHTML = '<div class="empty-note">Add at least one day (e.g., "Saturday (Apr 25)") with fields and times.</div>';
+    const division = schedDivisionSelect.value;
+    const cfgs = getDayConfigsForDivision(division);
+    dayConfigsList.innerHTML = '';
+    if (!cfgs.length){
+      dayConfigsList.innerHTML = '<div class="empty-note">No day configuration yet. Add at least one day with fields and times.</div>';
       return;
     }
-
-    list.forEach((day, idx) => {
+    cfgs.forEach(cfg => {
       const row = document.createElement('div');
-      row.className = 'small-input-row';
-
-      const wrapLabel = document.createElement('div');
-      const lbl1 = document.createElement('div');
-      lbl1.className = 'small-label';
-      lbl1.textContent = `Day ${idx+1} Label`;
-      const inp1 = document.createElement('input');
-      inp1.value = day.label;
-      inp1.placeholder = 'Saturday (Apr 25)';
-      inp1.style.minWidth = '150px';
-      inp1.addEventListener('input', () => {
-        dayConfigs[division][idx].label = inp1.value;
-        saveDayConfigs();
-      });
-      wrapLabel.appendChild(lbl1);
-      wrapLabel.appendChild(inp1);
-
-      const wrapFields = document.createElement('div');
-      wrapFields.style.flex = '1';
-      const lbl2 = document.createElement('div');
-      lbl2.className = 'small-label';
-      lbl2.textContent = 'Fields (comma separated)';
-      const inp2 = document.createElement('input');
-      inp2.value = day.fields;
-      inp2.placeholder = 'Field 5, Field 6';
-      inp2.style.width = '100%';
-      inp2.addEventListener('input', () => {
-        dayConfigs[division][idx].fields = inp2.value;
-        saveDayConfigs();
-      });
-      wrapFields.appendChild(lbl2);
-      wrapFields.appendChild(inp2);
-
-      const wrapTimes = document.createElement('div');
-      wrapTimes.style.flex = '1';
-      const lbl3 = document.createElement('div');
-      lbl3.className = 'small-label';
-      lbl3.textContent = 'Times (comma separated)';
-      const inp3 = document.createElement('input');
-      inp3.value = day.times;
-      inp3.placeholder = '8:00am, 9:15am, 10:30am';
-      inp3.style.width = '100%';
-      inp3.addEventListener('input', () => {
-        dayConfigs[division][idx].times = inp3.value;
-        saveDayConfigs();
-      });
-      wrapTimes.appendChild(lbl3);
-      wrapTimes.appendChild(inp3);
-
-      const wrapDel = document.createElement('div');
-      wrapDel.style.alignSelf = 'flex-end';
-      const delBtn = document.createElement('button');
-      delBtn.className = 'btn-small btn-decline';
-      delBtn.textContent = 'X';
-      delBtn.addEventListener('click', () => {
-        dayConfigs[division].splice(idx,1);
-        saveDayConfigs();
+      row.style.fontSize = '12px';
+      row.style.marginBottom = '4px';
+      row.innerHTML = `
+        <strong>${cfg.label}</strong> – Fields: ${cfg.fields} • Times: ${cfg.times}
+      `;
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-ghost btn-small';
+      btn.style.marginTop = '2px';
+      btn.textContent = 'Delete';
+      btn.addEventListener('click', () => {
+        const list = getDayConfigsForDivision(division);
+        adminState.dayConfigs[division] = list.filter(c => c.id !== cfg.id);
+        saveStateToApi();
         renderDayConfigsUI();
       });
-      wrapDel.appendChild(delBtn);
-
-      row.appendChild(wrapLabel);
-      row.appendChild(wrapFields);
-      row.appendChild(wrapTimes);
-      row.appendChild(wrapDel);
-
-      dayConfigsDiv.appendChild(row);
+      row.appendChild(document.createElement('br'));
+      row.appendChild(btn);
+      dayConfigsList.appendChild(row);
     });
-  }
-
-  function buildRoundRobin(teamIds, maxGamesPerTeam){
-    const ids = teamIds.map(String);
-    if (ids.length < 2) return [];
-    let work = [...ids];
-    const n = work.length;
-    if (n % 2 === 1){
-      work.push('BYE');
-    }
-    const m = work.length;
-    const rounds = [];
-    const gameCount = {};
-    const canPlay = (a,b) => {
-      const ca = gameCount[a] || 0;
-      const cb = gameCount[b] || 0;
-      return ca < maxGamesPerTeam && cb < maxGamesPerTeam;
-    };
-
-    for (let r=0; r<m-1; r++){
-      const roundMatches = [];
-      for (let i=0; i<m/2; i++){
-        const t1 = work[i];
-        const t2 = work[m-1-i];
-        if (t1 === 'BYE' || t2 === 'BYE') continue;
-        if (!canPlay(t1,t2)) continue;
-        roundMatches.push({homeId:String(t1), awayId:String(t2)});
-        gameCount[t1] = (gameCount[t1]||0)+1;
-        gameCount[t2] = (gameCount[t2]||0)+1;
-      }
-      if (roundMatches.length) rounds.push(roundMatches);
-      work = [work[0], ...work.slice(2), work[1]];
-    }
-    return rounds;
   }
 
   generateScheduleBtn.addEventListener('click', () => {
-    const division = schedDivisionSel.value;
-    const poolsForDiv = getPoolsForDivision(division);
-    if (!poolsForDiv.length){
-      scheduleAdmin.innerHTML = '<div class="empty-note">Create pools for this division first.</div>';
-      schedulePreview.innerHTML = '';
+    const division = schedDivisionSelect.value;
+    const pools = getPoolsForDivision(division);
+    const cfgs = getDayConfigsForDivision(division);
+    if (!pools.length){
+      alert('Create pools first.');
       return;
     }
-
-    const rawDays = (dayConfigs[division] || []).map(d => ({
-      label:d.label.trim(),
-      fields:d.fields.split(',').map(x=>x.trim()).filter(Boolean),
-      times:d.times.split(',').map(x=>x.trim()).filter(Boolean)
-    })).filter(d => d.label && d.fields.length && d.times.length);
-
-    if (!rawDays.length){
-      scheduleAdmin.innerHTML = '<div class="empty-note">Add at least one day with fields and times.</div>';
-      schedulePreview.innerHTML = '';
-      return;
-    }
-
-    const includeCross = crossPoolCheckbox.checked;
-
-    const allDivTeams = getAllTeams().filter(t => t.division === division);
-    const poolRounds = [];
-    poolsForDiv.forEach(pool => {
-      const teamIds = allDivTeams
-        .filter(t => pool.teamIds.includes(String(t.id)))
-        .map(t => String(t.id));
-      if (teamIds.length < 2) return;
-      const rounds = buildRoundRobin(teamIds, 3);
-      if (rounds.length){
-        poolRounds.push({poolId:pool.id, poolName:pool.name, rounds});
-      }
-    });
-
-    const crossRounds = [];
-    if (includeCross && poolRounds.length > 1){
-      const gameCount = {};
-      poolRounds.forEach(pr => {
-        pr.rounds.forEach(r => {
-          r.forEach(m => {
-            gameCount[m.homeId] = (gameCount[m.homeId]||0)+1;
-            gameCount[m.awayId] = (gameCount[m.awayId]||0)+1;
-          });
-        });
-      });
-
-      const allPairs = [];
-      const poolTeams = poolsForDiv.map(p => ({
-        pool:p,
-        teams: allDivTeams.filter(t => p.teamIds.includes(String(t.id)))
-      }));
-
-      for (let i=0;i<poolTeams.length;i++){
-        for (let j=i+1;j<poolTeams.length;j++){
-          poolTeams[i].teams.forEach(a => {
-            poolTeams[j].teams.forEach(b => {
-              allPairs.push({a,b});
-            });
-          });
-        }
-      }
-
-      const usedPairs = new Set();
-      const crossList = [];
-      allPairs.forEach(pair => {
-        const key = [pair.a.id, pair.b.id].sort().join('_');
-        if (usedPairs.has(key)) return;
-        const ca = gameCount[pair.a.id] || 0;
-        const cb = gameCount[pair.b.id] || 0;
-        if (ca >= 3 || cb >= 3) return;
-        usedPairs.add(key);
-        gameCount[pair.a.id]=ca+1;
-        gameCount[pair.b.id]=cb+1;
-        crossList.push({
-          poolId:'cross',
-          poolName:`${getPoolForTeam(division,pair.a.id)?.name || ''} vs ${getPoolForTeam(division,pair.b.id)?.name || ''}`,
-          homeId:String(pair.a.id),
-          awayId:String(pair.b.id)
-        });
-      });
-
-      if (crossList.length){
-        const chunkSize = Math.max(1, Math.floor(crossList.length/2));
-        for (let i=0;i<crossList.length;i+=chunkSize){
-          crossRounds.push(crossList.slice(i,i+chunkSize));
-        }
-      }
-    }
-
-    const globalRounds = [];
-    const maxRounds = poolRounds.reduce((max,pr)=>Math.max(max,pr.rounds.length),0);
-    for (let r=0;r<maxRounds;r++){
-      const arr = [];
-      poolRounds.forEach(pr => {
-        if (pr.rounds[r]){
-          pr.rounds[r].forEach(m => arr.push({
-            poolId:pr.poolId, poolName:pr.poolName,
-            homeId:m.homeId, awayId:m.awayId
-          }));
-        }
-      });
-      if (arr.length) globalRounds.push(arr);
-    }
-    crossRounds.forEach(cr => {
-      globalRounds.push(cr.map(m => ({
-        poolId:m.poolId, poolName:m.poolName,
-        homeId:m.homeId, awayId:m.awayId
-      })));
-    });
-
-    if (!globalRounds.length){
-      scheduleAdmin.innerHTML = '<div class="empty-note">No games generated. Check pools and teams.</div>';
-      schedulePreview.innerHTML = '';
-      return;
-    }
-
-    const timeBlocks = [];
-    let blockIdx = 0;
-    rawDays.forEach((day, di) => {
-      day.times.forEach((time, ti) => {
-        timeBlocks.push({
-          index:blockIdx++,
-          dayIndex:di,
-          label:day.label,
-          timeIndex:ti,
-          time,
-          fields:[...day.fields]
-        });
-      });
-    });
-    const blocksCount = timeBlocks.length;
-    if (!blocksCount){
-      scheduleAdmin.innerHTML = '<div class="empty-note">No time blocks defined.</div>';
-      schedulePreview.innerHTML = '';
-      return;
-    }
-
-    const usedBlocksByTeam = {};
-    const blockUsage = timeBlocks.map(()=>0);
-    const assignedGames = [];
-
-    function teamCanPlayAtBlock(teamId, blockIndex){
-      teamId = String(teamId);
-      const used = usedBlocksByTeam[teamId] || [];
-      for (const idx of used){
-        if (idx === blockIndex) return false;
-        if (Math.abs(idx-blockIndex) < 2) return false;
-      }
-      return true;
-    }
-
-    const roundCount = globalRounds.length;
-    let blocksPerRound = Math.max(1, Math.floor(blocksCount/roundCount));
-    if (blocksCount >= 2*roundCount){
-      blocksPerRound = Math.floor(blocksCount/roundCount);
-    }
-
-    function assignGameToBlock(game, roundIndex){
-      const start = roundIndex * blocksPerRound;
-      let end = (roundIndex+1)*blocksPerRound - 1;
-      if (roundIndex === roundCount-1) end = blocksCount-1;
-      const ranges = [
-        [Math.max(0,start), Math.min(blocksCount-1,end)],
-        [0, blocksCount-1]
-      ];
-
-      for (const [from,to] of ranges){
-        for (let b=from;b<=to;b++){
-          const block = timeBlocks[b];
-          if (blockUsage[b] >= block.fields.length) continue;
-          if (!teamCanPlayAtBlock(game.homeId,b)) continue;
-          if (!teamCanPlayAtBlock(game.awayId,b)) continue;
-
-          const field = block.fields[blockUsage[b]];
-          blockUsage[b]++;
-
-          const g = {
-            id: `${division}_${game.poolId}_${assignedGames.length+1}`,
-            division,
-            poolId: game.poolId,
-            poolName: game.poolName,
-            homeId: game.homeId,
-            awayId: game.awayId,
-            date: block.label,
-            time: block.time,
-            field,
-            stage: 'pool'
-          };
-          assignedGames.push(g);
-
-          [game.homeId, game.awayId].forEach(tid => {
-            tid = String(tid);
-            if (!usedBlocksByTeam[tid]) usedBlocksByTeam[tid] = [];
-            usedBlocksByTeam[tid].push(b);
-          });
-
-          return true;
-        }
-      }
-      assignedGames.push({
-        id: `${division}_${game.poolId}_${assignedGames.length+1}`,
-        division,
-        poolId: game.poolId,
-        poolName: game.poolName,
-        homeId: game.homeId,
-        awayId: game.awayId,
-        date: '',
-        time: '',
-        field: '',
-        stage: 'pool'
-      });
-      return false;
-    }
-
-    globalRounds.forEach((roundMatches, rIdx) => {
-      const sorted = roundMatches.slice().sort((a,b)=>(a.poolId||'').localeCompare(b.poolId||''));
-      sorted.forEach(g => assignGameToBlock(g, rIdx));
-    });
-
-    const existing = schedules.find(s => s.division === division);
-    const knockoutsExisting = existing && existing.knockouts ? existing.knockouts : [];
-    schedules = schedules.filter(s => s.division !== division);
-    schedules.push({division, games:assignedGames, knockouts:knockoutsExisting});
-    saveSchedules();
-
-    renderScheduleAdmin(division);
-    renderSchedulePreview(division);
-    renderKnockoutEditor();
-  });
-
-  function renderScheduleAdmin(division){
-    const sched = schedules.find(s => s.division === division);
-    scheduleAdmin.innerHTML = '';
-    if (!sched || !sched.games.length){
-      scheduleAdmin.innerHTML = '<div class="empty-note">No pool-play schedule yet for this division.</div>';
-      return;
-    }
-    const gamesByPool = {};
-    sched.games.filter(g => g.stage === 'pool').forEach(g => {
-      const pool = g.poolId === 'cross'
-        ? 'Cross Pool'
-        : (getPoolForTeam(division,g.homeId)?.name || g.poolName || 'Pool');
-      if (!gamesByPool[pool]) gamesByPool[pool] = [];
-      gamesByPool[pool].push(g);
-    });
-
-    Object.keys(gamesByPool).forEach(poolName => {
-      const block = document.createElement('div');
-      block.style.marginTop = '8px';
-      const title = document.createElement('div');
-      title.innerHTML = `<strong>${poolName}</strong>`;
-      block.appendChild(title);
-
-      const games = gamesByPool[poolName];
-      const allTeams = getAllTeams().filter(t => t.division === division);
-
-      games.forEach(g => {
-        const row = document.createElement('div');
-        row.className = 'game-row';
-
-        const dateInput = document.createElement('input');
-        dateInput.className = 'admin-game-input';
-        dateInput.value = g.date || '';
-        dateInput.placeholder = 'Date';
-        dateInput.addEventListener('input', () => {
-          g.date = dateInput.value;
-          saveSchedules();
-          renderSchedulePreview(division);
-        });
-
-        const timeInput = document.createElement('input');
-        timeInput.className = 'admin-game-input';
-        timeInput.value = g.time || '';
-        timeInput.placeholder = 'Time';
-        timeInput.addEventListener('input', () => {
-          g.time = timeInput.value;
-          saveSchedules();
-          renderSchedulePreview(division);
-        });
-
-        const fieldInput = document.createElement('input');
-        fieldInput.className = 'admin-game-input';
-        fieldInput.value = g.field || '';
-        fieldInput.placeholder = 'Field';
-        fieldInput.addEventListener('input', () => {
-          g.field = fieldInput.value;
-          saveSchedules();
-          renderSchedulePreview(division);
-        });
-
-        const homeSel = document.createElement('select');
-        homeSel.className = 'admin-game-input';
-        const awaySel = document.createElement('select');
-        awaySel.className = 'admin-game-input';
-
-        function fillTeamSelect(sel, currentId){
-          sel.innerHTML = '';
-          const tbd = document.createElement('option');
-          tbd.value = '';
-          tbd.textContent = 'TBD';
-          sel.appendChild(tbd);
-          allTeams.forEach(t => {
-            const o = document.createElement('option');
-            o.value = String(t.id);
-            o.textContent = t.teamName || 'Team';
-            if (String(t.id) === String(currentId)) o.selected = true;
-            sel.appendChild(o);
-          });
-        }
-        fillTeamSelect(homeSel, g.homeId);
-        fillTeamSelect(awaySel, g.awayId);
-
-        homeSel.addEventListener('change', () => {
-          g.homeId = homeSel.value;
-          saveSchedules();
-          renderSchedulePreview(division);
-        });
-        awaySel.addEventListener('change', () => {
-          g.awayId = awaySel.value;
-          saveSchedules();
-          renderSchedulePreview(division);
-        });
-
-        row.appendChild(dateInput);
-        row.appendChild(timeInput);
-        row.appendChild(fieldInput);
-        row.appendChild(homeSel);
-        row.appendChild(document.createTextNode('vs'));
-        row.appendChild(awaySel);
-
-        block.appendChild(row);
-      });
-
-      scheduleAdmin.appendChild(block);
-    });
-  }
-
-  // ========= KNOCKOUT GAMES ==========
-  function getDivisionSchedule(division){
-    return schedules.find(s => s.division === division) || {division, games:[], knockouts:[]};
-  }
-
-  function renderKnockoutEditor(){
-    const division = schedDivisionSel.value;
-    const sched = getDivisionSchedule(division);
-    if (!sched.knockouts) sched.knockouts = [];
-
-    const types = ['Semi 1','Semi 2','Consolation','Championship'];
-    types.forEach(t => {
-      if (!sched.knockouts.find(k => k.type === t)){
-        sched.knockouts.push({
-          id: `${division}_KO_${t.replace(' ','_')}`,
-          division,
-          type: t,
-          date:'',
-          time:'',
-          field:'',
-          homeId:'',
-          awayId:''
-        });
-      }
-    });
-
-    sched.knockouts = sched.knockouts.filter(k => types.includes(k.type));
-    schedules = schedules.filter(s => s.division !== division);
-    schedules.push(sched);
-    saveSchedules();
-
-    knockoutEditor.innerHTML = '';
-    const allTeams = getAllTeams().filter(t => t.division === division && (t.status === 'approved' || t.manual));
-
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>Game</th><th>Date</th><th>Time</th><th>Field</th><th>Home</th><th>Away</th></tr>';
-    table.appendChild(thead);
-    const tbody = document.createElement('tbody');
-
-    sched.knockouts.forEach(k => {
-      const tr = document.createElement('tr');
-
-      const tdType = document.createElement('td');
-      tdType.textContent = k.type;
-
-      const dateInput = document.createElement('input');
-      dateInput.className = 'admin-game-input';
-      dateInput.value = k.date || '';
-      dateInput.placeholder = 'e.g., Sunday (Apr 26)';
-      dateInput.addEventListener('input', () => {
-        k.date = dateInput.value;
-        saveSchedules();
-        renderSchedulePreview(division);
-      });
-
-      const timeInput = document.createElement('input');
-      timeInput.className = 'admin-game-input';
-      timeInput.value = k.time || '';
-      timeInput.placeholder = 'e.g., 1:00pm';
-      timeInput.addEventListener('input', () => {
-        k.time = timeInput.value;
-        saveSchedules();
-        renderSchedulePreview(division);
-      });
-
-      const fieldInput = document.createElement('input');
-      fieldInput.className = 'admin-game-input';
-      fieldInput.value = k.field || '';
-      fieldInput.placeholder = 'Field';
-      fieldInput.addEventListener('input', () => {
-        k.field = fieldInput.value;
-        saveSchedules();
-        renderSchedulePreview(division);
-      });
-
-      const homeSel = document.createElement('select');
-      homeSel.className = 'admin-game-input';
-      const awaySel = document.createElement('select');
-      awaySel.className = 'admin-game-input';
-
-      function fill(sel, currentId){
-        sel.innerHTML = '';
-        const tbd = document.createElement('option');
-        tbd.value = '';
-        tbd.textContent = 'TBD';
-        sel.appendChild(tbd);
-        allTeams.forEach(t => {
-          const o = document.createElement('option');
-          o.value = String(t.id);
-          o.textContent = t.teamName || 'Team';
-          if (String(t.id) === String(currentId)) o.selected = true;
-          sel.appendChild(o);
-        });
-      }
-      fill(homeSel, k.homeId);
-      fill(awaySel, k.awayId);
-
-      homeSel.addEventListener('change', () => {
-        k.homeId = homeSel.value;
-        saveSchedules();
-        renderSchedulePreview(division);
-      });
-      awaySel.addEventListener('change', () => {
-        k.awayId = awaySel.value;
-        saveSchedules();
-        renderSchedulePreview(division);
-      });
-
-      const tdDate  = document.createElement('td'); tdDate.appendChild(dateInput);
-      const tdTime  = document.createElement('td'); tdTime.appendChild(timeInput);
-      const tdField = document.createElement('td'); tdField.appendChild(fieldInput);
-      const tdHome  = document.createElement('td'); tdHome.appendChild(homeSel);
-      const tdAway  = document.createElement('td'); tdAway.appendChild(awaySel);
-
-      tr.appendChild(tdType);
-      tr.appendChild(tdDate);
-      tr.appendChild(tdTime);
-      tr.appendChild(tdField);
-      tr.appendChild(tdHome);
-      tr.appendChild(tdAway);
-
-      tbody.appendChild(tr);
-    });
-
-    table.appendChild(tbody);
-    knockoutEditor.appendChild(table);
-  }
-
-  // ========= SCHEDULE PREVIEW ==========
-  function renderSchedulePreview(division){
-    const sched = schedules.find(s => s.division === division);
-    schedulePreview.innerHTML = '';
-    if (!sched){
-      schedulePreview.innerHTML = '<div class="empty-note">No schedule yet for this division.</div>';
-      return;
-    }
-
-    const poolGames = (sched.games || []).filter(g => g.stage === 'pool');
-    const knockouts = sched.knockouts || [];
-
-    if (!poolGames.length && !knockouts.length){
-      schedulePreview.innerHTML = '<div class="empty-note">No games yet for this division.</div>';
-      return;
-    }
-
-    const dates = new Set();
-    poolGames.forEach(g => { if (g.date) dates.add(g.date); });
-    knockouts.forEach(k => { if (k.date) dates.add(k.date); });
-
-    const sortedDates = Array.from(dates);
-    if (!sortedDates.length){
-      schedulePreview.innerHTML = '<div class="empty-note">Assign dates to games to see the grid.</div>';
-      return;
-    }
-
-    sortedDates.forEach(dateLabel => {
-      const block = document.createElement('div');
-      block.className = 'schedule-grid';
-      const header = document.createElement('div');
-      header.className = 'schedule-date-header';
-      header.textContent = `${divisionLabel(division)} – ${dateLabel}`;
-      block.appendChild(header);
-
-      const dayPoolGames = poolGames.filter(g => g.date === dateLabel);
-      const dayKO = knockouts.filter(k => k.date === dateLabel);
-
-      const fields = [...new Set([
-        ...dayPoolGames.map(g => g.field || 'Field'),
-        ...dayKO.map(k => k.field || 'Field')
-      ])];
-      const times = [...new Set([
-        ...dayPoolGames.map(g => g.time || ''),
-        ...dayKO.map(k => k.time || '')
-      ])].filter(Boolean);
-
-      const table = document.createElement('table');
-      const thead = document.createElement('thead');
-      const headRow = document.createElement('tr');
-      const thTime = document.createElement('th');
-      thTime.textContent = 'Time';
-      headRow.appendChild(thTime);
-      fields.forEach(f => {
-        const th = document.createElement('th');
-        th.textContent = f;
-        th.className = 'schedule-field-header';
-        headRow.appendChild(th);
-      });
-      thead.appendChild(headRow);
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-
-      times.forEach(t => {
-        const tr = document.createElement('tr');
-        const tdTime = document.createElement('td');
-        tdTime.textContent = t;
-        tr.appendChild(tdTime);
-
-        fields.forEach(f => {
-          const td = document.createElement('td');
-          const g = dayPoolGames.find(x => x.time === t && x.field === f);
-          const k = dayKO.find(x => x.time === t && x.field === f);
-
-          if (g){
-            const home = g.homeId ? getTeamById(g.homeId) : null;
-            const away = g.awayId ? getTeamById(g.awayId) : null;
-            const poolName = getPoolForTeam(division,g.homeId)?.name || g.poolName || '';
-            td.innerHTML = `<span class="highlight">${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}</span><br><span style="font-size:10px;">${poolName || 'Pool play'}</span>`;
-          } else if (k){
-            const home = k.homeId ? getTeamById(k.homeId) : null;
-            const away = k.awayId ? getTeamById(k.awayId) : null;
-            td.innerHTML =
-              `<span class="highlight">${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}</span><br>` +
-              `<span style="font-size:10px;">${k.type}</span>`;
-          } else {
-            td.textContent = '';
-          }
-
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(tbody);
-      block.appendChild(table);
-      schedulePreview.appendChild(block);
-    });
-  }
-
-  // ========= SCORING TAB ==========
-  const scoreDivisionSel = document.getElementById('scoreDivision');
-  const loadScoresBtn    = document.getElementById('loadScoresBtn');
-  const scoringGamesDiv  = document.getElementById('scoringGames');
-  const standingsOutput  = document.getElementById('standingsOutput');
-
-  loadScoresBtn.addEventListener('click', () => {
-    const division = scoreDivisionSel.value;
-    renderScoringGames(division);
-  });
-
-  function renderScoringGames(division){
-    const sched = schedules.find(s => s.division === division);
-    scoringGamesDiv.innerHTML = '';
-    standingsOutput.innerHTML = '';
-    if (!sched || !sched.games.length){
-      scoringGamesDiv.innerHTML = '<div class="empty-note">Generate a pool-play schedule first.</div>';
-      return;
-    }
-
-    const games = sched.games.filter(g => g.stage === 'pool');
-    const byPool = {};
-    games.forEach(g => {
-      const pool = g.poolId === 'cross'
-        ? 'Cross Pool'
-        : (getPoolForTeam(division,g.homeId)?.name || g.poolName || 'Pool');
-      if (!byPool[pool]) byPool[pool] = [];
-      byPool[pool].push(g);
-    });
-
-    Object.keys(byPool).forEach(poolName => {
-      const h = document.createElement('h4');
-      h.style.margin = '8px 0 4px';
-      h.style.fontSize = '13px';
-      h.textContent = `Pool ${poolName}`;
-      scoringGamesDiv.appendChild(h);
-
-      byPool[poolName].forEach(g => {
-        const home = g.homeId ? getTeamById(g.homeId) : null;
-        const away = g.awayId ? getTeamById(g.awayId) : null;
-        const key = g.id;
-        const existing = scores[key] || {home:'',away:''};
-
-        const row = document.createElement('div');
-        row.className = 'game-row';
-        const label = document.createElement('span');
-        label.innerHTML = `<strong>${g.date || ''}</strong> ${g.time || ''} @ ${g.field || ''} – ${(home && home.teamName) || 'TBD'} vs ${(away && away.teamName) || 'TBD'}`;
-        row.appendChild(label);
-
-        const homeInput = document.createElement('input');
-        homeInput.type = 'number';
-        homeInput.min = '0';
-        homeInput.className = 'score-input';
-        homeInput.value = existing.home === '' ? '' : existing.home;
-
-        const awayInput = document.createElement('input');
-        awayInput.type = 'number';
-        awayInput.min = '0';
-        awayInput.className = 'score-input';
-        awayInput.value = existing.away === '' ? '' : existing.away;
-
-        function handleChange(){
-          const hVal = homeInput.value;
-          const aVal = awayInput.value;
-          if (hVal === '' && aVal === ''){
-            delete scores[key];
-          } else {
-            scores[key] = {home:Number(hVal || 0), away:Number(aVal || 0)};
-          }
-          saveScoresStore();
-          renderStandings(division);
-        }
-
-        homeInput.addEventListener('change', handleChange);
-        awayInput.addEventListener('change', handleChange);
-
-        row.appendChild(document.createTextNode(' '));
-        row.appendChild(homeInput);
-        row.appendChild(document.createTextNode(' - '));
-        row.appendChild(awayInput);
-
-        scoringGamesDiv.appendChild(row);
-      });
-    });
-
-    renderStandings(division);
-  }
-
-  function renderStandings(division){
-    const sched = schedules.find(s => s.division === division);
-    standingsOutput.innerHTML = '';
-    if (!sched || !sched.games.length) return;
-    const games = sched.games.filter(g => g.stage === 'pool');
-
-    const stats = {};
-
-    function ensureTeam(id){
-      id = String(id);
-      if (!stats[id]){
-        const t = getTeamById(id) || {};
-        stats[id] = {
-          id,
-          name:t.teamName || 'Team',
-          played:0,w:0,d:0,l:0, gf:0,ga:0, pts:0
-        };
-      }
-      return stats[id];
-    }
-
-    games.forEach(g => {
-      const key = g.id;
-      const r = scores[key];
-      if (!r) return;
-      const hs = Number(r.home);
-      const as = Number(r.away);
-      if (isNaN(hs) || isNaN(as)) return;
-
-      const home = ensureTeam(g.homeId);
-      const away = ensureTeam(g.awayId);
-
-      home.played++; away.played++;
-      home.gf += hs; home.ga += as;
-      away.gf += as; away.ga += hs;
-
-      if (hs > as){ home.w++; away.l++; home.pts += 6; }
-      else if (hs < as){ away.w++; home.l++; away.pts += 6; }
-      else { home.d++; away.d++; home.pts += 3; away.pts += 3; }
-
-      if (as === 0 && hs > 0) home.pts += 1;
-      if (hs === 0 && as > 0) away.pts += 1;
-
-      home.pts += Math.min(hs,3);
-      away.pts += Math.min(as,3);
-    });
-
-    const rows = Object.values(stats);
-    if (!rows.length){
-      standingsOutput.innerHTML = '<div class="empty-note">Enter scores to see standings.</div>';
-      return;
-    }
-
-    const byPool = {};
-    rows.forEach(r => {
-      const pool = getPoolForTeam(division,r.id);
-      const key = pool ? pool.name : 'Unassigned';
-      if (!byPool[key]) byPool[key] = [];
-      byPool[key].push(r);
-    });
-
-    let html = '<h3 class="card-title">Standings by Pool</h3>';
-    Object.keys(byPool).forEach(poolName => {
-      const list = byPool[poolName].slice().sort((a,b) =>
-        b.pts - a.pts || (b.gf-b.ga) - (a.gf-a.ga)
-      );
-      html += `<h4 style="margin:8px 0 4px;font-size:13px;">Pool ${poolName}</h4>`;
-      html += '<table><thead><tr><th>Team</th><th>GP</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>Pts</th></tr></thead><tbody>';
-      list.forEach(r => {
-        html += `<tr>
-          <td>${r.name}</td>
-          <td>${r.played}</td>
-          <td>${r.w}</td>
-          <td>${r.d}</td>
-          <td>${r.l}</td>
-          <td>${r.gf}</td>
-          <td>${r.ga}</td>
-          <td>${r.pts}</td>
-        </tr>`;
-      });
-      html += '</tbody></table>';
-    });
-
-    standingsOutput.innerHTML = html;
-  }
-</script>
-</body>
-</html>
+    if (!cfgs.length){
+      alert('Add at least one day configuration first.');
+      return
