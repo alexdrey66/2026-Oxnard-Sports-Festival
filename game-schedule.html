@@ -478,7 +478,8 @@
 
       // unique fields and times
       const fields = Array.from(new Set(dayGames.map(g => g.field || 'TBD'))).sort();
-      const times  = Array.from(new Set(dayGames.map(g => g.time || 'TBD'))).sort();
+      const times  = Array.from(new Set(dayGames.map(g => g.time || 'TBD')))
+        .sort((a, b) => timeToMinutes(a) - timeToMinutes(b));
 
       const dayBlock = document.createElement('div');
       dayBlock.className = 'day-block';
