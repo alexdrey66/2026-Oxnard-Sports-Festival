@@ -1,505 +1,700 @@
 <!doctype html>
 <html lang="en">
-<head>
+ <head>
   <meta charset="UTF-8">
-  <title>OSF 2026 – Standings</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Stats</title>
   <style>
-    :root{
-      --primary:#004b8d;
-      --accent:#d62828;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --border:#e5e7eb;
-      --text:#111827;
-      --muted:#6b7280;
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-      background:radial-gradient(circle at top left,#e0f2fe 0,#f9fafb 45%,#e5e7eb 100%);
-      color:var(--text);
-    }
-    .page{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px 12px 40px;
-    }
-    h1{
-      margin:0 0 4px;
-      font-size:26px;
-      letter-spacing:0.04em;
-    }
-    .subtitle{
-      margin:0 0 12px;
-      font-size:13px;
-      color:var(--muted);
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:4px 10px;
-      border-radius:999px;
-      background:rgba(37,99,235,0.08);
-      color:#1d4ed8;
-      font-size:12px;
-      font-weight:600;
-      margin-bottom:6px;
-    }
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
+  min-height: 100%;
+  color: #ffffff;
+}
 
-    .tabs{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-bottom:14px;
-    }
-    .tab-btn{
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.8);
-      background:rgba(15,23,42,0.02);
-      padding:7px 13px;
-      font-size:12px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      color:#374151;
-    }
-    .tab-btn.active{
-      background:#111827;
-      color:#fff;
-      border-color:#0f172a;
-    }
+html {
+  height: 100%;
+}
 
-    .card{
-      background:var(--card);
-      border-radius:16px;
-      box-shadow:0 18px 40px rgba(15,23,42,0.18);
-      border:1px solid rgba(148,163,184,0.4);
-      padding:14px 12px 14px;
-      margin-bottom:16px;
-    }
-    .card-header{
-      font-size:14px;
-      font-weight:600;
-      margin-bottom:4px;
-    }
-    .card-sub{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 100%;
+}
 
-    .division-title{
-      font-size:14px;
-      font-weight:600;
-      margin:8px 0 4px;
-    }
+.header {
+  background: transparent;
+  border-radius: 16px;
+  padding: 3rem;
+  border: 3px solid #faca3d;
+  margin-bottom: 2rem;
+  position: relative;
+  text-align: center;
+}
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      border-radius:12px;
-      overflow:hidden;
-      box-shadow:0 10px 24px rgba(15,23,42,0.08);
-    }
-    th,td{
-      padding:6px 8px;
-      border:1px solid #e5e7eb;
-      text-align:right;
-    }
-    th{
-      background:#f3f4f6;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.05em;
-      color:#6b7280;
-    }
-    th:first-child, td:first-child{
-      text-align:left;
-    }
-    .pool-header{
-      margin-top:10px;
-      margin-bottom:4px;
-      font-size:13px;
-      font-weight:600;
-    }
-    .team-name-cell{
-      display:flex;
-      flex-direction:column;
-    }
-    .team-sub{
-      font-size:10px;
-      color:#6b7280;
-    }
+.header::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
+  border-radius: 19px;
+  z-index: -1;
+  opacity: 0.1;
+}
 
-    .empty-note{
-      font-size:12px;
-      color:#9ca3af;
-      padding:6px 2px;
-    }
+.header h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
 
-    .chip-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:4px;
-      margin-top:2px;
-    }
-    .chip{
-      border-radius:999px;
-      padding:1px 6px;
-      font-size:10px;
-      font-weight:600;
-      border:1px solid rgba(148,163,184,0.7);
-      background:#f9fafb;
-      color:#374151;
-    }
-    .chip-cross{
-      border-color:#fed7aa;
-      background:#fffbeb;
-      color:#b45309;
-    }
-  </style>
-</head>
-<body>
-<div class="page">
-  <div class="badge">OSF 2026 • Standings</div>
-  <h1>Pool Standings</h1>
-  <p class="subtitle">
-    Points are calculated from all pool-play games (including cross-pool). Each team’s points stay with their original pool.
-  </p>
+.tabs {
+  background: #124175;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 3px solid #faca3d;
+  margin-bottom: 2rem;
+  box-shadow: 
+    0 15px 40px rgba(18, 65, 117, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 3px 15px rgba(250, 202, 61, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
 
-  <div class="tabs">
-    <button class="tab-btn active" data-div="ALL">All Divisions</button>
-    <button class="tab-btn" data-div="10UB">10U Boys</button>
-    <button class="tab-btn" data-div="10UG">10U Girls</button>
-    <button class="tab-btn" data-div="12UB">12U Boys</button>
-    <button class="tab-btn" data-div="12UG">12U Girls</button>
-    <button class="tab-btn" data-div="14UB">14U Boys</button>
-    <button class="tab-btn" data-div="14UG">14U Girls</button>
+.tab {
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #124175;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.tab:hover {
+  border-color: #faca3d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
+}
+
+.tab.active {
+  background: #faca3d;
+  color: #124175;
+  border-color: #124175;
+  box-shadow: 0 4px 14px rgba(250, 202, 61, 0.4);
+}
+
+.block {
+  background: #124175;
+  border: 3px solid #faca3d;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 
+    0 15px 40px rgba(18, 65, 117, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 3px 15px rgba(250, 202, 61, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
+}
+
+.block::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.block h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.block h2::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: #faca3d;
+  border-radius: 2px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 4px;
+  position: relative;
+  box-shadow: 
+    0 25px 60px rgba(18, 65, 117, 0.6),
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    0 5px 15px rgba(250, 202, 61, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+}
+
+table::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #faca3d, #f59e0b, #faca3d, #f59e0b);
+  background-size: 400% 400%;
+  border-radius: 22px;
+  z-index: -1;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+thead {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+tbody {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+  border-radius: 0 0 16px 16px;
+}
+
+th {
+  background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+  color: #124175;
+  padding: 1rem 0.75rem;
+  font-weight: 900;
+  text-align: center;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  box-shadow: 
+    0 6px 20px rgba(250, 202, 61, 0.4),
+    0 3px 10px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+th::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+}
+
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(250, 202, 61, 0.2);
+  font-size: 0.9rem;
+  text-align: center;
+  color: #124175;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+tr:hover td {
+  background: linear-gradient(135deg, rgba(250, 202, 61, 0.05) 0%, rgba(250, 202, 61, 0.1) 100%);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.team {
+  text-align: left;
+  font-weight: 700;
+  color: #124175;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rank, .pts {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  min-width: 30px;
+  text-align: center;
+}
+
+.rank::before, .pts::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+  border-radius: 12px;
+}
+
+.rank {
+  background: linear-gradient(135deg, rgba(250, 202, 61, 0.8) 0%, rgba(250, 202, 61, 0.9) 100%);
+  color: #124175;
+  border: 2px solid rgba(250, 202, 61, 0.6);
+}
+
+.pts {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.25) 100%);
+  color: #166534;
+  border: 2px solid rgba(34, 197, 94, 0.4);
+}
+
+.empty-message {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1rem;
+  }
+
+  .header {
+    padding: 2rem 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .tabs {
+    padding: 1.5rem;
+    justify-content: flex-start;
+  }
+
+  .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .block {
+    padding: 1.5rem;
+  }
+
+  th, td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .rank, .pts {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header, .tabs, .block {
+    padding: 1.5rem 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+  }
+}
+</style>
+ </head>
+ <body>
+  <div class="page">
+   <div class="header">
+    <h1>Tournament Stats</h1>
+   </div>
+
+   <div id="statsTabs" class="tabs">
+    <button class="tab active" data-division="">All</button>
+    <button class="tab" data-division="10UB">10U Boys</button>
+    <button class="tab" data-division="10UG">10U Girls</button>
+    <button class="tab" data-division="12UB">12U Boys</button>
+    <button class="tab" data-division="12UG">12U Girls</button>
+    <button class="tab" data-division="14UB">14U Boys</button>
+    <button class="tab" data-division="14UG">14U Girls</button>
+   </div>
+
+   <div id="statsContainer">
+    <div class="block">
+      <h2>Loading standings…</h2>
+      <p class="empty-message">
+        If this doesn’t update, check that the admin portal is publishing scores correctly.
+      </p>
+    </div>
+   </div>
   </div>
 
-  <div id="statsWrapper"></div>
-</div>
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
 
-<script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxTgz1zRnrtYvzsJraQeDKIdw5DY6-YFgs2FI87toZE7liLc1JXRgQbYcpIcmlhVczd/exec';
+    const DIVISION_LABELS = {
+      '10UB': '10U Boys',
+      '10UG': '10U Girls',
+      '12UB': '12U Boys',
+      '12UG': '12U Girls',
+      '14UB': '14U Boys',
+      '14UG': '14U Girls'
+    };
 
-  const DIVISION_LABELS = {
-    '10UB':'10U Boys',
-    '10UG':'10U Girls',
-    '12UB':'12U Boys',
-    '12UG':'12U Girls',
-    '14UB':'14U Boys',
-    '14UG':'14U Girls'
-  };
+    let allTeams = [];
+    let adminState = {
+      manualTeams: [],
+      pools: [],
+      schedules: [],
+      scores: {},
+      dayConfigs: {}
+    };
 
-  const tabs = document.querySelectorAll('.tab-btn');
-  const statsWrapper = document.getElementById('statsWrapper');
+    const statsContainer = document.getElementById('statsContainer');
+    const tabButtons = document.querySelectorAll('#statsTabs .tab');
 
-  let allTeams = [];
-  let adminState = {
-    manualTeams: [],
-    pools: [],
-    schedules: [],
-    scores: {},
-    dayConfigs: {}
-  };
-
-  function normalizeState(state){
-    if (!state || typeof state !== 'object') state = {};
-    state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
-    state.pools = Array.isArray(state.pools) ? state.pools : [];
-    state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
-    state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
-    state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
-    return state;
-  }
-
-  function divisionLabel(code){
-    return DIVISION_LABELS[code] || code || '';
-  }
-
-  function getAllTeamsCombined(){
-    const manual = (adminState.manualTeams || []).map(m => Object.assign({manual:true}, m));
-    return allTeams.concat(manual);
-  }
-
-  function getTeamById(id){
-    if (!id && id !== 0) return null;
-    id = String(id);
-    return getAllTeamsCombined().find(t => String(t.id) === id) || null;
-  }
-
-  // Map teamId -> poolId (first pool wins if somehow duplicated)
-  function buildTeamPoolMap(){
-    const map = {};
-    (adminState.pools || []).forEach(pool => {
-      (pool.teamIds || []).forEach(tid => {
-        const idStr = String(tid);
-        if (!map[idStr]) map[idStr] = pool.id;
-      });
-    });
-    return map;
-  }
-
-  function getScheduleForDivision(division){
-    if (!Array.isArray(adminState.schedules)) return null;
-    return adminState.schedules.find(s => s.division === division) || null;
-  }
-
-  // Collect only POOL-PLAY games (stage 'pool') for a division
-  function collectPoolGames(division){
-    const sched = getScheduleForDivision(division);
-    if (!sched) return [];
-    return (sched.games || []).filter(g => (g.stage || 'pool') === 'pool');
-  }
-
-  // Calculate standings for one division, grouped by pool
-  function computeStandingsForDivision(division){
-    const teamPoolMap = buildTeamPoolMap();
-    const games = collectPoolGames(division);
-    const scores = adminState.scores || {};
-    const teamsCombined = getAllTeamsCombined();
-
-    const teamStats = {}; // teamId -> stats object
-
-    function ensureTeamStat(teamId){
-      const idStr = String(teamId);
-      if (!teamStats[idStr]){
-        const team = getTeamById(idStr) || { teamName: 'Team', regionNumber:'', coachName:'' };
-        const poolId = teamPoolMap[idStr] || null;
-        teamStats[idStr] = {
-          id: idStr,
-          poolId,
-          division,
-          name: team.teamName || 'Team',
-          region: team.regionNumber || '',
-          coach: team.coachName || '',
-          games: 0,
-          wins: 0,
-          draws: 0,
-          losses: 0,
-          goalsFor: 0,
-          goalsAgainst: 0,
-          goalDiff: 0,
-          points: 0,
-          shutouts: 0,
-          bonusGoals: 0
-        };
-      }
-      return teamStats[idStr];
+    function normalizeState(state) {
+      if (!state || typeof state !== 'object') state = {};
+      state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
+      state.pools = Array.isArray(state.pools) ? state.pools : [];
+      state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
+      state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
+      state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
+      return state;
     }
 
-    games.forEach(g => {
-      const s = scores[g.id];
-      if (!s || (s.home == null && s.away == null)) return;
-
-      const homeGoals = (s.home == null ? null : Number(s.home));
-      const awayGoals = (s.away == null ? null : Number(s.away));
-      if (homeGoals == null || awayGoals == null) return;
-
-      const homeTeam = ensureTeamStat(g.homeId);
-      const awayTeam = ensureTeamStat(g.awayId);
-
-      // Update basic stats
-      homeTeam.games++;
-      awayTeam.games++;
-      homeTeam.goalsFor += homeGoals;
-      homeTeam.goalsAgainst += awayGoals;
-      awayTeam.goalsFor += awayGoals;
-      awayTeam.goalsAgainst += homeGoals;
-
-      // Results & points
-      function applyPoints(team, gf, ga){
-        if (gf > ga){
-          team.wins++;
-          team.points += 6;
-        } else if (gf === ga){
-          team.draws++;
-          team.points += 3;
-        } else {
-          team.losses++;
-          // 0 points
-        }
-        const bonus = Math.min(gf, 3);
-        team.bonusGoals += bonus;
-        team.points += bonus;
-
-        if (ga === 0 && gf > 0){
-          team.shutouts++;
-          team.points += 1;
-        }
-      }
-
-      applyPoints(homeTeam, homeGoals, awayGoals);
-      applyPoints(awayTeam, awayGoals, homeGoals);
-    });
-
-    // Finalize goal diff
-    Object.values(teamStats).forEach(ts => {
-      ts.goalDiff = ts.goalsFor - ts.goalsAgainst;
-    });
-
-    // Group by poolId
-    const poolsById = {};
-    (adminState.pools || []).forEach(p => { poolsById[p.id] = p; });
-
-    const byPool = {};
-    Object.values(teamStats).forEach(ts => {
-      const pId = ts.poolId || 'UNASSIGNED';
-      if (!byPool[pId]) byPool[pId] = [];
-      byPool[pId].push(ts);
-    });
-
-    // Sort teams within each pool
-    Object.keys(byPool).forEach(poolId => {
-      byPool[poolId].sort((a,b)=>{
-        if (b.points !== a.points) return b.points - a.points;
-        if (b.goalDiff !== a.goalDiff) return b.goalDiff - a.goalDiff;
-        if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
-        return a.name.localeCompare(b.name);
-      });
-    });
-
-    return { byPool, poolsById };
-  }
-
-  function renderDivisionStandings(division){
-    statsWrapper.innerHTML = '';
-
-    const divisionsToShow = division === 'ALL'
-      ? (adminState.schedules || []).map(s => s.division)
-      : [division];
-
-    const uniqueDivs = Array.from(new Set(divisionsToShow));
-
-    if (!uniqueDivs.length){
-      statsWrapper.innerHTML = '<div class="card"><div class="empty-note">No standings available yet.</div></div>';
-      return;
+    function getAllTeamsCombined() {
+      const manual = adminState.manualTeams.map(m => Object.assign({ manual: true }, m));
+      return allTeams.concat(manual);
     }
 
-    uniqueDivs.forEach(div => {
-      const { byPool, poolsById } = computeStandingsForDivision(div);
-      const poolIds = Object.keys(byPool);
-      const hasStats = poolIds.some(pid => byPool[pid].length);
+    function getTeamById(id) {
+      if (id === undefined || id === null) return null;
+      id = String(id);
+      return getAllTeamsCombined().find(t => String(t.id) === id) || null;
+    }
 
-      const card = document.createElement('div');
-      card.className = 'card';
+    // Build standings index: key "division||poolId"
+    function buildStandingsIndex() {
+      const index = {};
+      const schedules = adminState.schedules || [];
+      const scores = adminState.scores || {};
 
-      const header = document.createElement('div');
-      header.className = 'card-header';
-      header.textContent = divisionLabel(div);
-      card.appendChild(header);
+      schedules.forEach(sched => {
+        const division = sched.division;
+        const games = (sched.games || []).filter(g => {
+          const stage = g.stage || 'pool';
+          return stage === 'pool'; // only pool play contributes to standings
+        });
 
-      if (!hasStats){
-        const empty = document.createElement('div');
-        empty.className = 'empty-note';
-        empty.textContent = 'No scored pool-play games yet for this division.';
-        card.appendChild(empty);
-        statsWrapper.appendChild(card);
+        games.forEach(g => {
+          const score = scores[g.id];
+          if (!score) return; // no score yet, skip
+
+          const homeId = g.homeId;
+          const awayId = g.awayId;
+          const poolId = g.poolId || 'POOL';
+
+          const key = division + '||' + poolId;
+          if (!index[key]) {
+            index[key] = {
+              division,
+              poolId,
+              teams: {}
+            };
+          }
+
+          function ensureTeam(teamId) {
+            const teamKey = String(teamId);
+            if (!index[key].teams[teamKey]) {
+              const team = getTeamById(teamKey);
+              index[key].teams[teamKey] = {
+                teamId: teamKey,
+                teamName: team ? team.teamName : 'TBD',
+                division,
+                poolId,
+                gp: 0,
+                w: 0,
+                d: 0,
+                l: 0,
+                gf: 0,
+                ga: 0,
+                gd: 0,
+                pts: 0
+              };
+            }
+            return index[key].teams[teamKey];
+          }
+
+          const homeTeam = ensureTeam(homeId);
+          const awayTeam = ensureTeam(awayId);
+
+          const homeScore = Number(score.homeScore);
+          const awayScore = Number(score.awayScore);
+          if (isNaN(homeScore) || isNaN(awayScore)) return;
+
+          homeTeam.gp += 1;
+          awayTeam.gp += 1;
+
+          homeTeam.gf += homeScore;
+          homeTeam.ga += awayScore;
+          awayTeam.gf += awayScore;
+          awayTeam.ga += homeScore;
+
+          homeTeam.gd = homeTeam.gf - homeTeam.ga;
+          awayTeam.gd = awayTeam.gf - awayTeam.ga;
+
+          // Result points
+          if (homeScore > awayScore) {
+            homeTeam.w += 1;
+            awayTeam.l += 1;
+            homeTeam.pts += 6;
+          } else if (homeScore < awayScore) {
+            awayTeam.w += 1;
+            homeTeam.l += 1;
+            awayTeam.pts += 6;
+          } else {
+            homeTeam.d += 1;
+            awayTeam.d += 1;
+            homeTeam.pts += 3;
+            awayTeam.pts += 3;
+          }
+
+          // Goal bonus: 1 pt per goal, max 3 per game
+          homeTeam.pts += Math.min(homeScore, 3);
+          awayTeam.pts += Math.min(awayScore, 3);
+        });
+      });
+
+      return index;
+    }
+
+    function renderStats(divisionFilter) {
+      const standingsIndex = buildStandingsIndex();
+      const poolsById = {};
+      (adminState.pools || []).forEach(p => { poolsById[p.id] = p; });
+
+      statsContainer.innerHTML = '';
+
+      const keys = Object.keys(standingsIndex).filter(key => {
+        if (!divisionFilter) return true;
+        const [div] = key.split('||');
+        return div === divisionFilter;
+      });
+
+      if (!keys.length) {
+        statsContainer.innerHTML = `
+          <div class="block">
+            <h2>No standings yet</h2>
+            <p class="empty-message">
+              Once scores are entered in the admin portal, standings will appear here automatically.
+            </p>
+          </div>
+        `;
         return;
       }
 
-      poolIds.forEach(poolId => {
-        const teams = byPool[poolId];
-        if (!teams.length) return;
+      // Sort blocks by division name then pool name
+      keys.sort((a, b) => {
+        const [divA, poolA] = a.split('||');
+        const [divB, poolB] = b.split('||');
 
-        const pool = poolsById[poolId];
-        const poolName = pool ? pool.name : 'Unassigned';
+        const labelA = DIVISION_LABELS[divA] || divA;
+        const labelB = DIVISION_LABELS[divB] || divB;
 
-        const poolHeader = document.createElement('div');
-        poolHeader.className = 'pool-header';
-        poolHeader.textContent = poolName;
-        card.appendChild(poolHeader);
+        if (labelA !== labelB) return labelA.localeCompare(labelB);
+
+        const poolObjA = poolsById[poolA];
+        const poolObjB = poolsById[poolB];
+        const nameA = poolObjA ? poolObjA.name : poolA;
+        const nameB = poolObjB ? poolObjB.name : poolB;
+        return String(nameA).localeCompare(String(nameB));
+      });
+
+      keys.forEach(key => {
+        const { division, poolId, teams } = standingsIndex[key];
+        const teamArray = Object.values(teams);
+
+        if (!teamArray.length) return;
+
+        // Sort teams within pool
+        teamArray.sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          if (b.gf !== a.gf) return b.gf - a.gf;
+          return a.teamName.localeCompare(b.teamName);
+        });
+
+        const divLabel = DIVISION_LABELS[division] || division;
+        const poolObj = poolsById[poolId];
+        const poolName = poolObj ? poolObj.name : (poolId === 'POOL' ? 'Pool' : poolId);
+
+        const block = document.createElement('div');
+        block.className = 'block';
+
+        const h2 = document.createElement('h2');
+        h2.textContent = `${divLabel} – ${poolName}`;
+        block.appendChild(h2);
 
         const table = document.createElement('table');
+
         const thead = document.createElement('thead');
-        const hr = document.createElement('tr');
-        ['Team','GP','W','D','L','GF','GA','GD','Pts'].forEach(h=>{
-          const th = document.createElement('th');
-          th.textContent = h;
-          hr.appendChild(th);
-        });
-        thead.appendChild(hr);
+        thead.innerHTML = `
+          <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>GP</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+            <th>Pts</th>
+          </tr>
+        `;
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
-        teams.forEach((ts, idx)=>{
+
+        teamArray.forEach((t, idx) => {
           const tr = document.createElement('tr');
 
-          const tdName = document.createElement('td');
-          const nameWrap = document.createElement('div');
-          nameWrap.className = 'team-name-cell';
-          const strong = document.createElement('span');
-          strong.textContent = `${idx+1}. ${ts.name}`;
-          const sub = document.createElement('span');
-          sub.className = 'team-sub';
-          const region = ts.region ? `Region ${ts.region}` : 'Region TBD';
-          const coach = ts.coach ? `Coach: ${ts.coach}` : 'Coach: TBD';
-          sub.textContent = `${region} • ${coach}`;
-          nameWrap.appendChild(strong);
-          nameWrap.appendChild(sub);
-          tdName.appendChild(nameWrap);
-          tr.appendChild(tdName);
+          const rankTd = document.createElement('td');
+          const rankSpan = document.createElement('span');
+          rankSpan.className = 'rank';
+          rankSpan.textContent = idx + 1;
+          rankTd.appendChild(rankSpan);
 
-          const cols = [
-            ts.games,
-            ts.wins,
-            ts.draws,
-            ts.losses,
-            ts.goalsFor,
-            ts.goalsAgainst,
-            ts.goalDiff,
-            ts.points
-          ];
-          cols.forEach(val=>{
-            const td=document.createElement('td');
-            td.textContent = val;
-            tr.appendChild(td);
-          });
+          const teamTd = document.createElement('td');
+          teamTd.className = 'team';
+          teamTd.textContent = t.teamName || 'TBD';
+
+          const gpTd = document.createElement('td');
+          gpTd.textContent = t.gp;
+
+          const wTd = document.createElement('td');
+          wTd.textContent = t.w;
+
+          const dTd = document.createElement('td');
+          dTd.textContent = t.d;
+
+          const lTd = document.createElement('td');
+          lTd.textContent = t.l;
+
+          const gfTd = document.createElement('td');
+          gfTd.textContent = t.gf;
+
+          const gaTd = document.createElement('td');
+          gaTd.textContent = t.ga;
+
+          const gdTd = document.createElement('td');
+          gdTd.textContent = (t.gd > 0 ? '+' : '') + t.gd;
+
+          const ptsTd = document.createElement('td');
+          const ptsSpan = document.createElement('span');
+          ptsSpan.className = 'pts';
+          ptsSpan.textContent = t.pts;
+          ptsTd.appendChild(ptsSpan);
+
+          tr.appendChild(rankTd);
+          tr.appendChild(teamTd);
+          tr.appendChild(gpTd);
+          tr.appendChild(wTd);
+          tr.appendChild(dTd);
+          tr.appendChild(lTd);
+          tr.appendChild(gfTd);
+          tr.appendChild(gaTd);
+          tr.appendChild(gdTd);
+          tr.appendChild(ptsTd);
 
           tbody.appendChild(tr);
         });
 
         table.appendChild(tbody);
-        card.appendChild(table);
+        block.appendChild(table);
+        statsContainer.appendChild(block);
       });
-
-      statsWrapper.appendChild(card);
-    });
-  }
-
-  function renderTab(div){
-    tabs.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.div === div);
-    });
-    renderDivisionStandings(div);
-  }
-
-  async function loadData(){
-    try{
-      const [teamsRes,stateRes] = await Promise.all([
-        fetch(API_URL),
-        fetch(API_URL + '?entity=state')
-      ]);
-      allTeams  = await teamsRes.json();
-      adminState = normalizeState(await stateRes.json());
-      renderTab('ALL');
-    }catch(err){
-      console.error(err);
-      statsWrapper.innerHTML = '<div class="card"><div class="empty-note">Unable to load standings.</div></div>';
     }
-  }
 
-  tabs.forEach(btn=>{
-    btn.addEventListener('click',()=>renderTab(btn.dataset.div));
-  });
+    async function loadData() {
+      try {
+        const [teamsRes, stateRes] = await Promise.all([
+          fetch(API_URL),
+          fetch(API_URL + '?entity=state')
+        ]);
 
-  loadData();
-</script>
-</body>
+        allTeams = await teamsRes.json();
+        const stateJson = await stateRes.json();
+        adminState = normalizeState(stateJson);
+
+        renderStats('');
+      } catch (e) {
+        console.error(e);
+        statsContainer.innerHTML = `
+          <div class="block">
+            <h2>Unable to load standings</h2>
+            <p class="empty-message">
+              Please refresh the page. If this continues, ask tournament staff to verify the admin portal and spreadsheet.
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const div = btn.getAttribute('data-division') || '';
+        renderStats(div);
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', loadData);
+  </script>
+ </body>
 </html>
