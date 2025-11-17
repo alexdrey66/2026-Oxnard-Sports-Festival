@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OSF 2026 – Game Schedule</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary:#004b8d;
+      --accent:#d62828;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
+      color:var(--text);
+    }
+    .page{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+    h1{
+      margin:0 0 4px;
+      font-size:24px;
+      letter-spacing:0.03em;
+    }
+    .subtitle{
+      margin:0 0 12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(37,99,235,0.07);
+      color:#1d4ed8;
+      font-size:12px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      box-shadow:0 16px 36px rgba(15,23,42,0.15);
+      border:1px solid rgba(148,163,184,0.35);
+      padding:14px 12px 14px;
+      margin-bottom:18px;
+    }
+    .division-title{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+    .schedule-grid{
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      overflow:hidden;
+      margin-top:10px;
+      background:#fff;
+    }
+    .schedule-date-header{
+      background:#111827;
+      color:#fff;
+      padding:6px 10px;
+      font-size:13px;
+      font-weight:600;
+    }
+    .schedule-grid table{
+      border-collapse:collapse;
+      width:100%;
+      margin:0;
+      font-size:12px;
+    }
+    .schedule-grid th,
+    .schedule-grid td{
+      border:1px solid #e5e7eb;
+      padding:5px 6px;
+      text-align:center;
+    }
+    .schedule-field-header{
+      background:#e5e7eb;
+      font-size:11px;
+      font-weight:600;
+    }
+    .highlight{
+      background:#fef3c7;
+      border-radius:4px;
+      padding:0 2px;
+    }
+    .empty{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="badge">OSF 2026 • Official Schedule</div>
+  <h1>Game Schedule</h1>
+  <p class="subtitle">Pool play, semifinals, consolation, and championship games for all divisions.</p>
+
+  <div id="scheduleRoot"></div>
+  <div id="error" class="empty" style="display:none;"></div>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycby81ycJHK0S9NUWgWuYSuHHzmz9mf2VKV_oDt4KEJv-hvSvlvOF-dxZa-AnZacewuJ8/exec';
+
+  const scheduleRoot = document.getElementById('scheduleRoot');
+  const errorBox = document.getElementById('error');
+
+  function divisionLabel(code){
+    return {
+      '10UB':'10U Boys','10UG':'10U Girls',
+      '12UB':'12U Boys','12UG':'12U Girls',
+      '14UB':'14U Boys','14UG':'14U Girls'
+    }[code] || code || '';
+  }
+
+  function getTeamById(teams, id){
+    id = String(id);
+    return teams.find(t => String(t.id) === id) || null;
+  }
+
+  async function loadData(){
+    try{
+      const [teamsRes, stateRes] = await Promise.all([
+        fetch(API_URL),
+        fetch(API_URL + '?entity=state')
+      ]);
+
+      const teams = await teamsRes.json();
+      const state = await stateRes.json();
+
+      renderSchedule(teams, state);
+    }catch(err){
+      console.error(err);
+      errorBox.textContent = 'Unable to load schedule at the moment. Please try again later.';
+      errorBox.style.display = 'block';
+    }
+  }
+
+  function renderSchedule(teams, state){
+    scheduleRoot.innerHTML = '';
+    if (!state || !Array.isArray(state.schedules) || !state.schedules.length){
+      scheduleRoot.innerHTML = '<div class="empty">Schedule has not been published yet.</div>';
+      return;
+    }
+
+    const schedules = state.schedules;
+    schedules.forEach(sched => {
+      const divCard = document.createElement('section');
+      divCard.className = 'card';
+
+      const h = document.createElement('h2');
+      h.className = 'division-title';
+      h.textContent = divisionLabel(sched.division);
+      divCard.appendChild(h);
+
+      const games = sched.games || [];
+      const knockouts = sched.knockouts || [];
+
+      if (!games.length && !knockouts.length){
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'No games scheduled yet for this division.';
+        divCard.appendChild(empty);
+        scheduleRoot.appendChild(divCard);
+        return;
+      }
+
+      const dates = new Set();
+      games.forEach(g => { if (g.date) dates.add(g.date); });
+      knockouts.forEach(k => { if (k.date) dates.add(k.date); });
+      const sortedDates = Array.from(dates);
+
+      if (!sortedDates.length){
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'Game dates are not assigned yet.';
+        divCard.appendChild(empty);
+        scheduleRoot.appendChild(divCard);
+        return;
+      }
+
+      sortedDates.forEach(dateLabel => {
+        const block = document.createElement('div');
+        block.className = 'schedule-grid';
+
+        const header = document.createElement('div');
+        header.className = 'schedule-date-header';
+        header.textContent = `${divisionLabel(sched.division)} – ${dateLabel}`;
+        block.appendChild(header);
+
+        const dayPool = (games || []).filter(g => g.date === dateLabel && g.stage === 'pool');
+        const dayKO   = (knockouts || []).filter(k => k.date === dateLabel);
+
+        const fields = [...new Set([
+          ...dayPool.map(g => g.field || 'Field'),
+          ...dayKO.map(k => k.field || 'Field')
+        ])];
+        const times = [...new Set([
+          ...dayPool.map(g => g.time || ''),
+          ...dayKO.map(k => k.time || '')
+        ])].filter(Boolean);
+
+        const table = document.createElement('table');
+
+        const thead = document.createElement('thead');
+        const hr = document.createElement('tr');
+        const thTime = document.createElement('th');
+        thTime.textContent = 'Time';
+        hr.appendChild(thTime);
+        fields.forEach(f => {
+          const th = document.createElement('th');
+          th.textContent = f;
+          th.className = 'schedule-field-header';
+          hr.appendChild(th);
+        });
+        thead.appendChild(hr);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+
+        times.forEach(timeLabel => {
+          const tr = document.createElement('tr');
+          const tdTime = document.createElement('td');
+          tdTime.textContent = timeLabel;
+          tr.appendChild(tdTime);
+
+          fields.forEach(fieldLabel => {
+            const td = document.createElement('td');
+            const g = dayPool.find(x => x.time === timeLabel && x.field === fieldLabel);
+            const k = dayKO.find(x => x.time === timeLabel && x.field === fieldLabel);
+
+            if (g){
+              const home = g.homeId ? getTeamById(teams, g.homeId) : null;
+              const away = g.awayId ? getTeamById(teams, g.awayId) : null;
+              td.innerHTML =
+                `<span class="highlight">${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}</span><br>` +
+                `<span style="font-size:10px;color:#6b7280;">Pool play</span>`;
+            } else if (k){
+              const home = k.homeId ? getTeamById(teams, k.homeId) : null;
+              const away = k.awayId ? getTeamById(teams, k.awayId) : null;
+              td.innerHTML =
+                `<span class="highlight">${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}</span><br>` +
+                `<span style="font-size:10px;color:#6b7280;">${k.type}</span>`;
+            } else {
+              td.textContent = '';
+            }
+
+            tr.appendChild(td);
+          });
+
+          tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        block.appendChild(table);
+        divCard.appendChild(block);
+      });
+
+      scheduleRoot.appendChild(divCard);
+    });
+  }
+
+  loadData();
+</script>
+</body>
+</html>
