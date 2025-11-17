@@ -768,6 +768,33 @@
     return false;
   }
 }
+async function saveScoresOnly() {
+  try {
+    const payload = {
+      entity: 'scores',
+      scores: adminState.scores || {}
+    };
+
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      console.error('Error saving scores:', data.error);
+      alert('There was a problem saving scores. Please try again.');
+      return;
+    }
+
+    alert('Scores saved successfully.');
+  } catch (err) {
+    console.error(err);
+    alert('Network error while saving scores.');
+  }
+}
 
 
   /* ===== Load from Apps Script ===== */
