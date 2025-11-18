@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+ <head>
   <meta charset="UTF-8">
   <title>Game Schedules</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -73,7 +73,7 @@
       padding: 2rem;
       border: 3px solid #faca3d;
       margin-bottom: 2rem;
-      box-shadow:
+      box-shadow: 
         0 15px 40px rgba(18, 65, 117, 0.4),
         0 8px 20px rgba(0, 0, 0, 0.3),
         0 3px 15px rgba(250, 202, 61, 0.2);
@@ -123,7 +123,7 @@
       border: 3px solid #faca3d;
       border-radius: 16px;
       padding: 2rem;
-      box-shadow:
+      box-shadow: 
         0 15px 40px rgba(18, 65, 117, 0.4),
         0 8px 20px rgba(0, 0, 0, 0.3),
         0 3px 15px rgba(250, 202, 61, 0.2);
@@ -179,7 +179,7 @@
       overflow: hidden;
       padding: 4px;
       position: relative;
-      box-shadow:
+      box-shadow: 
         0 25px 60px rgba(18, 65, 117, 0.6),
         0 15px 35px rgba(0, 0, 0, 0.5),
         0 5px 15px rgba(250, 202, 61, 0.4),
@@ -217,7 +217,7 @@
       letter-spacing: 1px;
       position: relative;
       border-radius: 12px 12px 0 0;
-      box-shadow:
+      box-shadow: 
         0 6px 20px rgba(250, 202, 61, 0.4),
         0 3px 10px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4),
@@ -250,7 +250,7 @@
       letter-spacing: 1px;
       position: relative;
       border-radius: 0 12px 12px 0;
-      box-shadow:
+      box-shadow: 
         0 6px 20px rgba(250, 202, 61, 0.4),
         0 3px 10px rgba(0, 0, 0, 0.2),
         inset 0 2px 0 rgba(255, 255, 255, 0.4),
@@ -283,7 +283,7 @@
       position: relative;
       border-radius: 12px;
       border: 2px solid rgba(250, 202, 61, 0.1);
-      box-shadow:
+      box-shadow: 
         0 4px 12px rgba(0, 0, 0, 0.08),
         0 2px 6px rgba(0, 0, 0, 0.04),
         inset 0 1px 0 rgba(255, 255, 255, 0.9),
@@ -329,7 +329,7 @@
     .game-slot:hover {
       transform: translateY(-6px) scale(1.03);
       border-color: rgba(250, 202, 61, 0.4);
-      box-shadow:
+      box-shadow: 
         0 20px 40px rgba(250, 202, 61, 0.3),
         0 10px 25px rgba(0, 0, 0, 0.15),
         0 5px 15px rgba(250, 202, 61, 0.2),
@@ -366,7 +366,7 @@
       border-color: #faca3d;
       background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(250, 202, 61, 0.05) 100%);
       transform: translateY(-4px) scale(1.03);
-      box-shadow:
+      box-shadow: 
         0 15px 40px rgba(250, 202, 61, 0.5),
         0 8px 20px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 1);
@@ -413,7 +413,7 @@
       border-radius: 12px;
       border: 2px solid rgba(250, 202, 61, 0.4);
       position: relative;
-      box-shadow:
+      box-shadow: 
         0 2px 8px rgba(250, 202, 61, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
       white-space: nowrap;
@@ -502,32 +502,31 @@
       }
     }
   </style>
-</head>
-<body>
+ </head>
+ <body>
   <div class="page">
-    <div class="header-section">
-      <h1>Game Schedules</h1>
-      <p class="subtitle">Schedules are subject to change.</p>
+   <div class="header-section">
+    <h1>Game Schedule</h1>
+    <p class="subtitle">Schedules auto-update as scores and brackets are entered.</p>
+   </div>
+   <div class="controls-section">
+    <div id="divisionTabs">
+      <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
+      <button class="tab-btn" data-division="10UB">10U Boys</button>
+      <button class="tab-btn" data-division="10UG">10U Girls</button>
+      <button class="tab-btn" data-division="12UB">12U Boys</button>
+      <button class="tab-btn" data-division="12UG">12U Girls</button>
+      <button class="tab-btn" data-division="14UB">14U Boys</button>
+      <button class="tab-btn" data-division="14UG">14U Girls</button>
     </div>
+   </div>
 
-    <div class="controls-section">
-      <div id="divisionTabs">
-        <button id="allGamesTab" class="tab-btn active" data-division="">All Divisions</button>
-        <button class="tab-btn" data-division="10UB">10U Boys</button>
-        <button class="tab-btn" data-division="10UG">10U Girls</button>
-        <button class="tab-btn" data-division="12UB">12U Boys</button>
-        <button class="tab-btn" data-division="12UG">12U Girls</button>
-        <button class="tab-btn" data-division="14UB">14U Boys</button>
-        <button class="tab-btn" data-division="14UG">14U Girls</button>
-      </div>
+   <div id="scheduleContainer">
+    <div class="sched-block">
+      <div class="sched-title">Loading schedule…</div>
+      <p class="empty-message">If this doesn’t update, check that the admin portal and spreadsheet are published correctly.</p>
     </div>
-
-    <div id="scheduleContainer">
-      <div class="sched-block">
-        <div class="sched-title">Loading schedule…</div>
-        <p class="empty-message">If this doesn’t update, check that the admin portal and spreadsheet are published correctly.</p>
-      </div>
-    </div>
+   </div>
   </div>
 
   <script>
@@ -557,10 +556,10 @@
     function normalizeState(state) {
       if (!state || typeof state !== 'object') state = {};
       state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
-      state.pools       = Array.isArray(state.pools)       ? state.pools       : [];
-      state.schedules   = Array.isArray(state.schedules)   ? state.schedules   : [];
-      state.scores      = state.scores && typeof state.scores === 'object' ? state.scores : {};
-      state.dayConfigs  = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
+      state.pools = Array.isArray(state.pools) ? state.pools : [];
+      state.schedules = Array.isArray(state.schedules) ? state.schedules : [];
+      state.scores = state.scores && typeof state.scores === 'object' ? state.scores : {};
+      state.dayConfigs = state.dayConfigs && typeof state.dayConfigs === 'object' ? state.dayConfigs : {};
       return state;
     }
 
@@ -608,26 +607,24 @@
         return sa.localeCompare(sb);
       });
     }
-function buildDateOrderMap() {
-  const map = {};
-  let idx = 0;
-
-  const dc = adminState.dayConfigs || {};
-  Object.keys(dc).forEach(div => {
-    (dc[div] || []).forEach(cfg => {
-      const label = (cfg.label || '').trim();
-      if (!label) return;
-      if (map[label] === undefined) {
-        map[label] = idx++;
-      }
-    });
-  });
-
-  return map;
-}
 
     function normalizeStateForRendering(rawState) {
       adminState = normalizeState(rawState);
+    }
+
+    function getDateSortValue(label) {
+      if (!label) return 0;
+      const s = String(label);
+      const m = s.match(/\(([^)]+)\)/); // grab text inside parentheses if present
+      const raw = m ? m[1] : s;
+      const d = new Date(raw);
+      if (!isNaN(d.getTime())) return d.getTime();
+      return raw.toLowerCase();
+    }
+
+    function formatTeamLabel(name, score) {
+      if (score === null || score === undefined || score === '') return name;
+      return `${name} (${score})`;
     }
 
     async function loadData() {
@@ -742,26 +739,15 @@ function buildDateOrderMap() {
         if (g.time) groups[key].times.add(g.time);
       });
 
-      const dateOrder = buildDateOrderMap();
+      const groupKeys = Object.keys(groups).sort((a, b) => {
+        const da = getDateSortValue(groups[a].date);
+        const db = getDateSortValue(groups[b].date);
 
-const groupKeys = Object.keys(groups).sort((a, b) => {
-  const da = groups[a].date || '';
-  const db = groups[b].date || '';
-
-  const oa = dateOrder[da];
-  const ob = dateOrder[db];
-
-  // If either date has an explicit order from AdminState, use that
-  if (oa !== undefined || ob !== undefined) {
-    if (oa === undefined) return 1;   // unknown dates go last
-    if (ob === undefined) return -1;
-    return oa - ob;                   // earlier index = earlier in list
-  }
-
-  // Fallback: alphabetical
-  return da.localeCompare(db);
-});
-
+        if (typeof da === 'number' && typeof db === 'number') {
+          return da - db;
+        }
+        return String(da).localeCompare(String(db));
+      });
 
       groupKeys.forEach(key => {
         const group = groups[key];
@@ -822,12 +808,20 @@ const groupKeys = Object.keys(groups).sort((a, b) => {
               const home = getTeamById(game.homeId);
               const away = getTeamById(game.awayId);
 
+              // pull scores for this game
+              const scoreData = (adminState.scores && adminState.scores[game.id]) || {};
+              const homeScore = scoreData.home;
+              const awayScore = scoreData.away;
+
               const teamsDiv = document.createElement('div');
               teamsDiv.className = 'game-teams';
 
               const homeSpan = document.createElement('div');
               homeSpan.className = 'team-name';
-              homeSpan.textContent = home ? home.teamName : 'TBD';
+              homeSpan.textContent = formatTeamLabel(
+                home ? home.teamName : 'TBD',
+                homeScore
+              );
 
               const vsSpan = document.createElement('div');
               vsSpan.className = 'vs-text';
@@ -835,7 +829,10 @@ const groupKeys = Object.keys(groups).sort((a, b) => {
 
               const awaySpan = document.createElement('div');
               awaySpan.className = 'team-name';
-              awaySpan.textContent = away ? away.teamName : 'TBD';
+              awaySpan.textContent = formatTeamLabel(
+                away ? away.teamName : 'TBD',
+                awayScore
+              );
 
               teamsDiv.appendChild(homeSpan);
               teamsDiv.appendChild(vsSpan);
@@ -884,5 +881,5 @@ const groupKeys = Object.keys(groups).sort((a, b) => {
 
     document.addEventListener('DOMContentLoaded', loadData);
   </script>
-</body>
+ </body>
 </html>
