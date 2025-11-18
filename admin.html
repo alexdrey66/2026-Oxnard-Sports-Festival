@@ -5,48 +5,262 @@
   <title>OSF 2026 – Admin Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ORIGINAL ADMIN STYLES -->
   <style>
     :root{
-      --primary:#004b8d;
-      --accent:#d62828;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --border:#e5e7eb;
-      --text:#111827;
-      --muted:#6b7280;
+      --bg-deep:#020617;
+      --bg-mid:#02081c;
+      --bg-card:#020b24;
+      --navy:#0b1220;
+      --accent:#fbbf24;
+      --accent-strong:#f59e0b;
+      --accent-soft:#facc15;
+      --outline:#1f2937;
+      --muted:#9ca3af;
+      --text:#e5e7eb;
+      --danger:#ef4444;
+      --success:#22c55e;
+      --pending:#facc15;
     }
-    *{box-sizing:border-box;}
-    body{
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,body{
       margin:0;
+      padding:0;
+      height:100%;
       font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-      background:radial-gradient(circle at top left,#dbeafe 0,#f9fafb 40%,#e5e7eb 100%);
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, #1f2937 0, #020617 45%, #000000 100%);
+    }
+
+    /* GLOBAL LAYOUT FOR ADMIN APP */
+    .page{
+      max-width:1200px;
+      margin:0 auto;
+      padding:32px 16px 40px;
+    }
+
+    /* ---------------- LOGIN (CANVA STYLE) ---------------- */
+
+    #authGate{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        radial-gradient(circle at top, #111827 0, #020617 55%, #000000 100%);
+      z-index:100;
+    }
+
+    .auth-card{
+      width:100%;
+      max-width:420px;
+      padding:26px 26px 22px;
+      border-radius:22px;
+      background:radial-gradient(circle at top left,#020824 0,#020617 40%,#020617 100%);
+      border:1px solid rgba(148,163,184,0.45);
+      box-shadow:
+        0 32px 90px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(15,23,42,0.9);
+      position:relative;
       color:var(--text);
     }
-    .page{
-      max-width:1150px;
-      margin:0 auto;
-      padding:24px 16px 40px;
+
+    .auth-card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:24px;
+      background:radial-gradient(circle at top left,rgba(248,250,252,0.16),transparent 55%);
+      opacity:0.8;
+      pointer-events:none;
+      z-index:-1;
     }
+
+    .auth-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      color:#bfdbfe;
+      background:rgba(15,23,42,0.9);
+      box-shadow:0 0 0 1px rgba(56,189,248,0.35);
+      margin-bottom:10px;
+    }
+
+    .auth-pill-dot{
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 10px rgba(34,197,94,1);
+    }
+
+    .auth-title{
+      font-size:20px;
+      font-weight:700;
+      margin:0 0 4px;
+    }
+
+    .auth-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin:0 0 16px;
+      line-height:1.5;
+    }
+
+    .auth-label{
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:4px;
+      color:#9ca3af;
+    }
+
+    .auth-input{
+      width:100%;
+      border-radius:999px;
+      border:1px solid #1f2937;
+      background:#020617;
+      padding:9px 13px;
+      color:var(--text);
+      font-size:14px;
+      outline:none;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        inset 0 1px 0 rgba(148,163,184,0.2);
+    }
+
+    .auth-input::placeholder{
+      color:#4b5563;
+    }
+
+    .auth-input:focus{
+      border-color:var(--accent);
+      box-shadow:
+        0 0 0 1px rgba(234,179,8,0.9),
+        0 0 24px rgba(250,204,21,0.4);
+    }
+
+    .auth-actions{
+      margin-top:14px;
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .auth-btn{
+      border:none;
+      outline:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:9px 24px;
+      font-size:14px;
+      font-weight:700;
+      color:#111827;
+      position:relative;
+      background:radial-gradient(circle at 30% 0%,#fef3c7 0,#fbbf24 35%,#f97316 100%);
+      box-shadow:
+        0 18px 45px rgba(248,181,35,0.65),
+        0 0 0 1px rgba(251,191,36,0.7),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .auth-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:
+        0 22px 55px rgba(248,181,35,0.8),
+        0 0 0 1px rgba(251,191,36,0.85);
+    }
+
+    .auth-btn:active{
+      transform:translateY(0);
+      box-shadow:
+        0 10px 30px rgba(248,181,35,0.7),
+        0 0 0 1px rgba(251,191,36,0.9);
+    }
+
+    .auth-error{
+      min-height:16px;
+      margin-top:6px;
+      font-size:11px;
+      color:#fb923c;
+    }
+
+    .auth-footer{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:#6b7280;
+    }
+
+    /* ---------------- ADMIN LAYOUT (CANVA-ISH) ---------------- */
+
+    .admin-header{
+      background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(12,10,40,0.98));
+      border-radius:20px;
+      padding:22px 22px 18px;
+      border:1px solid rgba(148,163,184,0.6);
+      box-shadow:
+        0 24px 80px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(15,23,42,0.8);
+      margin-bottom:20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .admin-header::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:22px;
+      background:radial-gradient(circle at top left,rgba(148,163,184,0.14),transparent 55%);
+      pointer-events:none;
+    }
+
     .badge{
       display:inline-flex;
       align-items:center;
       gap:6px;
-      padding:4px 10px;
+      padding:4px 12px;
       border-radius:999px;
-      background:rgba(37,99,235,0.07);
-      color:#1d4ed8;
-      font-size:12px;
+      background:rgba(15,23,42,0.8);
+      color:#bfdbfe;
+      font-size:11px;
       font-weight:600;
-      margin-bottom:6px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
     }
-    h1{
+
+    .badge::before{
+      content:"";
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 10px rgba(34,197,94,1);
+    }
+
+    .admin-title{
       margin:0 0 4px;
       font-size:26px;
-      letter-spacing:0.03em;
+      font-weight:700;
+      letter-spacing:0.02em;
     }
-    .subtitle{
-      margin:0 0 8px;
+
+    .admin-subtitle{
+      margin:0;
       font-size:13px;
       color:var(--muted);
     }
@@ -56,43 +270,83 @@
       justify-content:space-between;
       align-items:center;
       margin-bottom:14px;
-      gap:8px;
+      gap:10px;
       flex-wrap:wrap;
-    }
-    .top-bar-note{
       font-size:12px;
-      color:#6b7280;
+      color:var(--muted);
     }
 
-    .tabs{
-      display:flex;
-      gap:6px;
-      margin-bottom:14px;
-      flex-wrap:wrap;
-    }
-    .tab-btn{
+    .btn{
       border-radius:999px;
-      border:1px solid rgba(148,163,184,0.8);
-      background:rgba(15,23,42,0.02);
+      border:1px solid rgba(148,163,184,0.7);
       padding:7px 14px;
       font-size:12px;
+      font-weight:600;
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       gap:6px;
-      color:#374151;
+      background:rgba(15,23,42,0.85);
+      color:var(--text);
+      transition:all .18s ease-out;
     }
+
+    .btn:hover{
+      border-color:var(--accent-soft);
+      box-shadow:0 0 0 1px rgba(250,204,21,0.4);
+      transform:translateY(-1px);
+    }
+
+    .btn-primary{
+      background:radial-gradient(circle at 20% 0%,#fef3c7 0,#fbbf24 40%,#f97316 100%);
+      color:#111827;
+      border-color:rgba(251,191,36,0.9);
+      box-shadow:
+        0 16px 45px rgba(250,204,21,0.7),
+        0 0 0 1px rgba(251,191,36,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+
+    .btn-small{padding:5px 11px;font-size:11px;box-shadow:none;}
+
+    .btn-approve{background:#16a34a;color:#ecfdf5;border-color:#16a34a;}
+    .btn-decline{background:#dc2626;color:#fee2e2;border-color:#b91c1c;}
+    .btn-pending{background:#facc15;color:#111827;border-color:#eab308;}
+
+    /* tabs */
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .tab-btn{
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,0.9);
+      padding:7px 14px;
+      font-size:12px;
+      cursor:pointer;
+      background:rgba(15,23,42,0.85);
+      color:#9ca3af;
+    }
+
     .tab-btn.active{
-      background:#111827;
-      color:#fff;
-      border-color:#0f172a;
+      background:linear-gradient(135deg,#111827,#020617);
+      color:#fbbf24;
+      border-color:rgba(234,179,8,0.9);
+      box-shadow:0 0 0 1px rgba(250,204,21,0.6);
     }
+
     .tab-panel{display:none;}
     .tab-panel.active{display:block;}
 
+    /* CARDS / LAYOUT */
+
     .layout-two{
       display:grid;
-      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+      grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
       gap:16px;
     }
     @media(max-width:900px){
@@ -100,18 +354,22 @@
     }
 
     .card{
-      background:var(--card);
-      border-radius:14px;
-      box-shadow:0 16px 36px rgba(15,23,42,0.16);
-      border:1px solid rgba(148,163,184,0.4);
+      background:linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,23,42,0.9));
+      border-radius:16px;
+      border:1px solid rgba(31,41,55,0.9);
       padding:14px 12px 14px;
       margin-bottom:14px;
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.85),
+        0 0 0 1px rgba(15,23,42,0.8);
     }
+
     .card-header{
       font-size:14px;
       font-weight:600;
       margin-bottom:4px;
     }
+
     .card-sub{
       font-size:12px;
       color:var(--muted);
@@ -125,25 +383,27 @@
       letter-spacing:0.06em;
       display:block;
       margin-bottom:3px;
-      color:#6b7280;
+      color:#9ca3af;
     }
+
     select,input,textarea{
       width:100%;
-      border-radius:9px;
-      border:1px solid var(--border);
-      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      padding:7px 9px;
       font-size:13px;
       font-family:inherit;
       outline:none;
-      background:#f9fafb;
-      transition:border-color .15s, box-shadow .15s, background .15s;
+      background:#020617;
+      color:var(--text);
     }
+
     select:focus,input:focus,textarea:focus{
-      border-color:#2563eb;
-      background:#fff;
-      box-shadow:0 0 0 1px rgba(37,99,235,0.25);
+      border-color:var(--accent-soft);
+      box-shadow:0 0 0 1px rgba(250,204,21,0.5);
     }
-    textarea{resize:vertical;min-height:60px;}
+
+    textarea{resize:vertical;min-height:70px;}
 
     .row{
       display:flex;
@@ -153,106 +413,69 @@
     }
     .row>div{flex:1;}
 
-    .btn{
-      border-radius:999px;
-      border:none;
-      padding:7px 13px;
-      font-size:12px;
-      font-weight:600;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .btn-primary{
-      background:linear-gradient(135deg,#2563eb,#1d4ed8);
-      color:#fff;
-      box-shadow:0 12px 22px rgba(37,99,235,0.35);
-    }
-    .btn-ghost{
-      background:rgba(15,23,42,0.03);
-      color:#111827;
-      border:1px solid rgba(148,163,184,0.6);
-    }
-    .btn-small{
-      padding:4px 9px;
-      font-size:11px;
-      box-shadow:none;
-    }
-    .btn-approve{background:#16a34a;color:#fff;}
-    .btn-decline{background:#ef4444;color:#fff;}
-    .btn-pending{background:#facc15;color:#111827;}
-
-    /* Canva-style team cards */
-
     .team-list{
       display:grid;
-      gap:1rem;
+      gap:0.85rem;
     }
 
     .team-card{
-      background:linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);
-      padding:1.25rem;
-      border-radius:12px;
-      border:2px solid rgba(250,202,61,0.2);
-      color:#124175;
-      transition:0.3s;
+      background:linear-gradient(135deg,rgba(15,23,42,0.98),rgba(15,23,42,0.92));
+      padding:10px 10px 9px;
+      border-radius:14px;
+      border:1px solid rgba(31,41,55,1);
+      box-shadow:
+        0 14px 35px rgba(0,0,0,0.8),
+        0 0 0 1px rgba(15,23,42,0.75);
+      transition:transform .15s ease-out, box-shadow .15s ease-out, border-color .15s;
     }
 
     .team-card:hover{
-      transform:translateY(-2px);
-      border-color:#faca3d;
+      transform:translateY(-1px);
+      border-color:rgba(250,204,21,0.6);
+      box-shadow:
+        0 18px 45px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(250,204,21,0.4);
     }
 
     .team-header{
       display:flex;
       justify-content:space-between;
       flex-wrap:wrap;
-      margin-bottom:6px;
+      margin-bottom:4px;
+      gap:6px;
     }
 
     .team-title{
-      font-size:1.1rem;
-      font-weight:900;
-      text-transform:uppercase;
+      font-size:15px;
+      font-weight:700;
     }
 
     .team-meta{
-      font-size:0.9rem;
-      font-weight:600;
-      color:#374151;
+      font-size:11px;
+      color:#9ca3af;
     }
 
     .status-pill{
-      padding:0.3rem 0.8rem;
-      border-radius:12px;
-      font-size:0.75rem;
+      padding:3px 9px;
+      border-radius:999px;
+      font-size:10px;
       font-weight:700;
       text-transform:uppercase;
-      letter-spacing:0.5px;
+      letter-spacing:0.06em;
     }
 
-    .status-pending{
-      background:rgba(250,202,61,0.9);
-      color:#124175;
-    }
-
-    .status-approved{
-      background:rgba(34,197,94,0.25);
-      color:#166534;
-    }
-
-    .status-declined{
-      background:rgba(239,68,68,0.25);
-      color:#991b1b;
-    }
+    .status-pending{background:rgba(250,204,21,0.15);color:#facc15;border:1px solid rgba(250,204,21,0.5);}
+    .status-approved{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.45);}
+    .status-declined{background:rgba(248,113,113,0.16);color:#fca5a5;border:1px solid rgba(248,113,113,0.45);}
 
     .check-row{
       display:flex;
       flex-wrap:wrap;
-      gap:8px;
+      gap:10px;
       margin-top:4px;
+      margin-bottom:4px;
     }
+
     .check-row label{
       font-size:11px;
       text-transform:none;
@@ -261,62 +484,73 @@
       display:flex;
       align-items:center;
       gap:4px;
-      color:#374151;
+      color:#e5e7eb;
     }
+
     .check-row input[type="checkbox"]{
-      width:auto;height:auto;
+      width:auto;
+      height:auto;
+      accent-color:var(--accent-soft);
     }
+
     .note-input{
       width:100%;
-      border-radius:8px;
-      border:1px dashed #cbd5f5;
-      background:#fff;
-      padding:4px 6px;
+      border-radius:999px;
+      border:1px dashed #374151;
+      background:rgba(15,23,42,0.9);
+      padding:4px 7px;
       font-size:11px;
-      margin-top:4px;
+      color:var(--text);
     }
 
     .pill{
       display:inline-flex;
       align-items:center;
       gap:4px;
-      padding:4px 8px;
+      padding:4px 9px;
       border-radius:999px;
-      background:#eff6ff;
-      color:#1d4ed8;
+      background:rgba(15,23,42,0.9);
+      color:#e5e7eb;
       font-size:11px;
       font-weight:600;
     }
+
     .tag{
       display:inline-flex;
       align-items:center;
       padding:2px 7px;
       font-size:11px;
       border-radius:999px;
-      background:#e5e7eb;
+      background:#1f2937;
+      color:#e5e7eb;
       margin:2px 4px 2px 0;
     }
+
     .empty-note{
       font-size:12px;
-      color:#9ca3af;
+      color:#6b7280;
     }
 
     table{
       width:100%;
       border-collapse:collapse;
       font-size:12px;
+      background:#020617;
+      color:var(--text);
     }
+
     th,td{
-      padding:5px 6px;
-      border:1px solid #e5e7eb;
+      padding:6px 7px;
+      border:1px solid #1f2937;
       text-align:left;
     }
+
     th{
-      background:#f3f4f6;
+      background:#020617;
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:0.05em;
-      color:#6b7280;
+      color:#9ca3af;
     }
 
     .toast{
@@ -324,15 +558,15 @@
       bottom:16px;
       right:16px;
       background:#111827;
-      color:#f9fafb;
+      color:#e5e7eb;
       font-size:11px;
-      padding:6px 10px;
+      padding:7px 12px;
       border-radius:999px;
       opacity:0;
       pointer-events:none;
       transform:translateY(8px);
       transition:all .2s ease-out;
-      box-shadow:0 10px 25px rgba(15,23,42,0.35);
+      box-shadow:0 18px 40px rgba(0,0,0,0.8);
       z-index:50;
     }
     .toast.visible{
@@ -341,10 +575,10 @@
     }
 
     .game-card{
-      border-radius:10px;
-      border:1px solid #e5e7eb;
-      background:#f9fafb;
-      padding:6px 8px;
+      border-radius:12px;
+      border:1px solid #1f2937;
+      background:rgba(15,23,42,0.96);
+      padding:8px 9px;
       margin-bottom:6px;
       font-size:12px;
     }
@@ -352,502 +586,40 @@
       display:flex;
       justify-content:space-between;
       gap:6px;
-      margin-bottom:2px;
+      margin-bottom:4px;
       flex-wrap:wrap;
     }
     .game-meta{
       font-size:11px;
-      color:#6b7280;
-    }
-
-    /* AUTH GATE */
-    #authGate{
-      position:fixed;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:radial-gradient(circle at top,#1e293b,#020617);
-      color:#e5e7eb;
-      z-index:100;
-    }
-    .auth-card{
-      width:100%;
-      max-width:360px;
-      background:#020617;
-      border-radius:18px;
-      border:1px solid rgba(148,163,184,0.4);
-      box-shadow:0 24px 60px rgba(0,0,0,0.7);
-      padding:18px 18px 16px;
-    }
-    .auth-title{
-      font-size:18px;
-      font-weight:600;
-      margin-bottom:4px;
-    }
-    .auth-sub{
-      font-size:12px;
       color:#9ca3af;
-      margin-bottom:12px;
-    }
-    .auth-label{
-      font-size:11px;
-      font-weight:600;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      margin-bottom:3px;
-      color:#9ca3af;
-    }
-    .auth-input{
-      width:100%;
-      border-radius:10px;
-      border:1px solid #4b5563;
-      background:#020617;
-      padding:7px 9px;
-      color:#e5e7eb;
-      font-size:13px;
-      outline:none;
-    }
-    .auth-input:focus{
-      border-color:#2563eb;
-      box-shadow:0 0 0 1px rgba(37,99,235,0.35);
-    }
-    .auth-error{
-      font-size:11px;
-      color:#f97316;
-      margin-top:4px;
-      min-height:14px;
-    }
-    .auth-footer{
-      margin-top:10px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:11px;
-      color:#6b7280;
-    }
-  </style>
-
-  <!-- CANVA THEME STYLES (OVERRIDES SOME GLOBALS) -->
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
-      color: #ffffff;
-      min-height: 100vh;
-    }
-
-    html {
-      height: 100%;
-    }
-
-    .page, #adminApp {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-      min-height: 100vh;
-    }
-
-    .admin-panel {
-      background: #124175;
-      border: 3px solid #faca3d;
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow:
-        0 15px 40px rgba(18, 65, 117, 0.4),
-        0 8px 20px rgba(0, 0, 0, 0.3),
-        0 3px 15px rgba(250, 202, 61, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .admin-panel::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
-    }
-
-    .admin-panel::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .admin-header {
-      background: transparent;
-      border-radius: 16px;
-      padding: 3rem;
-      border: 3px solid #faca3d;
-      margin-bottom: 2rem;
-      position: relative;
-      text-align: center;
-    }
-
-    .admin-header::before {
-      content: '';
-      position: absolute;
-      top: -3px;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
-      border-radius: 19px;
-      z-index: -1;
-      opacity: 0.1;
-    }
-
-    .admin-title {
-      font-size: 4rem;
-      font-weight: 900;
-      margin: 0 0 0.5rem;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      letter-spacing: 1px;
-    }
-
-    .admin-subtitle {
-      font-size: 1.1rem;
-      color: #ffffff;
-      margin: 0;
-      opacity: 0.9;
-      font-style: italic;
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 0 0 1.5rem 0;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .section-title::before {
-      content: '';
-      width: 4px;
-      height: 24px;
-      background: #faca3d;
-      border-radius: 2px;
-    }
-
-    button, .btn {
-      border-radius: 999px;
-      padding: 0.75rem 1.5rem;
-      border: 2px solid #e5e7eb;
-      background: white;
-      color: #124175;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
-      display: inline-block;
-      text-decoration: none;
-      text-align: center;
-    }
-
-    button:hover, .btn:hover {
-      border-color: #faca3d;
-      box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
-      transform: translateY(-1px);
-    }
-
-    button:active, .btn:active {
-      transform: translateY(0);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
-      color: #124175;
-      border-color: #124175;
-      box-shadow:
-        0 6px 20px rgba(250, 202, 61, 0.4),
-        0 3px 10px rgba(0, 0, 0, 0.2),
-        inset 0 2px 0 rgba(255, 255, 255, 0.4);
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-      position: relative;
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
-      border-radius: 999px;
-    }
-
-    .btn-primary:hover {
-      box-shadow:
-        0 8px 25px rgba(250, 202, 61, 0.5),
-        0 4px 15px rgba(0, 0, 0, 0.3),
-        inset 0 2px 0 rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-      color: #124175;
-      border-color: rgba(250, 202, 61, 0.3);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    }
-
-    .btn-small {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-    }
-
-    input, select, textarea {
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
-      border: 2px solid #e5e7eb;
-      margin: 0.25rem 0;
-      font-size: 1rem;
-      font-family: inherit;
-      width: 100%;
-      background: white;
-      color: #124175;
-      transition: all 0.2s ease;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #faca3d;
-      box-shadow: 0 0 0 3px rgba(250, 202, 61, 0.2);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #ffffff;
-      font-size: 0.95rem;
-      text-transform:none;
-      letter-spacing:0;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .admin-table-wrapper {
-      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
-      border-radius: 20px;
-      overflow: hidden;
-      padding: 4px;
-      position: relative;
-      box-shadow:
-        0 25px 60px rgba(18, 65, 117, 0.6),
-        0 15px 35px rgba(0, 0, 0, 0.5),
-        0 5px 15px rgba(250, 202, 61, 0.4),
-        inset 0 2px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-      margin-bottom: 1.5rem;
-    }
-
-    .admin-table-wrapper::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #faca3d, #f59e0b, #faca3d, #f59e0b);
-      background-size: 400% 400%;
-      border-radius: 22px;
-      z-index: -1;
-      animation: shimmer 3s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    thead {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
-      border-radius: 16px 16px 0 0;
-    }
-
-    th {
-      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
-      color: #124175;
-      padding: 1rem 0.75rem;
-      font-weight: 900;
-      text-align: left;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      position: relative;
-      box-shadow:
-        0 6px 20px rgba(250, 202, 61, 0.4),
-        0 3px 10px rgba(0, 0, 0, 0.2),
-        inset 0 2px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-    }
-
-    th::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
-    }
-
-    td {
-      padding: 0.75rem;
-      border-bottom: 1px solid rgba(250, 202, 61, 0.2);
-      color: #124175;
-      font-weight: 600;
-      position: relative;
-      transition: all 0.2s ease;
-    }
-
-    tr:hover td {
-      background: linear-gradient(135deg, rgba(250, 202, 61, 0.05) 0%, rgba(250, 202, 61, 0.1) 100%);
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      position: relative;
-      box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      white-space: nowrap;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.25) 100%);
-      color: #1e3a8a;
-      border: 2px solid rgba(59, 130, 246, 0.4);
-    }
-
-    .badge::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
-      border-radius: 12px;
-    }
-
-    .alert {
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-      border: 2px solid;
-      font-weight: 600;
-    }
-
-    .alert-info {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: #3b82f6;
-      color: #ffffff;
-    }
-
-    .flex {
-      display: flex;
-    }
-
-    .flex-wrap {
-      flex-wrap: wrap;
-    }
-
-    .gap-2 { gap: 1rem; }
-
-    @media (max-width: 768px) {
-      .page, #adminApp {
-        padding: 1rem;
-      }
-      .admin-header {
-        padding: 2rem 1.5rem;
-      }
-      .admin-title {
-        font-size: 2rem;
-      }
     }
   </style>
 </head>
 
 <body>
 
-<!-- PASSWORD GATE -->
+<!-- LOGIN (CANVA STYLE) -->
 <div id="authGate">
   <div class="auth-card">
-    <div class="badge" style="margin-bottom:8px;background:rgba(37,99,235,0.16);color:#bfdbfe;">
-      OSF 2026 • Admin
+    <div class="auth-pill">
+      <span class="auth-pill-dot"></span>
+      OSF 2026 • ADMIN
     </div>
-    <div class="auth-title">Tournament Admin Login</div>
-    <div class="auth-sub">
+    <h1 class="auth-title">Tournament Admin Login</h1>
+    <p class="auth-sub">
       This page is for tournament staff. Enter the admin password to continue.
-    </div>
+    </p>
+
     <div>
       <div class="auth-label">Password</div>
       <input id="authPassword" type="password" class="auth-input" placeholder="Enter password">
       <div id="authError" class="auth-error"></div>
     </div>
-    <div style="margin-top:10px;display:flex;justify-content:flex-end;">
-      <button id="authSubmit" class="btn btn-primary btn-small">Enter</button>
+
+    <div class="auth-actions">
+      <button id="authSubmit" class="auth-btn">Enter</button>
     </div>
+
     <div class="auth-footer">
       <span>Hint: same password used for admin access.</span>
       <span>AYSO • Area 10W</span>
@@ -855,17 +627,18 @@
   </div>
 </div>
 
+<!-- ADMIN APP -->
 <main id="adminMain" class="page" style="display:none;">
   <div class="admin-header">
     <div class="badge">OSF 2026 • Tournament Admin</div>
-    <h1 class="admin-title">Admin Portal</h1>
+    <h2 class="admin-title">Admin Portal</h2>
     <p class="admin-subtitle">
       One-stop view for teams, pools, schedules, and scoring.
     </p>
   </div>
 
   <div class="top-bar">
-    <div class="top-bar-note">
+    <div>
       Changes are saved to your <strong>OSF 2026 Tournament Teams</strong> spreadsheet (Teams + AdminState).
     </div>
     <button id="saveStateBtn" class="btn btn-primary btn-small">Save / Publish</button>
@@ -940,11 +713,9 @@
 
   <!-- POOLS TAB -->
   <section id="tab-pools" class="tab-panel">
-    <!-- Panel 1: Create & Manage Pools -->
-    <div class="panel">
-      <div class="section-title">
-        Create &amp; Manage Pools
-      </div>
+    <div class="card">
+      <div class="card-header">Create &amp; Manage Pools</div>
+      <div class="card-sub">Create pools and assign approved/manual teams.</div>
 
       <label>Division</label>
       <select id="poolsDivisionSelect">
@@ -956,63 +727,61 @@
         <option value="14UG">14U Girls</option>
       </select>
 
-      <label>New Pool Name</label>
-      <input id="newPoolName" placeholder="Pool A">
-
-      <button id="addPoolBtn">Add Pool</button>
-
-      <div id="poolsList">
-        <!-- JS will render pools here -->
-      </div>
-    </div>
-
-    <!-- Panel 2: Available Teams -->
-    <div class="panel">
-      <div class="section-title">
-        Available Teams
-      </div>
-
-      <label>Teams in Division</label>
-      <div id="poolTeamsArea">
-        <div class="empty">
-          Teams will appear here when you select a division
+      <label style="margin-top:6px;">New Pool Name</label>
+      <div class="row">
+        <div><input id="newPoolName" placeholder="Pool A"></div>
+        <div style="flex:0 0 auto;align-self:flex-end;">
+          <button id="addPoolBtn" class="btn btn-primary btn-small">Add Pool</button>
         </div>
       </div>
+
+      <div id="poolsList" style="margin-top:6px;"></div>
     </div>
 
-    <!-- Panel 3: Manual Teams -->
-    <div class="panel">
-      <div class="section-title">
-        Add Manual Team
+    <div class="card">
+      <div class="card-header">Available Teams</div>
+      <div class="card-sub">Approved &amp; manual teams in this division.</div>
+      <div id="poolTeamsArea">
+        <div class="empty-note">Teams will appear here when you select a division.</div>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Add Manual Team</div>
+      <div class="card-sub">Use for guest or late-add teams that aren’t in the registration sheet.</div>
 
       <label>Manual Team Name</label>
       <input id="manualTeamName" placeholder="Enter team name">
 
-      <label>Region</label>
-      <input id="manualTeamRegion" placeholder="e.g., 304">
+      <div class="row" style="margin-top:6px;">
+        <div>
+          <label>Region</label>
+          <input id="manualTeamRegion" placeholder="e.g., 304">
+        </div>
+        <div>
+          <label>City</label>
+          <input id="manualTeamCity" placeholder="Enter city">
+        </div>
+        <div>
+          <label>State</label>
+          <input id="manualTeamState" placeholder="Enter state">
+        </div>
+      </div>
 
-      <label>City</label>
-      <input id="manualTeamCity" placeholder="Enter city">
+      <button id="addManualTeamBtn" class="btn btn-primary btn-small">Add Manual Team</button>
 
-      <label>State</label>
-      <input id="manualTeamState" placeholder="Enter state">
-
-      <button id="addManualTeamBtn">Add Manual Team</button>
-
-      <div id="manualTeamsList">
-        <div class="empty">No manual teams yet</div>
+      <div id="manualTeamsList" style="margin-top:8px;">
+        <div class="empty-note">No manual teams yet</div>
       </div>
     </div>
   </section>
-
 
   <!-- SCHEDULE TAB -->
   <section id="tab-schedule" class="tab-panel">
     <div class="layout-two">
       <div>
         <div class="card">
-          <div class="card-header">Day & Field Configuration</div>
+          <div class="card-header">Day &amp; Field Configuration</div>
           <div class="card-sub">
             Configure days (Saturday/Sunday), fields, and times for pool-play games.
           </div>
@@ -1057,14 +826,13 @@
             Uses pools and day configs. Tries to avoid back-to-back games and duplicate time slots.
           </div>
 
-          <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px;text-transform:none;letter-spacing:0;">
             <input type="checkbox" id="allowCrossPool" style="width:auto;height:auto;">
             Allow <strong>cross-pool</strong> games when needed so each team reaches 3 matches
           </label>
 
           <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
         </div>
-
       </div>
 
       <div>
@@ -1086,7 +854,7 @@
   <!-- SCORING TAB -->
   <section id="tab-scoring" class="tab-panel">
     <div class="card">
-      <div class="card-header">Scoring & Standings</div>
+      <div class="card-header">Scoring &amp; Standings</div>
       <div class="card-sub">
         Enter scores for pool-play games. Clearing scores resets that game.
       </div>
@@ -1318,8 +1086,8 @@
     teamsSummaryEl.innerHTML = `
       <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">
         <span class="pill">Pending: ${pending}</span>
-        <span class="pill" style="background:#dcfce7;color:#166534;">Approved: ${approved}</span>
-        <span class="pill" style="background:#fee2e2;color:#991b1b;">Declined: ${declined}</span>
+        <span class="pill" style="background:#022c22;">Approved: ${approved}</span>
+        <span class="pill" style="background:#450a0a;">Declined: ${declined}</span>
       </div>
     `;
   }
@@ -1585,7 +1353,7 @@
         nameSpan.innerHTML=`<strong>${team.teamName||'Team'}</strong>`;
         const sub=document.createElement('span');
         sub.style.fontSize='11px';
-        sub.style.color='#6b7280';
+        sub.style.color='#9ca3af';
         sub.textContent=team.manual?'Manual':`Region ${team.regionNumber||''}`;
         div.appendChild(nameSpan);
         div.appendChild(sub);
@@ -1626,11 +1394,11 @@
       header.style.flexWrap='wrap';
 
       const title=document.createElement('div');
-      title.innerHTML=`<strong>${pool.name}</strong> <span style="font-size:11px;color:#6b7280;">(${divisionLabel(pool.division)})</span>`;
+      title.innerHTML=`<strong>${pool.name}</strong> <span style="font-size:11px;color:#9ca3af;">(${divisionLabel(pool.division)})</span>`;
       header.appendChild(title);
 
       const editBtn=document.createElement('button');
-      editBtn.className='btn btn-ghost btn-small';
+      editBtn.className='btn btn-small';
       editBtn.style.fontSize='10px';
       editBtn.textContent='Edit';
       editBtn.addEventListener('click',()=>{
@@ -1767,7 +1535,7 @@
       row.style.marginBottom='4px';
       row.innerHTML=`<strong>${cfg.label}</strong> – Fields: ${cfg.fields} • Times: ${cfg.times}`;
       const btn=document.createElement('button');
-      btn.className='btn btn-ghost btn-small';
+      btn.className='btn btn-small';
       btn.style.marginTop='2px';
       btn.textContent='Delete';
       btn.addEventListener('click',()=>{
@@ -2172,7 +1940,7 @@
         const s3=document.createElement('div');
         s3.innerHTML='<label>&nbsp;</label>';
         const clearBtn=document.createElement('button');
-        clearBtn.className='btn btn-ghost btn-small';
+        clearBtn.className='btn btn-small';
         clearBtn.textContent='Clear';
         clearBtn.addEventListener('click',()=>{
           delete adminState.scores[g.id];
@@ -2195,3 +1963,4 @@
 </script>
 </body>
 </html>
+
