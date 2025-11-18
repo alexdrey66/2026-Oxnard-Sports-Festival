@@ -939,74 +939,73 @@
   </section>
 
   <!-- POOLS TAB -->
-  <section id="tab-pools" class="tab-panel">
-    <div class="layout-two">
-      <div>
-        <div class="card">
-          <div class="card-header">Pools by Division</div>
-          <div class="card-sub">Create pools, edit/delete, and see which teams are assigned.</div>
-          <div class="row">
-            <div>
-              <label>Division</label>
-              <select id="poolsDivisionSelect">
-                <option value="10UB">10U Boys</option>
-                <option value="10UG">10U Girls</option>
-                <option value="12UB">12U Boys</option>
-                <option value="12UG">12U Girls</option>
-                <option value="14UB">14U Boys</option>
-                <option value="14UG">14U Girls</option>
-              </select>
-            </div>
-            <div>
-              <label>New Pool Name</label>
-              <div class="row" style="margin-bottom:0;">
-                <div><input type="text" id="newPoolName" placeholder="Pool A"></div>
-                <div style="flex:0 0 auto;">
-                  <button class="btn btn-primary btn-small" id="addPoolBtn">Add Pool</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="poolsList" style="margin-top:8px;"></div>
-        </div>
+<section id="tab-pools" class="tab-panel">
+  <!-- Panel 1: Create & Manage Pools -->
+  <div class="panel">
+    <div class="section-title">
+      Create &amp; Manage Pools
+    </div>
 
-        <div class="card">
-          <div class="card-header">Assign Teams to Pools</div>
-          <div class="card-sub">Approved teams and manual placeholders.</div>
-          <div id="poolTeamsArea"></div>
-        </div>
-      </div>
+    <label>Division</label>
+    <select id="poolsDivisionSelect">
+      <option value="10UB">10U Boys</option>
+      <option value="10UG">10U Girls</option>
+      <option value="12UB">12U Boys</option>
+      <option value="12UG">12U Girls</option>
+      <option value="14UB">14U Boys</option>
+      <option value="14UG">14U Girls</option>
+    </select>
 
-      <div>
-        <div class="card">
-          <div class="card-header">Manual Teams</div>
-          <div class="card-sub">Use this if you’re holding spots or need a placeholder team.</div>
-          <div class="row">
-            <div>
-              <label>Team Name</label>
-              <input type="text" id="manualTeamName" placeholder="Placeholder Team">
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label>Region #</label>
-              <input type="number" id="manualTeamRegion" placeholder="304">
-            </div>
-            <div>
-              <label>City</label>
-              <input type="text" id="manualTeamCity" placeholder="Oxnard">
-            </div>
-            <div>
-              <label>State</label>
-              <input type="text" id="manualTeamState" placeholder="CA" maxlength="2">
-            </div>
-          </div>
-          <button class="btn btn-primary btn-small" id="addManualTeamBtn">Add Manual Team</button>
-          <div id="manualTeamsList" style="margin-top:10px;"></div>
-        </div>
+    <label>New Pool Name</label>
+    <input id="newPoolName" placeholder="Pool A">
+
+    <button id="addPoolBtn">Add Pool</button>
+
+    <div id="poolsList">
+      <!-- JS will render pools here -->
+    </div>
+  </div>
+
+  <!-- Panel 2: Available Teams -->
+  <div class="panel">
+    <div class="section-title">
+      Available Teams
+    </div>
+
+    <label>Teams in Division</label>
+    <div id="poolTeamsArea">
+      <div class="empty">
+        Teams will appear here when you select a division
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Panel 3: Manual Teams -->
+  <div class="panel">
+    <div class="section-title">
+      Add Manual Team
+    </div>
+
+    <label>Manual Team Name</label>
+    <input id="manualTeamName" placeholder="Enter team name">
+
+    <label>Region</label>
+    <input id="manualTeamRegion" placeholder="e.g., 304">
+
+    <label>City</label>
+    <input id="manualTeamCity" placeholder="Enter city">
+
+    <label>State</label>
+    <input id="manualTeamState" placeholder="Enter state">
+
+    <button id="addManualTeamBtn">Add Manual Team</button>
+
+    <div id="manualTeamsList">
+      <div class="empty">No manual teams yet</div>
+    </div>
+  </div>
+</section>
+
 
   <!-- SCHEDULE TAB -->
   <section id="tab-schedule" class="tab-panel">
