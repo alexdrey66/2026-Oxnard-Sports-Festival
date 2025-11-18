@@ -80,29 +80,34 @@ html,
       background:#faca3d;
     }
 
-    .auth-card{
-      background:#ffffff;
-      border-radius:28px;
-      padding:40px 36px 28px;
-      max-width:420px;
-      width:100%;
-      box-shadow:0 22px 45px rgba(15,23,42,0.45);
-      text-align:left;
-      position:relative;
-      overflow:hidden;
-    }
+.auth-card{
+  background:#ffffff;
+  border-radius:28px;
+  padding:60px 36px 28px; /* extra top padding */
+  max-width:420px;
+  width:100%;
+  box-shadow:0 22px 45px rgba(15,23,42,0.45);
+  text-align:left;
+  position:relative;
+  overflow:visible; /* allow icon to float above */
+}
 
-    .auth-icon-circle{
-      width:72px;
-      height:72px;
-      border-radius:999px;
-      background:linear-gradient(135deg,#124175 0%,#1a5a8a 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin:-72px auto 24px;
-      box-shadow:0 12px 30px rgba(15,23,42,0.45);
-    }
+
+.auth-icon-circle{
+  width:72px;
+  height:72px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#124175 0%,#1a5a8a 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:absolute;
+  top:-36px;        /* pulls it halfway above the card */
+  left:50%;
+  transform:translateX(-50%);
+  box-shadow:0 12px 30px rgba(15,23,42,0.45);
+}
+
 
     .auth-icon-circle span{
       font-size:28px;
