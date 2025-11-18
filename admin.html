@@ -183,69 +183,69 @@
     .btn-decline{background:#ef4444;color:#fff;}
     .btn-pending{background:#facc15;color:#111827;}
 
-/* Canva Styles — Minimal Insert */
+    /* Canva-style team cards */
 
-.team-list{
-  display:grid;
-  gap:1rem;
-}
+    .team-list{
+      display:grid;
+      gap:1rem;
+    }
 
-.team-card{
-  background:linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);
-  padding:1.25rem;
-  border-radius:12px;
-  border:2px solid rgba(250,202,61,0.2);
-  color:#124175;
-  transition:0.3s;
-}
+    .team-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);
+      padding:1.25rem;
+      border-radius:12px;
+      border:2px solid rgba(250,202,61,0.2);
+      color:#124175;
+      transition:0.3s;
+    }
 
-.team-card:hover{
-  transform:translateY(-2px);
-  border-color:#faca3d;
-}
+    .team-card:hover{
+      transform:translateY(-2px);
+      border-color:#faca3d;
+    }
 
-.team-header{
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  margin-bottom:6px;
-}
+    .team-header{
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:6px;
+    }
 
-.team-title{
-  font-size:1.1rem;
-  font-weight:900;
-  text-transform:uppercase;
-}
+    .team-title{
+      font-size:1.1rem;
+      font-weight:900;
+      text-transform:uppercase;
+    }
 
-.team-meta{
-  font-size:0.9rem;
-  font-weight:600;
-  color:#374151;
-}
+    .team-meta{
+      font-size:0.9rem;
+      font-weight:600;
+      color:#374151;
+    }
 
-.status-pill{
-  padding:0.3rem 0.8rem;
-  border-radius:12px;
-  font-size:0.75rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:0.5px;
-}
+    .status-pill{
+      padding:0.3rem 0.8rem;
+      border-radius:12px;
+      font-size:0.75rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
 
-.status-pending{
-  background:rgba(250,202,61,0.9);
-  color:#124175;
-}
+    .status-pending{
+      background:rgba(250,202,61,0.9);
+      color:#124175;
+    }
 
-.status-approved{
-  background:rgba(34,197,94,0.25);
-  color:#166534;
-}
+    .status-approved{
+      background:rgba(34,197,94,0.25);
+      color:#166534;
+    }
 
-.status-declined{
-  background:rgba(239,68,68,0.25);
-  color:#991b1b;
-}
+    .status-declined{
+      background:rgba(239,68,68,0.25);
+      color:#991b1b;
+    }
 
     .check-row{
       display:flex;
@@ -939,72 +939,72 @@
   </section>
 
   <!-- POOLS TAB -->
-<section id="tab-pools" class="tab-panel">
-  <!-- Panel 1: Create & Manage Pools -->
-  <div class="panel">
-    <div class="section-title">
-      Create &amp; Manage Pools
-    </div>
+  <section id="tab-pools" class="tab-panel">
+    <!-- Panel 1: Create & Manage Pools -->
+    <div class="panel">
+      <div class="section-title">
+        Create &amp; Manage Pools
+      </div>
 
-    <label>Division</label>
-    <select id="poolsDivisionSelect">
-      <option value="10UB">10U Boys</option>
-      <option value="10UG">10U Girls</option>
-      <option value="12UB">12U Boys</option>
-      <option value="12UG">12U Girls</option>
-      <option value="14UB">14U Boys</option>
-      <option value="14UG">14U Girls</option>
-    </select>
+      <label>Division</label>
+      <select id="poolsDivisionSelect">
+        <option value="10UB">10U Boys</option>
+        <option value="10UG">10U Girls</option>
+        <option value="12UB">12U Boys</option>
+        <option value="12UG">12U Girls</option>
+        <option value="14UB">14U Boys</option>
+        <option value="14UG">14U Girls</option>
+      </select>
 
-    <label>New Pool Name</label>
-    <input id="newPoolName" placeholder="Pool A">
+      <label>New Pool Name</label>
+      <input id="newPoolName" placeholder="Pool A">
 
-    <button id="addPoolBtn">Add Pool</button>
+      <button id="addPoolBtn">Add Pool</button>
 
-    <div id="poolsList">
-      <!-- JS will render pools here -->
-    </div>
-  </div>
-
-  <!-- Panel 2: Available Teams -->
-  <div class="panel">
-    <div class="section-title">
-      Available Teams
-    </div>
-
-    <label>Teams in Division</label>
-    <div id="poolTeamsArea">
-      <div class="empty">
-        Teams will appear here when you select a division
+      <div id="poolsList">
+        <!-- JS will render pools here -->
       </div>
     </div>
-  </div>
 
-  <!-- Panel 3: Manual Teams -->
-  <div class="panel">
-    <div class="section-title">
-      Add Manual Team
+    <!-- Panel 2: Available Teams -->
+    <div class="panel">
+      <div class="section-title">
+        Available Teams
+      </div>
+
+      <label>Teams in Division</label>
+      <div id="poolTeamsArea">
+        <div class="empty">
+          Teams will appear here when you select a division
+        </div>
+      </div>
     </div>
 
-    <label>Manual Team Name</label>
-    <input id="manualTeamName" placeholder="Enter team name">
+    <!-- Panel 3: Manual Teams -->
+    <div class="panel">
+      <div class="section-title">
+        Add Manual Team
+      </div>
 
-    <label>Region</label>
-    <input id="manualTeamRegion" placeholder="e.g., 304">
+      <label>Manual Team Name</label>
+      <input id="manualTeamName" placeholder="Enter team name">
 
-    <label>City</label>
-    <input id="manualTeamCity" placeholder="Enter city">
+      <label>Region</label>
+      <input id="manualTeamRegion" placeholder="e.g., 304">
 
-    <label>State</label>
-    <input id="manualTeamState" placeholder="Enter state">
+      <label>City</label>
+      <input id="manualTeamCity" placeholder="Enter city">
 
-    <button id="addManualTeamBtn">Add Manual Team</button>
+      <label>State</label>
+      <input id="manualTeamState" placeholder="Enter state">
 
-    <div id="manualTeamsList">
-      <div class="empty">No manual teams yet</div>
+      <button id="addManualTeamBtn">Add Manual Team</button>
+
+      <div id="manualTeamsList">
+        <div class="empty">No manual teams yet</div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
   <!-- SCHEDULE TAB -->
@@ -1272,7 +1272,6 @@
     btn.addEventListener('click',()=>{
       const tab = btn.dataset.tab;
       document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-      btn.addEventListener('click',()=>{});
       btn.classList.add('active');
       document.querySelectorAll('.tab-panel').forEach(p=>{
         p.classList.toggle('active',p.id==='tab-'+tab);
