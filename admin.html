@@ -31,27 +31,28 @@
 }
 
 html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--text);
-  background:
-    radial-gradient(circle at top, var(--bg-mid) 0, var(--bg-deep) 45%, #000000 100%);
-}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      /* Canva background */
+      background:linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
+      color:var(--text);
+    }
+
     /* ---------------- LOGIN (CANVA STYLE) ---------------- */
 
-    #authGate{
+       #authGate{
       position:fixed;
       inset:0;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:
-        radial-gradient(circle at top, #111827 0, #020617 55%, #000000 100%);
+      /* Match Canva dark blue vibe */
+      background:linear-gradient(135deg, #020617 0%, #04132d 40%, #020617 100%);
+      color:#e5e7eb;
       z-index:100;
     }
+
 
     .auth-card{
       width:100%;
