@@ -608,6 +608,23 @@
         return sa.localeCompare(sb);
       });
     }
+function buildDateOrderMap() {
+  const map = {};
+  let idx = 0;
+
+  const dc = adminState.dayConfigs || {};
+  Object.keys(dc).forEach(div => {
+    (dc[div] || []).forEach(cfg => {
+      const label = (cfg.label || '').trim();
+      if (!label) return;
+      if (map[label] === undefined) {
+        map[label] = idx++;
+      }
+    });
+  });
+
+  return map;
+}
 
     function normalizeStateForRendering(rawState) {
       adminState = normalizeState(rawState);
@@ -725,11 +742,26 @@
         if (g.time) groups[key].times.add(g.time);
       });
 
-      const groupKeys = Object.keys(groups).sort((a, b) => {
-        const da = groups[a].date || '';
-        const db = groups[b].date || '';
-        return da.localeCompare(db);
-      });
+      const dateOrder = buildDateOrderMap();
+
+const groupKeys = Object.keys(groups).sort((a, b) => {
+  const da = groups[a].date || '';
+  const db = groups[b].date || '';
+
+  const oa = dateOrder[da];
+  const ob = dateOrder[db];
+
+  // If either date has an explicit order from AdminState, use that
+  if (oa !== undefined || ob !== undefined) {
+    if (oa === undefined) return 1;   // unknown dates go last
+    if (ob === undefined) return -1;
+    return oa - ob;                   // earlier index = earlier in list
+  }
+
+  // Fallback: alphabetical
+  return da.localeCompare(db);
+});
+
 
       groupKeys.forEach(key => {
         const group = groups[key];
