@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>OSF 2026 – Admin Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ORIGINAL ADMIN STYLES -->
   <style>
     :root{
       --primary:#004b8d;
@@ -406,7 +408,407 @@
       color:#6b7280;
     }
   </style>
+
+  <!-- CANVA THEME STYLES (OVERRIDES SOME GLOBALS) -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #124175 0%, #1a5a8a 100%);
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .page, #adminApp {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
+
+    .admin-panel {
+      background: #124175;
+      border: 3px solid #faca3d;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow:
+        0 15px 40px rgba(18, 65, 117, 0.4),
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 3px 15px rgba(250, 202, 61, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .admin-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #faca3d 0%, #124175 50%, #faca3d 100%);
+    }
+
+    .admin-panel::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .admin-header {
+      background: transparent;
+      border-radius: 16px;
+      padding: 3rem;
+      border: 3px solid #faca3d;
+      margin-bottom: 2rem;
+      position: relative;
+      text-align: center;
+    }
+
+    .admin-header::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(45deg, #faca3d, #124175, #faca3d);
+      border-radius: 19px;
+      z-index: -1;
+      opacity: 0.1;
+    }
+
+    .admin-title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin: 0 0 0.5rem;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      letter-spacing: 1px;
+    }
+
+    .admin-subtitle {
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin: 0;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 1.5rem 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: #faca3d;
+      border-radius: 2px;
+    }
+
+    button, .btn {
+      border-radius: 999px;
+      padding: 0.75rem 1.5rem;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #124175;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      display: inline-block;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    button:hover, .btn:hover {
+      border-color: #faca3d;
+      box-shadow: 0 4px 12px rgba(250, 202, 61, 0.3);
+      transform: translateY(-1px);
+    }
+
+    button:active, .btn:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      color: #124175;
+      border-color: #124175;
+      box-shadow:
+        0 6px 20px rgba(250, 202, 61, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+      border-radius: 999px;
+    }
+
+    .btn-primary:hover {
+      box-shadow:
+        0 8px 25px rgba(250, 202, 61, 0.5),
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+      color: #124175;
+      border-color: rgba(250, 202, 61, 0.3);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    input, select, textarea {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 2px solid #e5e7eb;
+      margin: 0.25rem 0;
+      font-size: 1rem;
+      font-family: inherit;
+      width: 100%;
+      background: white;
+      color: #124175;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #faca3d;
+      box-shadow: 0 0 0 3px rgba(250, 202, 61, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 0.95rem;
+      text-transform:none;
+      letter-spacing:0;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-table-wrapper {
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 4px;
+      position: relative;
+      box-shadow:
+        0 25px 60px rgba(18, 65, 117, 0.6),
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(250, 202, 61, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-table-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #faca3d, #f59e0b, #faca3d, #f59e0b);
+      background-size: 400% 400%;
+      border-radius: 22px;
+      z-index: -1;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border-radius: 16px 16px 0 0;
+    }
+
+    th {
+      background: linear-gradient(135deg, #faca3d 0%, #f59e0b 50%, #faca3d 100%);
+      color: #124175;
+      padding: 1rem 0.75rem;
+      font-weight: 900;
+      text-align: left;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      box-shadow:
+        0 6px 20px rgba(250, 202, 61, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    th::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+    }
+
+    td {
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(250, 202, 61, 0.2);
+      color: #124175;
+      font-weight: 600;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    tr:hover td {
+      background: linear-gradient(135deg, rgba(250, 202, 61, 0.05) 0%, rgba(250, 202, 61, 0.1) 100%);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      white-space: nowrap;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.25) 100%);
+      color: #1e3a8a;
+      border: 2px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+      border-radius: 12px;
+    }
+
+    .alert {
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: 2px solid;
+      font-weight: 600;
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .gap-2 { gap: 1rem; }
+
+    @media (max-width: 768px) {
+      .page, #adminApp {
+        padding: 1rem;
+      }
+      .admin-header {
+        padding: 2rem 1.5rem;
+      }
+      .admin-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
 <!-- PASSWORD GATE -->
@@ -435,11 +837,13 @@
 </div>
 
 <main id="adminMain" class="page" style="display:none;">
-  <div class="badge">OSF 2026 • Tournament Admin</div>
-  <h1>Admin Portal</h1>
-  <p class="subtitle">
-    One-stop view for teams, pools, schedules, and scoring.
-  </p>
+  <div class="admin-header">
+    <div class="badge">OSF 2026 • Tournament Admin</div>
+    <h1 class="admin-title">Admin Portal</h1>
+    <p class="admin-subtitle">
+      One-stop view for teams, pools, schedules, and scoring.
+    </p>
+  </div>
 
   <div class="top-bar">
     <div class="top-bar-note">
@@ -629,19 +1033,19 @@
           <div id="dayConfigsList" style="margin-top:10px;"></div>
         </div>
 
-<div class="card">
-  <div class="card-header">Generate Pool-Play Schedule</div>
-  <div class="card-sub">
-    Uses pools and day configs. Tries to avoid back-to-back games and duplicate time slots.
-  </div>
+        <div class="card">
+          <div class="card-header">Generate Pool-Play Schedule</div>
+          <div class="card-sub">
+            Uses pools and day configs. Tries to avoid back-to-back games and duplicate time slots.
+          </div>
 
-  <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px;">
-    <input type="checkbox" id="allowCrossPool" style="width:auto;height:auto;">
-    Allow <strong>cross-pool</strong> games when needed so each team reaches 3 matches
-  </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:6px;">
+            <input type="checkbox" id="allowCrossPool" style="width:auto;height:auto;">
+            Allow <strong>cross-pool</strong> games when needed so each team reaches 3 matches
+          </label>
 
-  <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
-</div>
+          <button class="btn btn-primary btn-small" id="generateScheduleBtn">Generate Schedule</button>
+        </div>
 
       </div>
 
@@ -713,9 +1117,6 @@
   const toastEl = document.getElementById('toast');
   const saveStateBtn = document.getElementById('saveStateBtn');
   let toastTimer = null;
-saveStateBtn.addEventListener('click', () => {
-  saveStateToApi(true);
-});
 
   const authGate = document.getElementById('authGate');
   const adminMain = document.getElementById('adminMain');
@@ -723,7 +1124,6 @@ saveStateBtn.addEventListener('click', () => {
   const authSubmitBtn = document.getElementById('authSubmit');
   const authError = document.getElementById('authError');
 
-  /* ===== Toast ===== */
   function showToast(msg){
     toastEl.textContent = msg;
     toastEl.classList.add('visible');
@@ -731,7 +1131,6 @@ saveStateBtn.addEventListener('click', () => {
     toastTimer = setTimeout(()=>toastEl.classList.remove('visible'),1500);
   }
 
-  /* ===== Admin state normalize ===== */
   function normalizeState(state){
     if (!state || typeof state !== 'object') state = {};
     state.manualTeams = Array.isArray(state.manualTeams) ? state.manualTeams : [];
@@ -742,65 +1141,58 @@ saveStateBtn.addEventListener('click', () => {
     return state;
   }
 
-  /* ===== Save to Apps Script (no JSON parse) ===== */
   async function saveStateToApi(showMessage = true){
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      // no Content-Type header -> avoids CORS preflight
-      body: JSON.stringify({
-        // doPost treats anything without mode=create/update as admin state
-        state: adminState
-      })
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          state: adminState
+        })
+      });
 
-    if (!res.ok) {
-      console.error('Save HTTP error', res.status);
+      if (!res.ok) {
+        console.error('Save HTTP error', res.status);
+        if (showMessage) showToast('Save failed');
+        return false;
+      }
+
+      if (showMessage) showToast('Saved');
+      return true;
+    } catch (e) {
+      console.error('Save fetch error', e);
       if (showMessage) showToast('Save failed');
       return false;
     }
-
-    // If you ever want to inspect response:
-    // const text = await res.text(); console.log('Save response:', text);
-
-    if (showMessage) showToast('Saved');
-    return true;
-  } catch (e) {
-    console.error('Save fetch error', e);
-    if (showMessage) showToast('Save failed');
-    return false;
   }
-}
-async function saveScoresOnly() {
-  try {
-    const payload = {
-      entity: 'scores',
-      scores: adminState.scores || {}
-    };
 
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+  async function saveScoresOnly() {
+    try {
+      const payload = {
+        entity: 'scores',
+        scores: adminState.scores || {}
+      };
 
-    const data = await res.json();
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-    if (!data.ok) {
-      console.error('Error saving scores:', data.error);
-      alert('There was a problem saving scores. Please try again.');
-      return;
+      const data = await res.json();
+
+      if (!data.ok) {
+        console.error('Error saving scores:', data.error);
+        alert('There was a problem saving scores. Please try again.');
+        return;
+      }
+
+      alert('Scores saved successfully.');
+    } catch (err) {
+      console.error(err);
+      alert('Network error while saving scores.');
     }
-
-    alert('Scores saved successfully.');
-  } catch (err) {
-    console.error(err);
-    alert('Network error while saving scores.');
   }
-}
 
-
-  /* ===== Load from Apps Script ===== */
   async function loadAdminData(){
     try{
       const [teamsRes,stateRes] = await Promise.all([
@@ -826,7 +1218,6 @@ async function saveScoresOnly() {
     renderScoringTab();
   }
 
-  /* ===== AUTH GATE ===== */
   function unlockAdmin(){
     authGate.style.display = 'none';
     adminMain.style.display = 'block';
@@ -859,7 +1250,6 @@ async function saveScoresOnly() {
     }
   });
 
-  /* ===== Tabs ===== */
   document.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const tab = btn.dataset.tab;
@@ -872,7 +1262,6 @@ async function saveScoresOnly() {
     });
   });
 
-  /* ---- TEAMS TAB ---- */
   const teamsDivisionFilter = document.getElementById('teamsDivisionFilter');
   const teamsStatusFilter = document.getElementById('teamsStatusFilter');
   const teamsListEl = document.getElementById('teamsList');
@@ -1013,52 +1402,50 @@ async function saveScoresOnly() {
     return card;
   }
 
- function changeTeamStatus(team, status) {
-  const updated = Object.assign({}, team, { status });
-  updateTeamOnServer(updated);
-}
-
-async function updateTeamOnServer(updatedTeam) {
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        mode: 'update',
-        team: updatedTeam
-      })
-    });
-
-    const text = await res.text();
-    let data;
-    try { data = JSON.parse(text); }
-    catch(err) {
-      console.error("Non-JSON from server:", text);
-      showToast('Update failed');
-      return;
-    }
-
-    if (!data.ok) {
-      console.error('Apps Script error:', data.error);
-      showToast('Update failed');
-      return;
-    }
-
-    const idx = allTeams.findIndex(t => String(t.id) === String(updatedTeam.id));
-    if (idx !== -1) allTeams[idx] = updatedTeam;
-
-    renderTeamsTab();
-    if (typeof refreshPoolsUI === 'function') refreshPoolsUI();
-    
-    showToast("Team updated");
+  function changeTeamStatus(team, status) {
+    const updated = Object.assign({}, team, { status });
+    updateTeamOnServer(updated);
   }
-  catch (e) {
-    console.error("Fetch error", e);
-    showToast("Update failed");
+
+  async function updateTeamOnServer(updatedTeam) {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          mode: 'update',
+          team: updatedTeam
+        })
+      });
+
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch(err) {
+        console.error("Non-JSON from server:", text);
+        showToast('Update failed');
+        return;
+      }
+
+      if (!data.ok) {
+        console.error('Apps Script error:', data.error);
+        showToast('Update failed');
+        return;
+      }
+
+      const idx = allTeams.findIndex(t => String(t.id) === String(updatedTeam.id));
+      if (idx !== -1) allTeams[idx] = updatedTeam;
+
+      renderTeamsTab();
+      if (typeof refreshPoolsUI === 'function') refreshPoolsUI();
+
+      showToast("Team updated");
+    }
+    catch (e) {
+      console.error("Fetch error", e);
+      showToast("Update failed");
+    }
   }
-}
 
-
-  /* ---- POOLS TAB ---- */
   const poolsDivisionSel=document.getElementById('poolsDivisionSelect');
   const newPoolNameInput=document.getElementById('newPoolName');
   const addPoolBtn=document.getElementById('addPoolBtn');
@@ -1274,7 +1661,6 @@ async function updateTeamOnServer(updatedTeam) {
     });
   }
 
-  /* ---- SCHEDULE HELPERS ---- */
   function getScheduleForDivision(division){
     let sched = adminState.schedules.find(s=>s.division===division);
     if(!sched){
@@ -1295,7 +1681,6 @@ async function updateTeamOnServer(updatedTeam) {
     return getAllTeamsCombined().find(t=>String(t.id)===id)||null;
   }
 
-  /* ---- SCHEDULE TAB ---- */
   const schedDivisionSelect=document.getElementById('schedDivisionSelect');
   const schedDayLabelInput=document.getElementById('schedDayLabel');
   const schedFieldsInput=document.getElementById('schedFields');
@@ -1305,32 +1690,30 @@ async function updateTeamOnServer(updatedTeam) {
   const generateScheduleBtn=document.getElementById('generateScheduleBtn');
   const gamesListEl=document.getElementById('gamesList');
   const knockoutsListEl=document.getElementById('knockoutsList');
-const allowCrossPoolCheckbox = document.getElementById('allowCrossPool');
+  const allowCrossPoolCheckbox = document.getElementById('allowCrossPool');
 
-function pairKey(a,b){
-  a = String(a); b = String(b);
-  return (a < b) ? `${a}_${b}` : `${b}_${a}`;
-}
+  function pairKey(a,b){
+    a = String(a); b = String(b);
+    return (a < b) ? `${a}_${b}` : `${b}_${a}`;
+  }
 
-function canPlaceGameInSlot(game, slot, sched, gamesPerTeam){
-  const t1 = String(game.homeId);
-  const t2 = String(game.awayId);
+  function canPlaceGameInSlot(game, slot, sched, gamesPerTeam){
+    const t1 = String(game.homeId);
+    const t2 = String(game.awayId);
 
-  // Team already playing at this time?
-  const clash = (sched.games||[]).some(g =>
-    g.date === slot.date &&
-    g.time === slot.time &&
-    (g.homeId === t1 || g.awayId === t1 || g.homeId === t2 || g.awayId === t2)
-  );
-  if (clash) return false;
+    const clash = (sched.games||[]).some(g =>
+      g.date === slot.date &&
+      g.time === slot.time &&
+      (g.homeId === t1 || g.awayId === t1 || g.homeId === t2 || g.awayId === t2)
+    );
+    if (clash) return false;
 
-  // Hard cap 3 pool-play games / team
-  const g1 = gamesPerTeam[t1] || 0;
-  const g2 = gamesPerTeam[t2] || 0;
-  if (g1 >= 3 || g2 >= 3) return false;
+    const g1 = gamesPerTeam[t1] || 0;
+    const g2 = gamesPerTeam[t2] || 0;
+    if (g1 >= 3 || g2 >= 3) return false;
 
-  return true;
-}
+    return true;
+  }
 
   schedDivisionSelect.addEventListener('change',()=>{
     renderDayConfigsUI();
@@ -1382,155 +1765,142 @@ function canPlaceGameInSlot(game, slot, sched, gamesPerTeam){
     });
   }
 
-generateScheduleBtn.addEventListener('click', ()=>{
-  const division = schedDivisionSelect.value;
-  const pools = getPoolsForDivision(division);
-  const cfgs = getDayConfigsForDivision(division);
-  const allowCross = allowCrossPoolCheckbox.checked;
+  generateScheduleBtn.addEventListener('click', ()=>{
+    const division = schedDivisionSelect.value;
+    const pools = getPoolsForDivision(division);
+    const cfgs = getDayConfigsForDivision(division);
+    const allowCross = allowCrossPoolCheckbox.checked;
 
-  if (!pools.length){
-    alert('Create pools first.');
-    return;
-  }
-  if (!cfgs.length){
-    alert('Add at least one day configuration first.');
-    return;
-  }
+    if (!pools.length){
+      alert('Create pools first.');
+      return;
+    }
+    if (!cfgs.length){
+      alert('Add at least one day configuration first.');
+      return;
+    }
 
-  // Build all field/time slots from your day configs
-  const slots = [];
-  cfgs.forEach(cfg=>{
-    const fields = cfg.fields.split(',').map(s=>s.trim()).filter(Boolean);
-    const times  = cfg.times.split(',').map(s=>s.trim()).filter(Boolean);
-    times.forEach(time=>{
-      fields.forEach(field=>{
-        slots.push({date:cfg.label,time,field});
+    const slots = [];
+    cfgs.forEach(cfg=>{
+      const fields = cfg.fields.split(',').map(s=>s.trim()).filter(Boolean);
+      const times  = cfg.times.split(',').map(s=>s.trim()).filter(Boolean);
+      times.forEach(time=>{
+        fields.forEach(field=>{
+          slots.push({date:cfg.label,time,field});
+        });
       });
     });
-  });
-  if (!slots.length){
-    alert('No usable slots from your day configuration.');
-    return;
-  }
+    if (!slots.length){
+      alert('No usable slots from your day configuration.');
+      return;
+    }
 
-  const sched = getScheduleForDivision(division);
-  sched.games = [];          // reset pool-play games for this division only
+    const sched = getScheduleForDivision(division);
+    sched.games = [];
 
-  const gamesPerTeam = {};
-  const usedPairs    = new Set();
+    const gamesPerTeam = {};
+    const usedPairs    = new Set();
 
-  // Map team -> pool (for cross-pool logic)
-  const teamPool = {};
-  pools.forEach(p=>{
-    (p.teamIds || []).forEach(id=>{
-      teamPool[String(id)] = p.id;
+    const teamPool = {};
+    pools.forEach(p=>{
+      (p.teamIds || []).forEach(id=>{
+        teamPool[String(id)] = p.id;
+      });
     });
-  });
 
-  // 1) Create all within-pool pairings (no duplicates)
-  const internalGames = [];
-  pools.forEach(pool=>{
-    const ids = (pool.teamIds || []).map(String);
-    for (let i=0;i<ids.length;i++){
-      for (let j=i+1;j<ids.length;j++){
-        const pk = pairKey(ids[i], ids[j]);
-        internalGames.push({
-          id: 'G_'+division+'_'+pk+'_'+Date.now(),
-          division,
-          poolId: pool.id,
-          homeId: ids[i],
-          awayId: ids[j],
-          stage: 'pool',
-          crossPool: false
-        });
-      }
-    }
-  });
-
-  // Helper to actually drop a game into the next available slot
-  function scheduleGame(game){
-    let placed = false;
-    let tries = 0;
-    let slotIdx = 0;
-
-    while (!placed && tries < slots.length){
-      const slot = slots[slotIdx % slots.length];
-      if (canPlaceGameInSlot(game, slot, sched, gamesPerTeam)){
-        game.date  = slot.date;
-        game.time  = slot.time;
-        game.field = slot.field;
-
-        sched.games.push(game);
-        const t1 = String(game.homeId);
-        const t2 = String(game.awayId);
-        gamesPerTeam[t1] = (gamesPerTeam[t1] || 0) + 1;
-        gamesPerTeam[t2] = (gamesPerTeam[t2] || 0) + 1;
-        usedPairs.add(pairKey(t1,t2));
-        placed = true;
-      }
-      slotIdx++;
-      tries++;
-    }
-    return placed;
-  }
-
-  // 2) First, schedule as many within-pool games as we can under the constraints
-  internalGames.forEach(game=>{
-    scheduleGame(game);
-  });
-
-  // 3) Optionally create cross-pool games to get everyone up to 3 matches
-  if (allowCross){
-    const allTeamIds = Object.keys(teamPool);  // only teams that are in pools
-
-    let progress = true;
-    while (progress){
-      progress = false;
-
-      // who still needs games?
-      const need = allTeamIds.filter(id => (gamesPerTeam[id] || 0) < 3);
-      if (need.length < 2) break;
-
-      outer:
-      for (let i=0;i<need.length;i++){
-        for (let j=i+1;j<need.length;j++){
-          const a = need[i], b = need[j];
-          const poolA = teamPool[a];
-          const poolB = teamPool[b];
-
-          // must be different pools & not already paired
-          if (!poolA || !poolB || poolA === poolB) continue;
-          if (usedPairs.has(pairKey(a,b))) continue;
-
-          // try to drop this cross-pool game into a slot
-          const game = {
-            id: 'X_'+division+'_'+pairKey(a,b)+'_'+Date.now(),
+    const internalGames = [];
+    pools.forEach(pool=>{
+      const ids = (pool.teamIds || []).map(String);
+      for (let i=0;i<ids.length;i++){
+        for (let j=i+1;j<ids.length;j++){
+          const pk = pairKey(ids[i], ids[j]);
+          internalGames.push({
+            id: 'G_'+division+'_'+pk+'_'+Date.now(),
             division,
-            // anchor to the home team's pool for scoring; still marked as crossPool
-            poolId: poolA,
-            homeId: a,
-            awayId: b,
+            poolId: pool.id,
+            homeId: ids[i],
+            awayId: ids[j],
             stage: 'pool',
-            crossPool: true
-          };
+            crossPool: false
+          });
+        }
+      }
+    });
 
-          if (scheduleGame(game)){
-            progress = true;
-            break outer;
+    function scheduleGame(game){
+      let placed = false;
+      let tries = 0;
+      let slotIdx = 0;
+
+      while (!placed && tries < slots.length){
+        const slot = slots[slotIdx % slots.length];
+        if (canPlaceGameInSlot(game, slot, sched, gamesPerTeam)){
+          game.date  = slot.date;
+          game.time  = slot.time;
+          game.field = slot.field;
+
+          sched.games.push(game);
+          const t1 = String(game.homeId);
+          const t2 = String(game.awayId);
+          gamesPerTeam[t1] = (gamesPerTeam[t1] || 0) + 1;
+          gamesPerTeam[t2] = (gamesPerTeam[t2] || 0) + 1;
+          usedPairs.add(pairKey(t1,t2));
+          placed = true;
+        }
+        slotIdx++;
+        tries++;
+      }
+      return placed;
+    }
+
+    internalGames.forEach(game=>{
+      scheduleGame(game);
+    });
+
+    if (allowCross){
+      const allTeamIds = Object.keys(teamPool);
+
+      let progress = true;
+      while (progress){
+        progress = false;
+
+        const need = allTeamIds.filter(id => (gamesPerTeam[id] || 0) < 3);
+        if (need.length < 2) break;
+
+        outer:
+        for (let i=0;i<need.length;i++){
+          for (let j=i+1;j<need.length;j++){
+            const a = need[i], b = need[j];
+            const poolA = teamPool[a];
+            const poolB = teamPool[b];
+
+            if (!poolA || !poolB || poolA === poolB) continue;
+            if (usedPairs.has(pairKey(a,b))) continue;
+
+            const game = {
+              id: 'X_'+division+'_'+pairKey(a,b)+'_'+Date.now(),
+              division,
+              poolId: poolA,
+              homeId: a,
+              awayId: b,
+              stage: 'pool',
+              crossPool: true
+            };
+
+            if (scheduleGame(game)){
+              progress = true;
+              break outer;
+            }
           }
         }
       }
-
-      // if we couldn’t place any new cross-pool game in the last pass, stop
     }
-  }
 
-  saveStateToApi(false);
-  renderGamesUI();
-  renderScoringTab();   // make sure scoring sees new games too
-  showToast('Schedule generated');
-});
-
+    saveStateToApi(false);
+    renderGamesUI();
+    renderScoringTab();
+    showToast('Schedule generated');
+  });
 
   function renderGamesUI(){
     const division=schedDivisionSelect.value;
@@ -1559,12 +1929,10 @@ generateScheduleBtn.addEventListener('click', ()=>{
       rightWrap.style.flexWrap='wrap';
 
       const meta=document.createElement('div');
-meta.className='game-meta';
-let metaText = `${g.date||''} • ${g.time||''} • ${g.field||''}`;
-if (g.crossPool) metaText += ' • Cross Pool';
-meta.textContent = metaText;
-
-
+      meta.className='game-meta';
+      let metaText = `${g.date||''} • ${g.time||''} • ${g.field||''}`;
+      if (g.crossPool) metaText += ' • Cross Pool';
+      meta.textContent = metaText;
 
       const delBtn=document.createElement('button');
       delBtn.className='btn btn-decline btn-small';
@@ -1707,7 +2075,6 @@ meta.textContent = metaText;
     });
   }
 
-  /* ---- SCORING ---- */
   const scoreDivisionSelect=document.getElementById('scoreDivisionSelect');
   const scoringContent=document.getElementById('scoringContent');
 
@@ -1763,13 +2130,12 @@ meta.textContent = metaText;
         homeInput.min='0';
         const sData=adminState.scores[g.id]||{};
         homeInput.value=(sData.home!=null)?sData.home:'';
-      homeInput.addEventListener('change',()=>{
-  const val=homeInput.value===''?null:Number(homeInput.value);
-  if(!adminState.scores[g.id]) adminState.scores[g.id]={};
-  adminState.scores[g.id].home=val;
-  saveScoresOnly();
-});
-
+        homeInput.addEventListener('change',()=>{
+          const val=homeInput.value===''?null:Number(homeInput.value);
+          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
+          adminState.scores[g.id].home=val;
+          saveStateToApi(false);
+        });
         s1.appendChild(homeInput);
 
         const s2=document.createElement('div');
@@ -1778,12 +2144,12 @@ meta.textContent = metaText;
         awayInput.type='number';
         awayInput.min='0';
         awayInput.value=(sData.away!=null)?sData.away:'';
-awayInput.addEventListener('change',()=>{
-  const val=awayInput.value===''?null:Number(awayInput.value);
-  if(!adminState.scores[g.id]) adminState.scores[g.id]={};
-  adminState.scores[g.id].away=val;
-  saveScoresOnly();
-});
+        awayInput.addEventListener('change',()=>{
+          const val=awayInput.value===''?null:Number(awayInput.value);
+          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
+          adminState.scores[g.id].away=val;
+          saveStateToApi(false);
+        });
         s2.appendChild(awayInput);
 
         const s3=document.createElement('div');
@@ -1791,13 +2157,12 @@ awayInput.addEventListener('change',()=>{
         const clearBtn=document.createElement('button');
         clearBtn.className='btn btn-ghost btn-small';
         clearBtn.textContent='Clear';
-clearBtn.addEventListener('click',()=>{
-  delete adminState.scores[g.id];
-  homeInput.value='';
-  awayInput.value='';
-  saveScoresOnly();
-});
-
+        clearBtn.addEventListener('click',()=>{
+          delete adminState.scores[g.id];
+          homeInput.value='';
+          awayInput.value='';
+          saveStateToApi(false);
+        });
         s3.appendChild(clearBtn);
 
         scoreRow.appendChild(s1);scoreRow.appendChild(s2);scoreRow.appendChild(s3);
