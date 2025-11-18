@@ -220,6 +220,242 @@ html,
       }
     }
 
+/* =========================
+   SCORING TAB STYLES
+========================= */
+
+.scoring-shell{
+  max-width:1100px;
+  margin:0 auto;
+  padding:12px 0 28px;
+}
+
+.scoring-header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.scoring-title{
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:#ffffff;
+}
+
+.scoring-underline{
+  width:80px;
+  height:4px;
+  border-radius:999px;
+  background:#f6c343;
+  margin:10px auto 0;
+}
+
+.scoring-filter-card,
+.scoring-main-card{
+  background:#ffffff;
+  border-radius:26px;
+  padding:20px 24px;
+  box-shadow:0 18px 40px rgba(15,23,42,0.35);
+  margin-bottom:20px;
+}
+
+.scoring-filter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+}
+
+.scoring-filter-field{
+  flex:1;
+  min-width:220px;
+}
+
+/* reuse existing label/input styles; just tweak */
+.scoring-filter-field label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#6b7280;
+  margin-bottom:6px;
+}
+
+.scoring-main-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.scoring-main-title{
+  margin:0;
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#111827;
+}
+
+.score-count-pill{
+  padding:6px 14px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#f6c343,#f1a608);
+  color:#124175;
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  white-space:nowrap;
+}
+
+.scoring-main-divider{
+  height:3px;
+  border-radius:999px;
+  background:#f6c343;
+  margin-bottom:18px;
+}
+
+/* Game cards */
+
+.score-game-card{
+  border-radius:22px;
+  background:#f9fafb;
+  border:1px solid rgba(15,23,42,0.08);
+  box-shadow:0 10px 26px rgba(15,23,42,0.18);
+  margin-bottom:18px;
+  overflow:hidden;
+}
+
+.score-game-header{
+  background:linear-gradient(135deg,#124175 0%,#1a5a8a 100%);
+  color:#ffffff;
+  padding:12px 18px 10px;
+}
+
+.score-game-header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:4px;
+}
+
+.score-game-title{
+  font-size:14px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+
+.score-game-meta{
+  font-size:11px;
+  opacity:0.9;
+}
+
+.score-game-header-actions{
+  display:flex;
+  gap:6px;
+}
+
+.score-clear-btn{
+  border:none;
+  border-radius:999px;
+  width:26px;
+  height:26px;
+  font-size:16px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  background:#ef4444;
+  color:#ffffff;
+  box-shadow:0 4px 10px rgba(239,68,68,0.5);
+}
+
+.score-clear-btn:hover{
+  background:#b91c1c;
+}
+
+.score-game-body{
+  padding:16px 18px 16px;
+  background:#f9fafb;
+}
+
+.score-input-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.score-input-group{
+  flex:1;
+  min-width:220px;
+}
+
+.score-input-group label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#6b7280;
+  margin-bottom:4px;
+  display:block;
+}
+
+.score-input-box{
+  width:100%;
+  border-radius:14px;
+  border:2px solid #e5e7eb;
+  padding:10px 12px;
+  font-size:18px;
+  font-weight:700;
+  text-align:center;
+  background:#ffffff;
+  color:#111827;
+  box-shadow:0 3px 10px rgba(15,23,42,0.08);
+}
+
+.score-input-box:focus{
+  outline:none;
+  border-color:#f6c343;
+  box-shadow:0 0 0 3px rgba(246,195,67,0.35);
+}
+
+.score-save-btn{
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:11px 16px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#ffffff;
+  box-shadow:0 10px 24px rgba(22,163,74,0.6);
+}
+
+.score-save-btn:hover{
+  filter:brightness(1.05);
+  transform:translateY(-1px);
+}
+
+.score-save-btn:active{
+  transform:translateY(0);
+}
+
+/* mobile */
+@media (max-width:768px){
+  .scoring-main-card,
+  .scoring-filter-card{
+    padding:16px 16px 18px;
+  }
+}
 
     /* ---------------- ADMIN LAYOUT (CANVA-ISH) ---------------- */
 
@@ -883,27 +1119,48 @@ html,
 
   <!-- SCORING TAB -->
   <section id="tab-scoring" class="tab-panel">
-    <div class="card">
-      <div class="card-header">Scoring &amp; Standings</div>
-      <div class="card-sub">
-        Enter scores for pool-play games. Clearing scores resets that game.
+    <div class="scoring-shell">
+
+      <!-- Header -->
+      <div class="scoring-header">
+        <div class="scoring-title">SCORING ADMIN</div>
+        <div class="scoring-underline"></div>
       </div>
-      <div class="row">
-        <div style="max-width:220px;">
-          <label>Division</label>
-          <select id="scoreDivisionSelect">
-            <option value="10UB">10U Boys</option>
-            <option value="10UG">10U Girls</option>
-            <option value="12UB">12U Boys</option>
-            <option value="12UG">12U Girls</option>
-            <option value="14UB">14U Boys</option>
-            <option value="14UG">14U Girls</option>
-          </select>
+
+      <!-- Filter card -->
+      <div class="scoring-filter-card">
+        <div class="scoring-filter-row">
+          <div class="scoring-filter-field">
+            <label>Division</label>
+            <select id="scoreDivisionSelect">
+              <option value="10UB">10U Boys</option>
+              <option value="10UG">10U Girls</option>
+              <option value="12UB">12U Boys</option>
+              <option value="12UG">12U Girls</option>
+              <option value="14UB">14U Boys</option>
+              <option value="14UG">14U Girls</option>
+            </select>
+          </div>
+          <div class="scoring-filter-field">
+            <label>Filter by date</label>
+            <input id="scoreDateFilter" type="text" placeholder="e.g. Apr 25">
+          </div>
         </div>
       </div>
-      <div id="scoringContent"></div>
+
+      <!-- Scores card -->
+      <div class="scoring-main-card">
+        <div class="scoring-main-header">
+          <h3 class="scoring-main-title">Enter Game Scores</h3>
+          <div id="scoreGameCountBadge" class="score-count-pill">0 Games</div>
+        </div>
+        <div class="scoring-main-divider"></div>
+        <div id="scoringContent"></div>
+      </div>
+
     </div>
   </section>
+
 </main>
 
 <div id="toast" class="toast">Saved</div>
@@ -1890,106 +2147,156 @@ html,
     });
   }
 
-  const scoreDivisionSelect=document.getElementById('scoreDivisionSelect');
-  const scoringContent=document.getElementById('scoringContent');
+  const scoreDivisionSelect = document.getElementById('scoreDivisionSelect');
+  const scoreDateFilter     = document.getElementById('scoreDateFilter');
+  const scoringContent      = document.getElementById('scoringContent');
+  const scoreGameCountBadge = document.getElementById('scoreGameCountBadge');
 
-  scoreDivisionSelect.addEventListener('change',renderScoringTab);
+  if (scoreDivisionSelect) {
+    scoreDivisionSelect.addEventListener('change', renderScoringTab);
+  }
+  if (scoreDateFilter) {
+    scoreDateFilter.addEventListener('input', renderScoringTab);
+  }
 
   function renderScoringTab(){
-    const division=scoreDivisionSelect.value;
-    const sched=getScheduleForDivision(division);
-    const games=(sched.games||[]).filter(g=>g.stage==='pool');
-    scoringContent.innerHTML='';
-    if(!games.length){
-      scoringContent.innerHTML='<div class="empty-note">No pool-play games yet for this division.</div>';
+    if (!scoreDivisionSelect || !scoringContent) return;
+
+    const division = scoreDivisionSelect.value;
+    const sched    = getScheduleForDivision(division);
+    const dateTerm = (scoreDateFilter && scoreDateFilter.value || '').trim().toLowerCase();
+
+    let games = (sched.games || []).filter(g => g.stage === 'pool');
+
+    if (dateTerm){
+      games = games.filter(g => (g.date || '').toLowerCase().includes(dateTerm));
+    }
+
+    const total = games.length;
+    if (scoreGameCountBadge){
+      scoreGameCountBadge.textContent = total
+        ? `${total} Game${total !== 1 ? 's' : ''}`
+        : 'No games';
+    }
+
+    scoringContent.innerHTML = '';
+    if (!games.length){
+      scoringContent.innerHTML = '<div class="empty-note">No pool-play games match these filters.</div>';
       return;
     }
 
-    const poolsById={};
-    adminState.pools.forEach(p=>{poolsById[p.id]=p;});
+    const poolsById = {};
+    adminState.pools.forEach(p => { poolsById[p.id] = p; });
 
-    const byPool={};
-    games.forEach(g=>{
-      const poolName=poolsById[g.poolId]?.name || 'Unassigned';
-      if(!byPool[poolName]) byPool[poolName]=[];
-      byPool[poolName].push(g);
-    });
+    games.forEach(g => {
+      const home = getTeamByIdAll(g.homeId);
+      const away = getTeamByIdAll(g.awayId);
+      const poolName = poolsById[g.poolId]?.name || 'Unassigned';
 
-    Object.keys(byPool).forEach(poolName=>{
-      const section=document.createElement('div');
-      const title=document.createElement('div');
-      title.className='card-header';
-      title.textContent='Pool '+poolName;
-      section.appendChild(title);
+      let homeInput, awayInput;
 
-      byPool[poolName].forEach(g=>{
-        const row=document.createElement('div');
-        row.className='game-card';
-        const header=document.createElement('div');
-        header.className='game-header';
-        const home=getTeamByIdAll(g.homeId);
-        const away=getTeamByIdAll(g.awayId);
-        const label=document.createElement('div');
-        label.textContent=`${home?home.teamName:'TBD'} vs ${away?away.teamName:'TBD'}`;
-        const meta=document.createElement('div');
-        meta.className='game-meta';
-        meta.textContent=`${g.date||''} • ${g.time||''} • ${g.field||''}`;
-        header.appendChild(label);header.appendChild(meta);
+      const card   = document.createElement('div');
+      card.className = 'score-game-card';
 
-        const scoreRow=document.createElement('div');
-        scoreRow.className='row';
-        const s1=document.createElement('div');
-        s1.innerHTML='<label>Home</label>';
-        const homeInput=document.createElement('input');
-        homeInput.type='number';
-        homeInput.min='0';
-        const sData=adminState.scores[g.id]||{};
-        homeInput.value=(sData.home!=null)?sData.home:'';
-        homeInput.addEventListener('change',()=>{
-          const val=homeInput.value===''?null:Number(homeInput.value);
-          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
-          adminState.scores[g.id].home=val;
-          saveStateToApi(false);
-        });
-        s1.appendChild(homeInput);
+      // Header
+      const header = document.createElement('div');
+      header.className = 'score-game-header';
 
-        const s2=document.createElement('div');
-        s2.innerHTML='<label>Away</label>';
-        const awayInput=document.createElement('input');
-        awayInput.type='number';
-        awayInput.min='0';
-        awayInput.value=(sData.away!=null)?sData.away:'';
-        awayInput.addEventListener('change',()=>{
-          const val=awayInput.value===''?null:Number(awayInput.value);
-          if(!adminState.scores[g.id]) adminState.scores[g.id]={};
-          adminState.scores[g.id].away=val;
-          saveStateToApi(false);
-        });
-        s2.appendChild(awayInput);
+      const headerRow = document.createElement('div');
+      headerRow.className = 'score-game-header-row';
 
-        const s3=document.createElement('div');
-        s3.innerHTML='<label>&nbsp;</label>';
-        const clearBtn=document.createElement('button');
-        clearBtn.className='btn btn-small';
-        clearBtn.textContent='Clear';
-        clearBtn.addEventListener('click',()=>{
-          delete adminState.scores[g.id];
-          homeInput.value='';
-          awayInput.value='';
-          saveStateToApi(false);
-        });
-        s3.appendChild(clearBtn);
+      const title = document.createElement('div');
+      title.className = 'score-game-title';
+      title.textContent = `${home ? home.teamName : 'TBD'} vs ${away ? away.teamName : 'TBD'}`;
 
-        scoreRow.appendChild(s1);scoreRow.appendChild(s2);scoreRow.appendChild(s3);
+      const actions = document.createElement('div');
+      actions.className = 'score-game-header-actions';
 
-        row.appendChild(header);
-        row.appendChild(scoreRow);
-        section.appendChild(row);
+      const clearBtn = document.createElement('button');
+      clearBtn.type = 'button';
+      clearBtn.className = 'score-clear-btn';
+      clearBtn.textContent = '×';
+      clearBtn.addEventListener('click', () => {
+        delete adminState.scores[g.id];
+        if (homeInput) homeInput.value = '';
+        if (awayInput) awayInput.value = '';
+        saveScoresOnly();
       });
 
-      scoringContent.appendChild(section);
+      actions.appendChild(clearBtn);
+      headerRow.appendChild(title);
+      headerRow.appendChild(actions);
+
+      const meta = document.createElement('div');
+      meta.className = 'score-game-meta';
+      meta.textContent = `${g.date || ''} • ${g.time || ''} • ${g.field || ''} • ${poolName}`;
+
+      header.appendChild(headerRow);
+      header.appendChild(meta);
+
+      // Body
+      const body = document.createElement('div');
+      body.className = 'score-game-body';
+
+      const scoreRow = document.createElement('div');
+      scoreRow.className = 'score-input-row';
+
+      const sData = adminState.scores[g.id] || {};
+
+      const homeGroup = document.createElement('div');
+      homeGroup.className = 'score-input-group';
+      const homeLabel = document.createElement('label');
+      homeLabel.textContent = `Home score (${home ? home.teamName : 'Team 1'})`;
+      homeInput = document.createElement('input');
+      homeInput.type = 'number';
+      homeInput.min = '0';
+      homeInput.className = 'score-input-box';
+      homeInput.value = (sData.home != null) ? sData.home : '';
+      homeInput.addEventListener('input', () => {
+        const val = homeInput.value === '' ? null : Number(homeInput.value);
+        if (!adminState.scores[g.id]) adminState.scores[g.id] = {};
+        adminState.scores[g.id].home = val;
+      });
+      homeGroup.appendChild(homeLabel);
+      homeGroup.appendChild(homeInput);
+
+      const awayGroup = document.createElement('div');
+      awayGroup.className = 'score-input-group';
+      const awayLabel = document.createElement('label');
+      awayLabel.textContent = `Away score (${away ? away.teamName : 'Team 2'})`;
+      awayInput = document.createElement('input');
+      awayInput.type = 'number';
+      awayInput.min = '0';
+      awayInput.className = 'score-input-box';
+      awayInput.value = (sData.away != null) ? sData.away : '';
+      awayInput.addEventListener('input', () => {
+        const val = awayInput.value === '' ? null : Number(awayInput.value);
+        if (!adminState.scores[g.id]) adminState.scores[g.id] = {};
+        adminState.scores[g.id].away = val;
+      });
+      awayGroup.appendChild(awayLabel);
+      awayGroup.appendChild(awayInput);
+
+      scoreRow.appendChild(homeGroup);
+      scoreRow.appendChild(awayGroup);
+
+      const saveBtn = document.createElement('button');
+      saveBtn.type = 'button';
+      saveBtn.className = 'score-save-btn';
+      saveBtn.textContent = 'Save Score';
+      saveBtn.addEventListener('click', () => {
+        saveScoresOnly();
+      });
+
+      body.appendChild(scoreRow);
+      body.appendChild(saveBtn);
+
+      card.appendChild(header);
+      card.appendChild(body);
+      scoringContent.appendChild(card);
     });
   }
+
 </script>
 </body>
 </html>
